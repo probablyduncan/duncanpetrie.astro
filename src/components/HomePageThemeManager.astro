@@ -75,7 +75,7 @@ const themeData = getHomePageThemes().light;
 <script>
 
     // should be after swap instead? not sure, sometimes you wait too long and this doesn't trigger on swap anymore?
-    document.addEventListener("astro:page-load", () => {
+    document.addEventListener("astro:after-swap", () => {
 
         // remove custom styles when navigating off the page
         if (window.location.pathname === '/') {

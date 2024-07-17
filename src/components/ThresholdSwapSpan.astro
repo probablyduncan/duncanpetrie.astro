@@ -88,7 +88,7 @@ const style =
         return fromStorage;
     }
 
-    document.addEventListener("astro:page-load", () => {
+    function startAnimation() {
         const span = document.querySelector("[data-swap-span]") as HTMLElement;
 
         if (!span || shouldSkip(parseFloat(span.dataset.swapSpanChance))) {
@@ -176,7 +176,10 @@ const style =
         }
 
         window.requestAnimationFrame(animate);
-    });
+    }
+
+    document.addEventListener("astro:after-swap", startAnimation);
+    startAnimation();
 </script>
 <style>
     svg {
