@@ -7,7 +7,8 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://duncanpetrie.com',
+	site: 'https://probablyduncan.github.io',
+	base: 'duncanpetrie.astro',
 	integrations: [
 		mdx({
 			remarkPlugins: [mdxComponentMapIntegration],
