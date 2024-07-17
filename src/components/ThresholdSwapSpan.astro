@@ -156,13 +156,12 @@ const style =
                 } else {
                     // otherwise reset cooldown and start waiting
                     cooldownStart = timeStamp;
-                    span.style.filter = "none";
                 }
             }
 
             // otherwise, wait
             else if (nextInitial == "wait") {
-                span.style.filter = "none";
+                // span.style.filter = "none";
                 nextInitial = "morph";
                 cooldownStart = timeStamp;
 
