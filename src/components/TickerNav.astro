@@ -1,0 +1,165 @@
+---
+import { TICKER_LINKS, type TickerLink } from '../lib/consts'
+import { shuffle, shuffleRef } from '../lib/miscellaneum';
+
+interface Props {
+    colorBreakpoints?: {
+        vh: number;
+        color: string;
+    }[];
+}
+
+const { colorBreakpoints = [] } = Astro.props;
+
+let initialColor = 'inherit';
+if (colorBreakpoints?.length && colorBreakpoints[0].vh <= 0) {
+    initialColor = colorBreakpoints[0].color;
+    colorBreakpoints.shift();
+}
+
+const keys: string[] = [];
+for (let i = 0; i < 4; i++) {
+    const tempKeys = Object.keys(TICKER_LINKS);
+    shuffleRef(tempKeys);
+    keys.push(...tempKeys);
+}
+---
+<div class="ticker-wrapper" style={`color: ${initialColor};`}>
+    <div class="ticker italic">
+        {
+            keys.map((l) => (
+                <span>/</span>
+                <a tabindex="-1" href={TICKER_LINKS[l as TickerLink]}>{l}</a>
+            ))
+        }
+    </div>
+</div>
+<div class="ticker-wrapper-static italic">
+    {Object.keys(TICKER_LINKS).map(l => (<a tabindex="-1" href={TICKER_LINKS[l as TickerLink]}>{l}</a><span>/</span>))}
+</div>
+{colorBreakpoints && colorBreakpoints.length > 0 && <script is:inline define:vars={{colorBreakpoints, initialColor}}>
+    function onScroll() {
+        const ticker = document.getElementsByClassName('ticker-wrapper')[0];
+        let newColor;
+        for (let i = 0; i < colorBreakpoints.length; i++) {
+            const breakpoint = colorBreakpoints[i];
+            const pastBreakpoint = window.scrollY > window.innerHeight * breakpoint.vh / 100 - ticker.clientHeight / 2;
+            if (!pastBreakpoint) {
+
+                if (newColor == breakpoint.color) {
+                    // if no change, get out, avoid setting style
+                    return;
+                } else {
+                    // if change, break to update style
+                    break;
+                }
+
+            }
+            // set color and test next breakpoint
+            newColor = breakpoint.color            
+        }
+        ticker.style.color = newColor ? newColor : initialColor;
+    }
+    document.addEventListener('scroll', onScroll);
+    document.addEventListener("astro:after-swap", () => document.removeEventListener('scroll', onScroll));
+</script>}
+<style type="text/css">
+
+    .ticker-wrapper {
+
+        width: 100vw;
+        position: fixed;
+        top: 0;
+        left: 0;
+
+        z-index: 10;
+
+        overflow: hidden;
+        white-space: nowrap;
+
+        font-size: 1.125rem;
+
+        /* transition: color 0.01s ease-in-out; */
+    }
+
+    .ticker {
+        width: 400vw;
+        overflow: visible;
+        white-space: nowrap;
+        display: flex;
+        flex-flow: row-reverse nowrap;
+        justify-content: space-between;
+        gap: 0.625rem;
+        transform: translate3d(0, 0, 0);
+        white-space: nowrap;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+        animation-name: ticker;
+        animation-duration: 180s;
+        user-select: none;
+    }
+
+    .ticker:hover {
+        animation-play-state: paused;
+    }
+
+    span {
+        pointer-events: none;
+    }
+
+    a {
+        overflow: visible;
+        white-space: nowrap;
+        text-decoration: none;
+    }
+
+    a:hover,
+    a:focus {
+        text-decoration: underline;
+    }
+
+    @keyframes ticker {
+        0% {
+            transform: translate3d(0, 0, 0);
+        }
+        100% {
+            transform: translate3d(-50%, 0, 0);
+        }
+    }
+
+    .ticker-wrapper-static {
+        width: calc(100vw - 56px);
+        position: fixed;
+        top: 0;
+        left: 0;
+
+        z-index: 10;
+
+        overflow-y: hidden;
+        overflow-x: scroll;
+        white-space: nowrap;
+
+        font-size: 1.125rem;
+        white-space: nowrap;
+        display: flex;
+        flex-flow: row nowrap;
+        gap: 0.625rem;
+
+        background-color: var(--color-background);
+        padding: 8px 28px 10px;
+        border-bottom: 2px solid var(--color-text);
+    }
+
+    @media screen and (min-width: 700px) {
+        .ticker-wrapper-static {
+            display: none;
+        }
+    }
+
+    @media screen and (max-width: 700px) {
+        .ticker-wrapper {
+            display: none;
+        }
+    }
+
+</style>

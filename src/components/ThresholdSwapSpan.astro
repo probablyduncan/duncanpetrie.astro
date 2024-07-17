@@ -1,0 +1,208 @@
+---
+import type { SideLR } from "../env";
+
+interface Props {
+    values: string[];
+    startIndex?: number;
+    endIndex?: number;
+    textAlign?: SideLR;
+    minWidth?: number;
+    customRightPropertyVal?: string;
+    repeatChance?: number;
+}
+
+const {
+    values,
+    startIndex = 0,
+    endIndex,
+    textAlign,
+    minWidth = 0,
+    customRightPropertyVal,
+    repeatChance = 1,
+} = Astro.props;
+
+if (values.length < 2) {
+    Error("ThresholdSwapSpan.astro needs at least two values to swap between.");
+}
+
+const style =
+    customRightPropertyVal || textAlign
+        ? `--right: ${customRightPropertyVal ?? (textAlign === "left" ? 1 : 0)};`
+        : "";
+---
+
+<span
+    data-swap-span
+    data-swap-span-chance={repeatChance}
+    data-swap-start-index={startIndex}
+    data-swap-end-index={endIndex}
+    data-swap-values={JSON.stringify(values)}
+    data-swap-min-width={minWidth}
+    style={style}
+>
+    <span data-swap-child="1" style="opacity: 0;"
+        >{values.at(startIndex - 1)}</span
+    >
+    <span data-swap-child="2">{values.at(startIndex)}</span>
+</span>
+<svg id="filters">
+    <defs>
+        <filter id="threshold">
+            <feColorMatrix
+                in="SourceGraphic"
+                type="matrix"
+                values="1 0 0 0 0
+                        0 1 0 0 0
+                        0 0 1 0 0
+                        0 0 0 255 -140"
+            ></feColorMatrix>
+        </filter>
+    </defs>
+</svg>
+<script>
+    // this whole idea comes from here:
+    // https://codepen.io/alvarotrigo/pen/eYEqPZa
+
+    const MORPH_DURATION = 1000;
+    const COOLDOWN_DURATION = 500;
+    const THRESHOLD_FILTER_STRING = "url(#threshold) blur(0.6px)";
+
+    /**
+     * only run this every few frames
+     */
+    function shouldSkip(chance: number): boolean {
+        if (!localStorage) {
+            return false;
+        }
+
+        const LOCAL_STORAGE_KEY = "skipSwapSpan";
+        const fromStorage = !!localStorage.getItem(LOCAL_STORAGE_KEY);
+
+        // if chance is 1, never skip. If 0, always skip
+        if (Math.random() < chance) {
+            localStorage.removeItem(LOCAL_STORAGE_KEY);
+        } else {
+            localStorage.setItem(LOCAL_STORAGE_KEY, "true");
+        }
+
+        return fromStorage;
+    }
+
+    document.addEventListener("astro:page-load", () => {
+        const span = document.querySelector("[data-swap-span]") as HTMLElement;
+
+        if (!span || shouldSkip(parseFloat(span.dataset.swapSpanChance))) {
+            return;
+        }
+
+        const child1 = span.querySelector(
+            "[data-swap-child='1']",
+        ) as HTMLElement;
+        const child2 = span.querySelector(
+            "[data-swap-child='2']",
+        ) as HTMLElement;
+
+        const values = JSON.parse(span.dataset.swapValues);
+        const endIndex = span.dataset.swapEndIndex
+            ? parseInt(span.dataset.swapEndIndex) + values.length
+            : null;
+
+        if (parseInt(span.dataset.swapMinWidth) > window.innerWidth) {
+            console.log("minwidth");
+            child2.innerHTML = values[endIndex % values.length];
+            return;
+        }
+
+        let i = parseInt(span.dataset.swapStartIndex) - 1;
+        let nextInitial: "morph" | "wait" = "wait";
+        let morphStart: number;
+        let cooldownStart: number;
+
+        function animate(timeStamp: number) {
+            // and if end is reached, stop animation
+            if (cooldownStart !== undefined && i % values.length === endIndex) {
+                span.style.filter = "none";
+                child2.innerHTML = "";
+                return;
+            }
+
+            // initially, we're cooling down
+            cooldownStart ??= timeStamp;
+
+            // if cooldown is over, morph every frame
+            if (timeStamp - cooldownStart >= COOLDOWN_DURATION) {
+                // initial morph
+                if (nextInitial == "morph") {
+                    nextInitial = "wait";
+                    i++;
+                    morphStart = timeStamp;
+
+                    span.style.filter = THRESHOLD_FILTER_STRING;
+                    child1.innerHTML =
+                        values[(i + values.length) % values.length];
+                    child2.innerHTML =
+                        values[(i + values.length + 1) % values.length];
+                }
+
+                const morphLerp = (timeStamp - morphStart) / MORPH_DURATION;
+
+                if (morphLerp <= 1) {
+                    // if still morphing, do that
+                    child2.style.filter = `blur(${Math.min(8 / morphLerp - 8, 100)}px)`;
+                    child2.style.opacity = `${Math.pow(morphLerp, 0.4) * 100}%`;
+
+                    child1.style.filter = `blur(${Math.min(8 / (1 - morphLerp) - 8, 100)}px)`;
+                    child1.style.opacity = `${Math.pow(1 - morphLerp, 0.4) * 100}%`;
+                } else {
+                    // otherwise reset cooldown and start waiting
+                    cooldownStart = timeStamp;
+                    span.style.filter = "none";
+                }
+            }
+
+            // otherwise, wait
+            else if (nextInitial == "wait") {
+                span.style.filter = "none";
+                nextInitial = "morph";
+                cooldownStart = timeStamp;
+
+                child2.style.filter = "";
+                child2.style.opacity = "100%";
+
+                child1.style.filter = "";
+                child1.style.opacity = "0%";
+            }
+
+            window.requestAnimationFrame(animate);
+        }
+
+        window.requestAnimationFrame(animate);
+    });
+</script>
+<style>
+    svg {
+        width: 0;
+        height: 0;
+    }
+
+    [data-swap-span] {
+        position: relative;
+        vertical-align: bottom;
+        line-height: 1;
+        white-space: nowrap;
+        filter: none;
+        /* filter: url(#threshold) blur(0.6px); */
+    }
+
+    [data-swap-child] {
+        position: absolute;
+        top: 0;
+        right: var(--right);
+    }
+
+    @media only screen and (max-width: 700px) {
+        [data-swap-child] {
+            left: 0;
+        }
+    }
+</style>

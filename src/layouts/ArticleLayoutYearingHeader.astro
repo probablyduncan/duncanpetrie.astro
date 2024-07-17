@@ -1,0 +1,187 @@
+---
+import type { MDXLayoutProps } from "astro";
+import Footer from "../components/Footer.astro";
+import { getImgSize } from "../lib/photoHelper";
+import TickerNav from "../components/TickerNav.astro";
+import HomePageThemeManager from "../components/HomePageThemeManager.astro";
+
+interface ArticleOptions {
+    title: string;
+    subtitle?: string;
+    description: string;
+    date: string;
+    location: string;
+    tags?: string[];
+    src?: string;
+    caption?: string;
+}
+
+type Props = MDXLayoutProps<ArticleOptions>;
+
+const { frontmatter } = Astro.props;
+
+const { ratio } = await getImgSize(frontmatter.src);
+---
+
+<TickerNav
+    colorBreakpoints={[
+        {
+            vh: -1,
+            color: "var(--color-background)",
+        },
+        {
+            vh: 99,
+            color: "inherit",
+        },
+    ]}
+/>
+<header>
+    <div class="hero">
+        {
+            frontmatter.src && (
+                <div>
+                    <img
+                        src={frontmatter.src}
+                        style={`aspect-ratio: ${ratio};`}
+                    />
+                    {frontmatter.caption && (
+                        <div class="caption italic">{frontmatter.caption}</div>
+                    )}
+                </div>
+            )
+        }
+        <div>
+            <div class="title bold">{frontmatter.title}</div>
+            {
+                frontmatter.subtitle && (
+                    <div class="subtitle italic right">
+                        {frontmatter.subtitle}
+                    </div>
+                )
+            }
+        </div>
+    </div>
+    <span class="italic">Falmouth, U.K.</span>
+    <span class="italic">October 2021.</span>
+</header>
+<main>
+    <div
+        data-progress-bar
+        style="position: fixed; bottom: 0; left: 0; width: 0; height: 5px; background-color: var(--color-accent);"
+    >
+    </div>
+    <article class="md" data-progress-target>
+        <slot />
+    </article>
+</main>
+<Footer />
+<HomePageThemeManager />
+<script>
+    const progressBar = document.querySelector(
+        "[data-progress-bar]",
+    ) as HTMLElement;
+    const progressTarget = document.querySelector(
+        "[data-progress-target]",
+    ) as HTMLElement;
+
+    document.addEventListener("scroll", () => {
+        // we want the scroll progress within progressTarget
+        // so we get
+        const targetOffset = progressTarget.offsetTop;
+        const targetHeight = progressTarget.scrollHeight;
+
+        const midWindowScroll = window.innerHeight / 2 + window.scrollY;
+
+        // either the start of the target element, or the beginning of the scroll, whichever comes last
+        const targetStart = Math.max(targetOffset, window.innerHeight / 2);
+
+        // either the end of the target element or the end of the scroll, whichever comes first
+        const targetEnd = Math.min(
+            targetOffset + targetHeight,
+            document.documentElement.scrollHeight - window.innerHeight / 2,
+        );
+
+        // lerp the midWindowScroll between targetStart and targetEnd
+        const lerp = Math.min(
+            1,
+            Math.max(
+                0,
+                (midWindowScroll - targetStart) / (targetEnd - targetStart),
+            ),
+        );
+
+        progressBar.style.width = lerp * 100 + "%";
+    });
+</script>
+<style>
+    main {
+        margin: 40px 0 120px;
+    }
+
+    header {
+        width: calc(100vw - 20px);
+        height: calc(100vh - 10px);
+        margin: 0 10px 10px;
+        border-radius: 0 0 8px 8px;
+        background-color: var(--color-text);
+        color: var(--color-background);
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        overflow: hidden;
+
+        position: relative;
+    }
+
+    .hero {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+    }
+
+    .hero > * {
+        position: absolute;
+    }
+
+    .title {
+        white-space: nowrap;
+
+        text-align: center;
+        font-size: min(9.8rem, 12.5vw);
+    }
+
+    .subtitle {
+        font-size: min(2.5vw, 2rem);
+        margin-top: max(-2.5vw, -2rem);
+    }
+
+    .hero img {
+        width: 1000px;
+        max-width: 80vw;
+
+        width: 80vw;
+
+        width: min(1000px, 80vw);
+    }
+
+    .caption {
+        font-size: min(1.4vw, 1em);
+        margin-top: 0.5em;
+    }
+
+    header > span:nth-child(even) {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+    }
+
+    header > span:nth-child(odd) {
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+    }
+</style>

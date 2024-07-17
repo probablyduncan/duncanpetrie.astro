@@ -1,0 +1,94 @@
+---
+import {
+    getHomePageThemes,
+} from "../lib/themeHelper";
+
+const themeData = getHomePageThemes().light;
+
+// https://astro-tips.dev/recipes/dark-mode/
+---
+
+<script is:inline data-themes={JSON.stringify(themeData)}>
+    window.theme ??= (() => {
+        const themes = JSON.parse(document.currentScript.dataset.themes);
+        const storeKey = "theme";
+        const store =
+            typeof localStorage !== "undefined"
+                ? localStorage
+                : { getItem: () => null, setItem: () => {} };
+
+        function getNextIndex(numThemes = 0) {
+            const fromStore = store.getItem(storeKey);
+            if (numThemes <= 1 || fromStore === null) {
+                return 0;
+            }
+
+            const prevIndex = parseInt(fromStore);
+            while (1) {
+                const next = Math.floor(Math.random() * numThemes);
+                if (next !== prevIndex) {
+                    return next;
+                }
+            }
+        }
+
+        function setVar(name, val) {
+            document.documentElement.style.setProperty(
+                "--" + name,
+                val?.toString(),
+            );
+        }
+
+        function next() {
+            const index = getNextIndex(themes.length);
+            const theme = themes[index];
+            document
+                .querySelectorAll("img[data-theme-element]")
+                .forEach((e) => {
+                    e.src = theme.src;
+                    e.alt = theme.caption;
+                });
+            document
+                .querySelectorAll(
+                    "span[data-theme-element], div[data-theme-element]",
+                )
+                .forEach((e) => {
+                    e.innerHTML = theme.caption;
+                });
+
+            setVar("color-background", theme.background);
+            setVar("color-text", theme.text);
+            setVar("color-accent", theme.accent);
+
+            setVar("title-align", theme.titleAlign);
+            setVar("title-is-left", theme.titleAlign === 'left' ? 1 : 0);
+            setVar("img-justify", theme.imgJustify);
+            setVar("img-ratio", theme.ratio);
+
+            store.setItem(storeKey, index);
+        }
+
+        return { next };
+    })();
+    window.theme.next();
+</script>
+<script>
+
+    // should be after swap instead? not sure, sometimes you wait too long and this doesn't trigger on swap anymore?
+    document.addEventListener("astro:page-load", () => {
+
+        // remove custom styles when navigating off the page
+        if (window.location.pathname === '/') {
+            window.theme.next();
+        } else {
+            document.documentElement.removeAttribute("style");
+        }
+    });
+</script>
+<style is:global>
+    :root {
+        --color-text: #666;
+        --color-background: #aaa;
+        --color-accent: #666;
+    }
+</style>

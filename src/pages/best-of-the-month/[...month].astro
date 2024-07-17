@@ -1,0 +1,257 @@
+---
+import BaseHead from "../../components/BaseHead.astro";
+import Image from "../../components/Image.astro";
+import Link from "../../components/Link.astro";
+import RootColors from "../../components/RootColors.astro";
+import TickerNav from "../../components/TickerNav.astro";
+import { getOrdinalSuffix, groupByKey } from "../../lib/miscellaneum";
+import { getPhotosByRating, PhotoData } from "../../lib/photoHelper";
+
+interface BestOfTheMonthGroup {
+    display: string;
+    monthLongName: string;
+    lastOfMonth: number;
+    year: number;
+    slug: string;
+    items: PhotoData[];
+}
+
+/**
+ * all photos >= 4 stars, grouped by month
+ */
+export let _allGroups: BestOfTheMonthGroup[];
+export function getGroups(): BestOfTheMonthGroup[] {
+    if (!_allGroups) {
+        _allGroups = getPhotosByRating(4).reduce((result, photo) => {
+            const displayName = new Intl.DateTimeFormat("default", {
+                month: "short",
+                year: "numeric",
+            }).format(photo.date);
+
+            const groupIndex = result.findIndex(
+                (group) => group.display === displayName,
+            );
+            if (groupIndex === -1) {
+                const monthName = new Intl.DateTimeFormat("default", {
+                    month: "long",
+                }).format(photo.date);
+
+                const lastOfMonthDate = new Date(photo.date);
+                lastOfMonthDate.setMonth(lastOfMonthDate.getMonth() + 1);
+                lastOfMonthDate.setDate(0);
+
+                result.push({
+                    display: displayName,
+                    slug: displayName.replaceAll(" ", "-").toLowerCase(),
+                    monthLongName: monthName,
+                    lastOfMonth: lastOfMonthDate.getDate(),
+                    year: photo.date.getFullYear(),
+                    items: [photo],
+                });
+            } else {
+                result[groupIndex].items.push(photo);
+            }
+
+            return result;
+        }, []);
+    }
+
+    return _allGroups;
+}
+
+export function getStaticPaths() {
+    const monthPaths = getGroups().map((group) => group.slug);
+    monthPaths.push(undefined);
+    return monthPaths.map((path) => ({ params: { month: path } }));
+}
+
+const { month } = Astro.params;
+const currentGroup =
+    month !== undefined
+        ? getGroups().find((group) => group.slug === month)
+        : getGroups()[0];
+
+// const groupsByYear = groupByKey(getGroups(), 'year');
+// const years = Object.keys(groupsByYear).sort((a: string, b: string) => parseInt(b) - parseInt(a));
+---
+
+<!doctype html>
+<html>
+    <head>
+        <BaseHead />
+        <RootColors colors={{ accent: "chocolate", background: "#FEF2E9" }} />
+    </head>
+    <body>
+        <TickerNav />
+        <header>
+            <h1>
+                {currentGroup.monthLongName} 1<sup>st</sup> through<br />the {
+                    currentGroup.lastOfMonth
+                }<sup>{getOrdinalSuffix(currentGroup.lastOfMonth)}</sup>, {
+                    currentGroup.year
+                }.
+            </h1>
+            <nav class="mono-small">
+                <span
+                    >Go <a href="/" title="Back! to the home page.">home</a>.
+                </span>
+                <span
+                    >More <a href="/photography" title="Back! to the home page."
+                        >photography</a
+                    >.
+                </span>
+                <span
+                    ><a href="/writing" title="Back! to the home page."
+                        >Writing</a
+                    >.
+                </span>
+                <span><a href="/about" title="About me.">About</a>. </span>
+                <span
+                    ><Link href="mailto:duncanpetrie1@gmail.com">Email me</Link
+                    >.
+                </span>
+                <span
+                    ><Link href="https://instagram.com/probablyduncan"
+                        >Instagram</Link
+                    >.
+                </span>
+                <br />
+                <br />
+                <span>◮ Photo Archives:</span>
+                <br />
+                <br />
+                {
+                    getGroups().map((group, i) => {
+                        if (group.slug === currentGroup.slug) {
+                            return (
+                                <span
+                                    class="color-accent"
+                                    style="cursor: not-allowed;"
+                                >
+                                    <b>{group.display}</b>.{" "}
+                                </span>
+                            );
+                        } else {
+                            return (
+                                <span>
+                                    <a href={`/best-of-the-month/${i === 0 ? "" : group.slug}`} title={`Best of the month: ${group.display}`}>{group.display}</a>.{" "}
+                                </span>
+                            );
+                        }
+                    })
+                }
+            </nav>
+        </header>
+        <main>
+            {
+                currentGroup.items.map((photo, i) => (
+                    <div
+                        style={`--rand: ${Math.random() - 0.5}; --i: ${i}; --ratio: ${photo.ratio}; --sqrt-ratio: ${Math.sqrt(photo.ratio)};`}
+                    >
+                        <div>
+                            <Image
+                                photo={{ name: photo.name, size: "medium" }}
+                                captionAlign="right"
+                                captionAccent={false}
+                            />
+                        </div>
+                    </div>
+                ))
+            }
+        </main>
+        <style>
+            header {
+                width: calc(100vw - 80px);
+                margin: 200px 0 100px;
+                display: flex;
+                flex-flow: row;
+                justify-content: space-between;
+                align-items: flex-end;
+                padding-bottom: 40px;
+                border-bottom: 2px solid var(--color-text);
+            }
+
+            h1 {
+                font-size: 5.6rem;
+                font-style: italic;
+                font-weight: normal;
+                max-width: 820px;
+                max-width: calc(100% - 60px);
+
+                margin: 0;
+            }
+
+            nav {
+                width: 280px;
+                min-width: 280px;
+                text-align: right;
+            }
+
+            main {
+                width: calc(100vw - 80px);
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+                row-gap: 40px;
+                margin-bottom: 50vh;
+            }
+
+            main > div {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                /* margin-bottom: calc(40vh); */
+                /* margin-bottom: min(calc(200px + var(--rand) * 40px)); */
+                /* margin-right: calc(var(--rand) * 20%);
+                margin-left: calc(var(--rand) * -20%); */
+            }
+
+            main > div > div {
+                width: calc(100% * var(--sqrt-ratio) / 1.3333333333);
+            }
+
+            @media screen and (max-width: 1160px) {
+                h1 {
+                    font-size: 2.8rem;
+                }
+
+                main {
+                    grid-template-columns: 1fr 1fr;
+                }
+            }
+
+            @media screen and (max-width: 750px) {
+
+                header {
+                    flex-flow: column-reverse;
+                    align-items: flex-start;
+                    gap: 40px;
+                    width: calc(100vw - 40px);
+                    margin-top: 60px;
+                    padding: 0 10px 20px 0;
+                }
+
+                h1 {
+                    font-size: 3.2rem;
+                    max-width: unset;
+                }
+
+                nav {
+                    max-width: 100%;
+                    width: 100%;
+                    text-align: left;
+                }
+
+                main {
+                    grid-template-columns: 1fr;
+                    row-gap: 20vh;
+                    width: calc(100vw - 20px);
+                }
+
+                main > div > div {
+                    width: 100%;
+                }
+            }
+        </style>
+    </body>
+</html>

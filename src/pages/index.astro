@@ -1,50 +1,272 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import BaseHead from "../components/BaseHead.astro";
+import TickerNav from "../components/TickerNav.astro";
+import LegendList from "../components/LegendList.astro";
+import Footer from "../components/Footer.astro";
+import { type ListData } from "../lib/consts";
+import HomePageThemeManager from "../components/HomePageThemeManager.astro";
+import { getHomePageThemes } from "../lib/themeHelper";
+import ThresholdSwapSpan from "../components/ThresholdSwapSpan.astro";
+
+const listData: ListData = [
+	{
+		name: "ongoing",
+		items: [
+			{
+				title: "The Permanent Collection",
+				url: "/permanent-collection",
+				type: "photography",
+				alt: "Photography Gallery",
+				photoName: "cycling",
+			},
+			{
+				title: "Palimpsest",
+				url: "/palimpsest",
+				type: "photobook",
+				alt: "Photobook: Palimpsest",
+				photoName: "paperwindow",
+			},
+			{
+				title: "Best of the Month",
+				url: "/best-of-the-month",
+				type: "archive",
+				alt: "Archives: Best of the Month",
+				// photoName: "falmouthclock",
+			},
+			{
+				title: "Unfinished Songs",
+				url: "/unfinished-songs",
+				type: "lyric & verse",
+				alt: "Unfinished Songs",
+				// photoName: "goslingcall",
+			},
+			{
+				title: "Springtide",
+				url: "/springtide",
+				type: "ruin",
+				alt: "Springtide",
+				imgSrc: "/media/bigmapW4_small.jpg",
+			},
+		],
+	},
+	{
+		name: "2024",
+		items: [
+			{
+				title: "To Pigeon-Fill the Sky",
+				url: "/pigeon-fill",
+				type: "photobook",
+				alt: "Photobook: To Pigeon-Fill the Sky",
+				imgSrc: "/media/pigeon-fill_s.jpg",
+			},
+			{
+				title: "Saltish and the Sea-Beast",
+				url: "/w/saltish",
+				type: "story",
+				alt: "It was the smell that woke them in the night...",
+				photoName: "stanthonyhead",
+			},
+		],
+	},
+	{
+		name: "2023",
+		items: [
+			{
+				title: "The Man Upstairs",
+				url: "/the-man-upstairs",
+				type: "lyric & verse",
+				alt: "I've learned to hate the man upstairs...",
+				photoName: "highcastle",
+			},
+			{
+				title: "The Baron’s Old Fleet",
+				url: "/the-barons-old-fleet",
+				type: "story",
+				alt: '"No," said the man with the large, floppy hat. "We cannot accommodate you..."',
+				photoName: "maplezoom",
+			},
+		],
+	},
+	{
+		name: "2022",
+		items: [
+			{
+				title: "Lingermyth",
+				url: "/lingermyth",
+				type: "photobook",
+				alt: "Photobook: Lingermyth",
+				photoName: "surrogatesea",
+			},
+			{
+				title: "A Necklace of Stars",
+				url: "/a-necklace-of-stars",
+				type: "story",
+				alt: "Back in a time when these sorts of things happened, the ground was littered with stars...",
+				photoName: "nightgrass",
+			},
+		],
+	},
+	{
+		name: "2021",
+		items: [
+			{
+				title: "On Yearning",
+				url: "/on-yearning",
+				type: "archive",
+				alt: "Dissertation: On Yearning",
+				imgSrc: "/media/diss/1.jpg",
+			},
+			{
+				title: "A Triumph of the Commons",
+				url: "https://www.youtube.com/watch?v=JRXZAaDxGCQ",
+				type: "film",
+				alt: "Film: A Triumph of the Commons",
+				imgSrc: "/media/wiki_thumbnail.gif",
+			},
+		],
+	},
+];
 ---
 
-<!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<BaseHead />
 	</head>
 	<body>
-		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
-				template serves as a lightweight, minimally-styled starting point for anyone looking to build
-				a personal website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/pages/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to <a href="https://docs.astro.build/"
-					>read the docs
-				</a> or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out <a
-					href="https://github.com/Charca/astro-blog-template"
-					>astro-blog-template
-				</a> by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
+		<TickerNav />
+		<header class="wrapper">
+			<div>
+				<h1>
+					Hello! I'm
+					<br />
+					<a class="color-accent" href="/about" title="About me."
+						>Duncan Petrie</a
+					>.
+				</h1>
+				<h1>
+					This is my<br />
+					{
+						true ? (
+							<ThresholdSwapSpan
+								values={[
+									"portfolio.",
+									// "archive.",
+									"garden.",
+									"website.",
+								]}
+								endIndex={-1}
+								startIndex={-1}
+								customRightPropertyVal={"var(--title-is-left)"}
+								minWidth={700}
+								repeatChance={0.3}
+							/>
+						) : (
+							<>website.</>
+						)
+					}
+				</h1>
+			</div>
+			<div class="header-img-container">
+				<div class="header-img-wrapper">
+					<img data-theme-element />
+					<span
+						class="color-accent monospace right"
+						data-theme-element></span>
+				</div>
+			</div>
+		</header>
+		<HomePageThemeManager />
+		<main class="wrapper">
+			<LegendList
+				itemGroups={listData}
+				legendLabels={["settlement", "ruin"]}
+				laterLegendLabels={[
+					"ritual stone",
+					"farm",
+					"story",
+					"road",
+					"road (unpaved)",
+					"road (loopy)",
+				]}
+			/>
 		</main>
 		<Footer />
+		<style type="text/css">
+			header {
+				position: relative;
+				margin: 40px 0 100px;
+			}
+
+			h1 {
+				font-style: italic;
+				font-weight: 400;
+				font-size: 6rem;
+				position: relative;
+				z-index: 1;
+				text-align: var(--title-align);
+			}
+
+			h1 a:focus-visible,
+			h1 a:hover {
+				display: inline-block;
+				text-decoration: none;
+				outline: none;
+				border: 6px dashed var(--color-accent);
+				padding: 0px 24px 0px 14px;
+				margin: -6px -30px -6px -20px;
+			}
+
+			.header-img-container {
+				width: 100%;
+				display: flex;
+				justify-content: var(--img-justify);
+				margin-top: -220px;
+				position: relative;
+				z-index: 0;
+			}
+
+			.header-img-wrapper {
+				width: calc((100% - 176px) * var(--img-ratio) / 1.5);
+				display: flex;
+				flex-flow: column nowrap;
+			}
+
+			.header-img-wrapper img {
+				aspect-ratio: var(--img-ratio);
+			}
+
+			.header-img-wrapper span {
+				font-size: 0.8rem;
+				font-weight: bold;
+				margin: 4px 0;
+			}
+
+			/* option 2: like current website */
+			@media only screen and (max-width: 700px) {
+				header {
+					display: flex;
+					flex-flow: column-reverse;
+					margin: calc(20px + 5vw + 1.125rem) 0 100px;
+				}
+
+				h1 {
+					font-size: 3rem;
+					margin-left: 8px;
+					text-align: left;
+				}
+
+				.header-img-container {
+					margin-top: 0;
+				}
+
+				.header-img-wrapper {
+					width: 100%;
+				}
+
+				.header-img-wrapper span {
+					display: none;
+				}
+			}
+		</style>
 	</body>
 </html>

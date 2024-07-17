@@ -1,0 +1,251 @@
+---
+import { LEGEND_DATA, type LegendLabel, type ListData } from "../lib/consts";
+import { getPhotoByName } from "../lib/photoHelper";
+
+interface Props {
+    itemGroups: ListData;
+    showLegend?: boolean;
+    legendLabels?: LegendLabel[];
+    laterLegendLabels?: LegendLabel[];
+}
+
+const {
+    itemGroups,
+    showLegend = true,
+    legendLabels = [],
+    laterLegendLabels = [],
+} = Astro.props;
+
+// first labels in legendLabels
+const allLegendLabels: LegendLabel[] = [
+    ...new Set(
+        legendLabels
+            // in the middle, labels from listItems that aren't already there
+            .concat(
+                itemGroups
+                    .flatMap((g) => g.items)
+                    .map((i) => i.type)
+                    .filter(
+                        (l) =>
+                            l &&
+                            legendLabels.indexOf(l) === -1 &&
+                            laterLegendLabels.indexOf(l) === -1,
+                    ),
+            )
+            // last labels in laterLegendLabels
+            .concat(
+                laterLegendLabels.filter((l) => legendLabels.indexOf(l) === -1),
+            ),
+    ),
+];
+---
+
+<div class="legend-list-container italic">
+    <div class="list-container">
+        {
+            itemGroups.map((group) => (
+                <div class="list-group">
+                    <span class="list-heading monospace">
+                        {group.name.toUpperCase()}
+                    </span>
+                    {group.items.map((item) => {
+                        const alt = item.alt ?? item.url;
+                        const src = item.photoName
+                            ? getPhotoByName(item.photoName)?.paths.medium
+                            : item.imgSrc;
+
+                        return (
+                            <>
+                                {src && (
+                                    <img
+                                        alt={alt}
+                                        src={src}
+                                        loading="lazy"
+                                        class:list={{
+                                            crisp: src.includes("bigmap"),
+                                        }}
+                                    />
+                                )}
+                                <a
+                                    data-list-item
+                                    data-type={item.type}
+                                    data-img-src={src}
+                                    title={alt}
+                                    href={item.url}
+                                    target={
+                                        item.url.startsWith("http") ||
+                                        item.url.endsWith(".pdf")
+                                            ? "_blank"
+                                            : "_self"
+                                    }
+                                >
+                                    <span class="title">{item.title}</span>
+                                    <sup>{LEGEND_DATA[item.type]}</sup>
+                                </a>
+                                <br />
+                            </>
+                        );
+                    })}
+                </div>
+            ))
+        }
+    </div>
+    {
+        showLegend && (
+            <div class="legend-container">
+                <div class="legend">
+                    <span class="bold">Key</span>
+                    <div class="legend-items">
+                        {allLegendLabels.map((label) => (
+                            <div
+                                data-legend-item
+                                data-type={label}
+                                tabindex="-1"
+                            >
+                                <div>{LEGEND_DATA[label]}</div>
+                                <div>
+                                    {label[0].toUpperCase() +
+                                        label.substring(1)}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        )
+    }
+</div>
+<style>
+    .legend-list-container {
+        width: 100%;
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+    }
+
+    .list-container {
+        margin-top: 100px;
+    }
+
+    .list-group {
+        margin-bottom: 100px;
+    }
+
+    .list-heading {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 0.25rem;
+    }
+
+    .list-group a {
+        display: inline-block;
+        font-size: 3rem;
+        margin-bottom: 0.75rem;
+
+        color: unset;
+        text-decoration: unset;
+        white-space: nowrap;
+    }
+
+    .list-group a:hover:not(:focus-visible, :active) span {
+        text-decoration: underline;
+    }
+
+    .list-group a:is(:focus-visible, :active) {
+        outline: none;
+        color: var(--color-accent);
+        border: 4px dashed var(--color-accent);
+        padding: 0px 4px 6px 6px;
+        margin: -4px -8px 2px -10px;
+    }
+
+    .list-group a,
+    .list-group a > * {
+        position: relative;
+        z-index: 1;
+    }
+
+    .list-group a > * {
+        white-space: break-spaces;
+    }
+
+    .list-group img {
+        display: none;
+    }
+
+    .legend {
+        position: sticky;
+        z-index: 1;
+        top: 100px;
+        margin: 0 0 200px 20px;
+        padding: 16px 32px 24px 24px;
+        border: 2px solid var(--color-text);
+        background-color: var(--color-background);
+    }
+
+    .legend-items {
+        margin-top: 8px;
+    }
+
+    .legend-items > div {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: 1rem;
+        margin-top: 8px;
+        white-space: nowrap;
+    }
+
+    .legend-items > div > div:first-child {
+        width: 1.125rem;
+        text-align: center;
+        font-style: normal;
+    }
+
+    @media screen and (max-width: 700px) {
+        .legend {
+            display: none;
+        }
+
+        .list-container {
+            margin-top: 0;
+        }
+
+        .list-heading {
+            padding: 4px 8px;
+            border-top: 2px solid var(--color-text);
+            border-bottom: 2px solid var(--color-text);
+            margin-bottom: 20px;
+        }
+
+        .list-group a {
+            font-size: 3rem;
+            padding: 0 8px;
+            width: calc(100% - 16px);
+        }
+
+        .list-group a:not(:last-of-type) {
+            padding-bottom: 120px;
+            border-bottom: 2px solid var(--color-text);
+            margin-bottom: 20px;
+        }
+
+        .list-group img {
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        /* removing images */
+        /* .list-group img {
+            display: none;
+        }
+
+        .list-group {
+            margin-bottom: 50px;
+        }
+
+        .list-group a {
+            margin-bottom: 1rem;
+        } */
+    }
+</style>

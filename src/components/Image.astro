@@ -1,0 +1,65 @@
+---
+import type { ImageSize } from "../lib/consts";
+import type { PhotoName } from "../data/photoTypes.generated";
+import { getImgSize, getPhotoByName } from "../lib/photoHelper";
+import { type SideClass } from "../env";
+
+interface Props {
+    photo?: {
+        name: PhotoName;
+        size?: ImageSize;
+    };
+    image?: {
+        src: string;
+        caption?: string;
+    };
+    noCaption?: boolean;
+    captionAlign?: SideClass;
+    captionAccent?: boolean;
+}
+
+const {
+    photo,
+    image,
+    captionAlign = "left",
+    captionAccent = true,
+    noCaption = false,
+} = Astro.props;
+
+if (!photo && !image) {
+    throw Error("Image must have a photo or image prop.");
+}
+
+const photoData = photo?.name ? getPhotoByName(photo.name) : null;
+const src = photoData ? photoData.paths[photo.size ?? "medium"] : image.src;
+const caption = noCaption
+    ? null
+    : photoData
+      ? photoData.joinedCaption
+      : image.caption;
+const ratio = photoData ? photoData.ratio : (await getImgSize(src)).ratio;
+---
+
+<img src={src} style={`aspect-ratio: ${ratio};`} alt={caption} loading="lazy" />
+
+{
+    caption && (
+        <div
+            class:list={[
+                "monospace",
+                { "color-accent": captionAccent },
+                captionAlign,
+            ]}
+        >
+            {caption}
+        </div>
+    )
+}
+
+<style type="text/css">
+    div {
+        font-size: 0.8rem;
+        font-weight: bold;
+        margin: 4px 0;
+    }
+</style>

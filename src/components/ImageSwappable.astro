@@ -1,0 +1,132 @@
+---
+import type { ImageSize } from "../lib/consts";
+import type { PhotoName } from "../data/photoTypes.generated";
+import { getPhotoByName } from "../lib/photoHelper";
+import type { SideLR } from "../env";
+
+export interface ImageSwappableUpdateEvent {
+    direction: 'next' | 'prev' | 'index' | 'name';
+    index?: number;
+    name?: PhotoName;
+}
+
+interface Props {
+    id: string,
+    photoNames: PhotoName[],
+    size?: ImageSize,
+    caption?: SideLR,
+}
+
+const {id, photoNames, size, caption} = Astro.props;
+
+if (!photoNames.length) {
+    throw Error('Image must have at least one photoName.')
+}
+
+const srcList: string[] = [];
+const captionList: string[] = [];
+const ratioList: number[] = [];
+photoNames.forEach(n => {
+    const photo = getPhotoByName(n);
+    srcList.push(photo.paths[size ?? 'medium']);
+    captionList.push(photo.joinedCaption);
+    ratioList.push(photo.ratio);
+});
+---
+
+<img id={id} data-img-swappable 
+
+    data-current={photoNames[0]} 
+    src={srcList[0]} 
+    alt={captionList[0]} 
+    style={`aspect-ratio: ${ratioList[0]};`}
+
+    data-names={photoNames.join('|')} 
+    data-srcs={srcList.join('|')} 
+    data-captions={captionList.join('|')} 
+    data-ratios={ratioList.join('|')}
+/>
+
+{caption && 
+    <span id={id + '_caption'} class={"color-accent monospace " + caption}>
+        {captionList[0]}
+    </span>
+}
+
+<script>
+import type { ImageSwappableUpdateEvent } from "./ImageSwappable.astro";
+
+
+    document.querySelectorAll('img[data-img-swappable]').forEach(i => {
+        
+        // preload img and dataset stuff
+        const img = i as HTMLImageElement;
+        const names = img.dataset.names?.split('|') ?? [];
+        const srcs = img.dataset.srcs?.split('|') ?? [];
+        const captions = img.dataset.captions?.split('|') ?? [];
+        const ratios = img.dataset.ratios?.split('|') ?? [];
+
+        // validate all the same size
+        if (!names.length || srcs.length !== names.length || captions.length !== names.length || ratios.length !== names.length) {
+            return;
+        }
+
+        const caption = document.getElementById(img.id + '_caption');
+        const setCaption = (capStr: string) => {
+            if (caption) {
+                caption.innerHTML = capStr;
+            }
+        }
+
+        img.addEventListener('load', () => {
+            img.removeAttribute('loading');
+        })
+
+        // how to hopefully dispatch this event https://javascript.info/dispatch-events#custom-events
+        // document.getElementById('changebutton').addEventListener('click', () => {
+        //     dispatchEvent(new CustomEvent<ImageSwappableUpdateEvent>('header-img-container-update', { detail: { direction: 'next' }}));
+        // })
+
+        img.addEventListener(`${img.id}-update`, (e) => {
+
+            console.log('event recieved!!')
+            const event = e as unknown as ImageSwappableUpdateEvent;
+
+            // block changing when already 
+            if (img.hasAttribute('loading')) {
+                return;
+            }
+            img.setAttribute('loading', 'true');
+
+            let i: number;
+            switch (event.direction) {
+                case 'index':
+                    i = event.index ?? 0;
+                    break;
+                case 'name':
+                    i = Math.max(names.indexOf(event.name), 0);
+                    break;
+                default:
+                    i = (names.indexOf(img.dataset.current) + (event.direction === 'prev' ? -1 : 1)) % names.length;
+                    break;
+            }
+
+            img.dataset.current = names[i];
+            img.src = srcs[i];
+            img.style.aspectRatio = ratios[i];
+            img.alt = captions[i];
+            setCaption(captions[i]);
+        })
+    })
+
+</script>
+
+<style type="text/css">
+
+    span {
+        font-size: 0.8rem;
+        font-weight: bold;
+        margin: 4px 0;
+    }
+
+</style>

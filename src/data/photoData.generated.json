@@ -1,0 +1,988 @@
+[
+    {
+        "name": "seeing-double-1",
+        "paths": {
+            "large": "\\photos\\seeing-double-1_l.webp",
+            "medium": "\\photos\\seeing-double-1_m.webp",
+            "small": "\\photos\\seeing-double-1_s.webp"
+        },
+        "datestring": "2024-06-27T19:01:36.000Z",
+        "rating": 3,
+        "camera": "NIKON D500",
+        "lens": "24.0-120.0 mm f/4.0",
+        "focallength": 35,
+        "aperture": 5.6,
+        "shutter": 0.002,
+        "iso": 800,
+        "ratio": 1.5,
+        "tags": [
+            "seeing-double",
+            "london"
+        ]
+    },
+    {
+        "name": "seeing-double-2",
+        "paths": {
+            "large": "\\photos\\seeing-double-2_l.webp",
+            "medium": "\\photos\\seeing-double-2_m.webp",
+            "small": "\\photos\\seeing-double-2_s.webp"
+        },
+        "datestring": "2024-06-25T13:52:39.000Z",
+        "rating": 3,
+        "camera": "NIKON D500",
+        "lens": "24.0-120.0 mm f/4.0",
+        "focallength": 50,
+        "aperture": 8,
+        "shutter": 0.002,
+        "iso": 400,
+        "ratio": 1.5,
+        "tags": [
+            "seeing-double"
+        ]
+    },
+    {
+        "name": "seeing-double-3",
+        "paths": {
+            "large": "\\photos\\seeing-double-3_l.webp",
+            "medium": "\\photos\\seeing-double-3_m.webp",
+            "small": "\\photos\\seeing-double-3_s.webp"
+        },
+        "datestring": "2024-06-24T19:25:07.000Z",
+        "rating": 3,
+        "camera": "NIKON D500",
+        "lens": "24.0-120.0 mm f/4.0",
+        "focallength": 35,
+        "aperture": 5.6,
+        "shutter": 0.002,
+        "iso": 3200,
+        "ratio": 1.5,
+        "tags": [
+            "seeing-double"
+        ]
+    },
+    {
+        "name": "seeing-double-4",
+        "paths": {
+            "large": "\\photos\\seeing-double-4_l.webp",
+            "medium": "\\photos\\seeing-double-4_m.webp",
+            "small": "\\photos\\seeing-double-4_s.webp"
+        },
+        "datestring": "2024-06-24T19:20:50.000Z",
+        "rating": 3,
+        "camera": "NIKON D500",
+        "lens": "24.0-120.0 mm f/4.0",
+        "focallength": 34,
+        "aperture": 5.6,
+        "shutter": 0.004,
+        "iso": 1600,
+        "ratio": 1.4998640935036696,
+        "tags": [
+            "seeing-double"
+        ]
+    },
+    {
+        "name": "youngbirch",
+        "paths": {
+            "large": "\\photos\\youngbirch_l.webp",
+            "medium": "\\photos\\youngbirch_m.webp",
+            "small": "\\photos\\youngbirch_s.webp"
+        },
+        "caption": "Young birch, London",
+        "datestring": "2024-05-15T17:15:20.000Z",
+        "rating": 4,
+        "camera": "NIKON D500",
+        "lens": "24.0-120.0 mm f/4.0",
+        "focallength": 24,
+        "aperture": 5.6,
+        "shutter": 0.0025,
+        "iso": 400,
+        "ratio": 1.5,
+        "tags": [
+            "london",
+            "england",
+            "uk"
+        ]
+    },
+    {
+        "name": "highcastle",
+        "paths": {
+            "large": "\\photos\\highcastle_l.webp",
+            "medium": "\\photos\\highcastle_m.webp",
+            "small": "\\photos\\highcastle_s.webp"
+        },
+        "caption": "High castle, London",
+        "datestring": "2024-05-13T05:03:39.000Z",
+        "rating": 5,
+        "camera": "NIKON D500",
+        "lens": "24.0-120.0 mm f/4.0",
+        "focallength": 24,
+        "aperture": 5.6,
+        "shutter": 0.0025,
+        "iso": 400,
+        "ratio": 1.5,
+        "tags": [
+            "best",
+            "palimpsest",
+            "london"
+        ]
+    },
+    {
+        "name": "windowsafari",
+        "paths": {
+            "large": "\\photos\\windowsafari_l.webp",
+            "medium": "\\photos\\windowsafari_m.webp",
+            "small": "\\photos\\windowsafari_s.webp"
+        },
+        "caption": "Window Safari, Primrose Hill",
+        "datestring": "2024-05-13T04:57:59.000Z",
+        "rating": 5,
+        "camera": "NIKON D500",
+        "lens": "24.0-120.0 mm f/4.0",
+        "focallength": 70,
+        "aperture": 5.6,
+        "shutter": 0.0025,
+        "iso": 800,
+        "ratio": 1.3337595907928388,
+        "tags": [
+            "palimpsest",
+            "tag tag",
+            "best",
+            "tag",
+            "primrose hill",
+            "london",
+            "england"
+        ]
+    },
+    {
+        "name": "seeing-double-5",
+        "paths": {
+            "large": "\\photos\\seeing-double-5_l.webp",
+            "medium": "\\photos\\seeing-double-5_m.webp",
+            "small": "\\photos\\seeing-double-5_s.webp"
+        },
+        "caption": "Chestnut Tree, London",
+        "datestring": "2024-05-01T18:22:06.000Z",
+        "rating": 4,
+        "camera": "NIKON D500",
+        "lens": "24.0-120.0 mm f/4.0",
+        "focallength": 34,
+        "aperture": 4,
+        "shutter": 0.00625,
+        "iso": 2000,
+        "ratio": 1.5,
+        "tags": [
+            "seeing-double",
+            "primrose hill",
+            "london",
+            "england",
+            "uk"
+        ]
+    },
+    {
+        "name": "forestlibrary",
+        "paths": {
+            "large": "\\photos\\forestlibrary_l.webp",
+            "medium": "\\photos\\forestlibrary_m.webp",
+            "small": "\\photos\\forestlibrary_s.webp"
+        },
+        "caption": "Forest library, Isle of Wight",
+        "datestring": "2024-04-26T11:57:11.000Z",
+        "rating": 5,
+        "camera": "NIKON D500",
+        "lens": "24.0-120.0 mm f/4.0",
+        "focallength": 24,
+        "aperture": 5.6,
+        "shutter": 0.0025,
+        "iso": 400,
+        "ratio": 0.6666064002892786,
+        "tags": [
+            "palimpsest",
+            "isle of wight"
+        ]
+    },
+    {
+        "name": "stannescourt",
+        "paths": {
+            "large": "\\photos\\stannescourt_l.webp",
+            "medium": "\\photos\\stannescourt_m.webp",
+            "small": "\\photos\\stannescourt_s.webp"
+        },
+        "caption": "St. Anne's Court, Herne Bay",
+        "datestring": "2024-01-15T12:14:59.000Z",
+        "rating": 4,
+        "camera": "NIKON D500",
+        "lens": "70.0-200.0 mm f/2.8",
+        "focallength": 70,
+        "aperture": 5.6,
+        "shutter": 0.0025,
+        "iso": 400,
+        "ratio": 1.5,
+        "tags": [
+            "herne bay",
+            "kent",
+            "england"
+        ]
+    },
+    {
+        "name": "oakleaf",
+        "paths": {
+            "large": "\\photos\\oakleaf_l.webp",
+            "medium": "\\photos\\oakleaf_m.webp",
+            "small": "\\photos\\oakleaf_s.webp"
+        },
+        "caption": "Oak leaf, Rothamstead",
+        "datestring": "2023-11-23T12:24:04.000Z",
+        "rating": 4,
+        "camera": "NIKON D500",
+        "lens": "70.0-200.0 mm f/2.8",
+        "focallength": 200,
+        "aperture": 4,
+        "shutter": 0.0008,
+        "iso": 400,
+        "ratio": 1.500146756677429,
+        "tags": [
+            "rothamstead",
+            "harpenden",
+            "hertfordshire",
+            "england"
+        ]
+    },
+    {
+        "name": "broadstairs",
+        "paths": {
+            "large": "\\photos\\broadstairs_l.webp",
+            "medium": "\\photos\\broadstairs_m.webp",
+            "small": "\\photos\\broadstairs_s.webp"
+        },
+        "caption": "Sea wall, Broadstairs",
+        "datestring": "2023-09-04T11:06:58.000Z",
+        "rating": 4,
+        "camera": "NIKON D500",
+        "lens": "70.0-200.0 mm f/2.8",
+        "focallength": 70,
+        "aperture": 4,
+        "shutter": 0.0025,
+        "iso": 400,
+        "ratio": 1.5,
+        "tags": [
+            "broadstairs",
+            "kent",
+            "england"
+        ]
+    },
+    {
+        "name": "paperwindow",
+        "paths": {
+            "large": "\\photos\\paperwindow_l.webp",
+            "medium": "\\photos\\paperwindow_m.webp",
+            "small": "\\photos\\paperwindow_s.webp"
+        },
+        "caption": "Parchment paper, window, Margate",
+        "datestring": "2023-09-04T08:54:23.000Z",
+        "rating": 4,
+        "camera": "NIKON D500",
+        "lens": "70.0-200.0 mm f/2.8",
+        "focallength": 70,
+        "aperture": 8,
+        "shutter": 0.0015625,
+        "iso": 400,
+        "ratio": 1.5,
+        "tags": [
+            "margate",
+            "kent",
+            "england",
+            "uk"
+        ]
+    },
+    {
+        "name": "algae",
+        "paths": {
+            "large": "\\photos\\algae_l.webp",
+            "medium": "\\photos\\algae_m.webp",
+            "small": "\\photos\\algae_s.webp"
+        },
+        "caption": "From the sea wall, St. Ives",
+        "datestring": "2022-03-08T13:06:16.000Z",
+        "rating": 4,
+        "camera": "NIKON D500",
+        "lens": "70.0-200.0 mm f/2.8",
+        "focallength": 70,
+        "aperture": 5.6,
+        "shutter": 0.0025,
+        "iso": 400,
+        "ratio": 1.5,
+        "tags": [
+            "313 all",
+            "_lingermyth",
+            "st. ives",
+            "cornwall",
+            "england"
+        ]
+    },
+    {
+        "name": "stmawes",
+        "paths": {
+            "large": "\\photos\\stmawes_l.webp",
+            "medium": "\\photos\\stmawes_m.webp",
+            "small": "\\photos\\stmawes_s.webp"
+        },
+        "caption": "Pole over field, St. Mawes, Cornwall",
+        "datestring": "2022-02-26T12:14:01.000Z",
+        "rating": 5,
+        "camera": "NIKON D500",
+        "lens": "70.0-200.0 mm f/2.8",
+        "focallength": 70,
+        "aperture": 5.6,
+        "shutter": 0.0008,
+        "iso": 400,
+        "ratio": 1.500142979696883,
+        "tags": [
+            "313 all",
+            "cornwall",
+            "_lingermyth",
+            "lingermyth",
+            "st. mawes",
+            "uk"
+        ]
+    },
+    {
+        "name": "surrogatesea",
+        "paths": {
+            "large": "\\photos\\surrogatesea_l.webp",
+            "medium": "\\photos\\surrogatesea_m.webp",
+            "small": "\\photos\\surrogatesea_s.webp"
+        },
+        "caption": "Surrogate Sea, Villajoyosa",
+        "datestring": "2022-02-18T16:16:59.000Z",
+        "rating": 5,
+        "camera": "NIKON D500",
+        "lens": "TAMRON 18-400mm F3.5-6.3 Di II VC HLD B028N",
+        "focallength": 35,
+        "aperture": 5.6,
+        "shutter": 0.003125,
+        "iso": 400,
+        "ratio": 1.5001645278051992,
+        "tags": [
+            "313 all",
+            "lingermyth",
+            "_lingermyth",
+            "villajoyosa",
+            "alicante",
+            "spain"
+        ]
+    },
+    {
+        "name": "falmouthclock",
+        "paths": {
+            "large": "\\photos\\falmouthclock_l.webp",
+            "medium": "\\photos\\falmouthclock_m.webp",
+            "small": "\\photos\\falmouthclock_s.webp"
+        },
+        "caption": "Clock tower, Falmouth",
+        "datestring": "2021-11-15T15:15:38.000Z",
+        "rating": 5,
+        "camera": "NIKON D500",
+        "lens": "70.0-200.0 mm f/2.8",
+        "focallength": 70,
+        "aperture": 4,
+        "shutter": 0.000625,
+        "iso": 1600,
+        "ratio": 1.25,
+        "tags": [
+            "311 final",
+            "lingermyth",
+            "_lingermyth",
+            "311 all",
+            "falmouth",
+            "cornwall",
+            "uk"
+        ]
+    },
+    {
+        "name": "fluffycloud",
+        "paths": {
+            "large": "\\photos\\fluffycloud_l.webp",
+            "medium": "\\photos\\fluffycloud_m.webp",
+            "small": "\\photos\\fluffycloud_s.webp"
+        },
+        "caption": "Dusk, Falmouth",
+        "datestring": "2021-11-02T17:03:55.000Z",
+        "rating": 5,
+        "camera": "NIKON D500",
+        "lens": "70.0-200.0 mm f/2.8",
+        "focallength": 70,
+        "aperture": 5.6,
+        "shutter": 0.005,
+        "iso": 1600,
+        "ratio": 1.5,
+        "tags": [
+            "311 all",
+            "311 final",
+            "_lingermyth",
+            "lingermyth",
+            "falmouth",
+            "cornwall",
+            "uk"
+        ]
+    },
+    {
+        "name": "penzancewait",
+        "paths": {
+            "large": "\\photos\\penzancewait_l.webp",
+            "medium": "\\photos\\penzancewait_m.webp",
+            "small": "\\photos\\penzancewait_s.webp"
+        },
+        "caption": "Furniture store, Penzance",
+        "datestring": "2021-11-02T11:09:22.000Z",
+        "rating": 5,
+        "camera": "NIKON D500",
+        "lens": "TAMRON 18-400mm F3.5-6.3 Di II VC HLD B028N",
+        "focallength": 35,
+        "aperture": 5.6,
+        "shutter": 0.00125,
+        "iso": 400,
+        "ratio": 1.5,
+        "tags": [
+            "lingermyth",
+            "311 all",
+            "_lingermyth",
+            "311 final",
+            "penzance",
+            "cornwall",
+            "uk"
+        ]
+    },
+    {
+        "name": "jubileepool",
+        "paths": {
+            "large": "\\photos\\jubileepool_l.webp",
+            "medium": "\\photos\\jubileepool_m.webp",
+            "small": "\\photos\\jubileepool_s.webp"
+        },
+        "caption": "Jubilee Pool, Penzance",
+        "datestring": "2021-11-02T10:55:49.000Z",
+        "rating": 5,
+        "camera": "NIKON D500",
+        "lens": "70.0-200.0 mm f/2.8",
+        "focallength": 100,
+        "aperture": 5.6,
+        "shutter": 0.00125,
+        "iso": 400,
+        "ratio": 1.5,
+        "tags": [
+            "311 all",
+            "_lingermyth",
+            "lingermyth",
+            "penzance",
+            "cornwall",
+            "uk"
+        ]
+    },
+    {
+        "name": "meltedmoon",
+        "paths": {
+            "large": "\\photos\\meltedmoon_l.webp",
+            "medium": "\\photos\\meltedmoon_m.webp",
+            "small": "\\photos\\meltedmoon_s.webp"
+        },
+        "caption": "Melted moon, Falmouth Bay",
+        "datestring": "2021-10-15T16:46:37.000Z",
+        "rating": 5,
+        "camera": "NIKON D500",
+        "lens": "70.0-200.0 mm f/2.8",
+        "focallength": 70,
+        "aperture": 4,
+        "shutter": 0.03333333333333333,
+        "iso": 800,
+        "ratio": 0.800090661831369,
+        "tags": [
+            "311 final",
+            "yearning",
+            "lingermyth",
+            "_lingermyth",
+            "311 all",
+            "falmouth",
+            "cornwall",
+            "uk"
+        ]
+    },
+    {
+        "name": "flaxengrass",
+        "paths": {
+            "large": "\\photos\\flaxengrass_l.webp",
+            "medium": "\\photos\\flaxengrass_m.webp",
+            "small": "\\photos\\flaxengrass_s.webp"
+        },
+        "caption": "Flaxengrass, Falmouth",
+        "datestring": "2021-10-15T16:08:47.000Z",
+        "rating": 5,
+        "camera": "NIKON D500",
+        "lens": "70.0-200.0 mm f/2.8",
+        "focallength": 70,
+        "aperture": 4,
+        "shutter": 0.005,
+        "iso": 400,
+        "ratio": 1.5001359064963304,
+        "tags": [
+            "yearning",
+            "311 final",
+            "_lingermyth",
+            "311 all",
+            "coast path",
+            "falmouth",
+            "cornwall",
+            "uk"
+        ]
+    },
+    {
+        "name": "catclaws",
+        "paths": {
+            "large": "\\photos\\catclaws_l.webp",
+            "medium": "\\photos\\catclaws_m.webp",
+            "small": "\\photos\\catclaws_s.webp"
+        },
+        "caption": "Catclaws, Pennance Point",
+        "datestring": "2021-10-09T16:45:13.000Z",
+        "rating": 5,
+        "camera": "NIKON D500",
+        "lens": "70.0-200.0 mm f/2.8",
+        "focallength": 70,
+        "aperture": 10,
+        "shutter": 0.03333333333333333,
+        "iso": 1600,
+        "ratio": 1.4998642411077925,
+        "tags": [
+            "yearning",
+            "coast path",
+            "falmouth",
+            "cornwall",
+            "uk"
+        ]
+    },
+    {
+        "name": "nightgrass",
+        "paths": {
+            "large": "\\photos\\nightgrass_l.webp",
+            "medium": "\\photos\\nightgrass_m.webp",
+            "small": "\\photos\\nightgrass_s.webp"
+        },
+        "caption": "Dunegrass, Lake Michigan",
+        "datestring": "2021-03-28T23:50:11.000Z",
+        "rating": 5,
+        "camera": "NIKON D500",
+        "lens": "70.0-200.0 mm f/2.8",
+        "focallength": 70,
+        "aperture": 2.8,
+        "shutter": 0.003125,
+        "iso": 6400,
+        "ratio": 1.5,
+        "tags": [
+            "world",
+            "yearning",
+            "214",
+            "kohler-andrae",
+            "heartland",
+            "usa"
+        ]
+    },
+    {
+        "name": "toenailmoon",
+        "paths": {
+            "large": "\\photos\\toenailmoon_l.webp",
+            "medium": "\\photos\\toenailmoon_m.webp",
+            "small": "\\photos\\toenailmoon_s.webp"
+        },
+        "caption": "Toenail moon, Maenporth",
+        "datestring": "2021-01-16T16:47:08.000Z",
+        "rating": 5,
+        "camera": "NIKON D500",
+        "lens": "70.0-200.0 mm f/2.8",
+        "focallength": 200,
+        "aperture": 4,
+        "shutter": 0.0015625,
+        "iso": 800,
+        "ratio": 1.6,
+        "tags": [
+            "_photos that shoud have names",
+            "yearning",
+            "214",
+            "mayn home",
+            "world",
+            "maenporth",
+            "cornwall",
+            "uk"
+        ]
+    },
+    {
+        "name": "diningroom",
+        "paths": {
+            "large": "\\photos\\diningroom_l.webp",
+            "medium": "\\photos\\diningroom_m.webp",
+            "small": "\\photos\\diningroom_s.webp"
+        },
+        "caption": "North Atlantic, Pennance Point",
+        "datestring": "2021-01-14T16:42:06.000Z",
+        "rating": 4,
+        "camera": "NIKON D500",
+        "lens": "70.0-200.0 mm f/2.8",
+        "focallength": 75,
+        "aperture": 2.8,
+        "shutter": 0.025,
+        "iso": 100,
+        "ratio": 1.4998628257887516,
+        "tags": [
+            "abstracts all",
+            "_photos that shoud have names",
+            "yearning",
+            "abstracts",
+            "bookmaybeidk",
+            "world",
+            "falmouth",
+            "cornwall",
+            "uk"
+        ]
+    },
+    {
+        "name": "stanthonyhead",
+        "paths": {
+            "large": "\\photos\\stanthonyhead_l.webp",
+            "medium": "\\photos\\stanthonyhead_m.webp",
+            "small": "\\photos\\stanthonyhead_s.webp"
+        },
+        "caption": "Last light over Roseland",
+        "datestring": "2020-12-02T16:33:59.000Z",
+        "rating": 4,
+        "camera": "NIKON D500",
+        "lens": "TAMRON 18-400mm F3.5-6.3 Di II VC HLD B028N",
+        "focallength": 35,
+        "aperture": 4,
+        "shutter": 0.03333333333333333,
+        "iso": 800,
+        "ratio": 1.5001365001365001,
+        "tags": [
+            "_photos that shoud have names",
+            "yearning",
+            "oldhoriz",
+            "abstracts all",
+            "huw",
+            "mayn home",
+            "abstracts",
+            "bookmaybeidk",
+            "world",
+            "pennance point",
+            "falmouth",
+            "cornwall",
+            "uk"
+        ]
+    },
+    {
+        "name": "me",
+        "paths": {
+            "large": "\\photos\\me_l.webp",
+            "medium": "\\photos\\me_m.webp",
+            "small": "\\photos\\me_s.webp"
+        },
+        "caption": "Self-portrait, Falmouth, Cornwall",
+        "datestring": "2020-09-25T08:06:04.000Z",
+        "rating": 5,
+        "camera": "NIKON D500",
+        "lens": "TAMRON 18-400mm F3.5-6.3 Di II VC HLD B028N",
+        "focallength": 35,
+        "aperture": 5,
+        "shutter": 0.008,
+        "iso": 800,
+        "ratio": 1.2501699524133243,
+        "tags": [
+            "_lingermyth",
+            "me",
+            "cornwall",
+            "uk"
+        ]
+    },
+    {
+        "name": "accidentals-01",
+        "paths": {
+            "large": "\\photos\\accidentals-01_l.webp",
+            "medium": "\\photos\\accidentals-01_m.webp",
+            "small": "\\photos\\accidentals-01_s.webp"
+        },
+        "datestring": "2020-07-23T15:52:21.000Z",
+        "rating": 4,
+        "camera": "NIKON D500",
+        "lens": "150.0-600.0 mm f/5.0-6.3",
+        "focallength": 150,
+        "aperture": 5,
+        "shutter": 0.03333333333333333,
+        "iso": 400,
+        "ratio": 1.5,
+        "tags": [
+            "accidentals",
+            "usa"
+        ]
+    },
+    {
+        "name": "accidentals-02",
+        "paths": {
+            "large": "\\photos\\accidentals-02_l.webp",
+            "medium": "\\photos\\accidentals-02_m.webp",
+            "small": "\\photos\\accidentals-02_s.webp"
+        },
+        "datestring": "2020-07-23T15:45:43.000Z",
+        "rating": 3,
+        "camera": "NIKON D500",
+        "lens": "150.0-600.0 mm f/5.0-6.3",
+        "focallength": 150,
+        "aperture": 32,
+        "shutter": 0.03333333333333333,
+        "iso": 400,
+        "ratio": 1.5,
+        "tags": [
+            "accidentals",
+            "usa"
+        ]
+    },
+    {
+        "name": "accidentals-03",
+        "paths": {
+            "large": "\\photos\\accidentals-03_l.webp",
+            "medium": "\\photos\\accidentals-03_m.webp",
+            "small": "\\photos\\accidentals-03_s.webp"
+        },
+        "datestring": "2020-07-23T15:32:11.000Z",
+        "rating": 3,
+        "camera": "NIKON D500",
+        "lens": "150.0-600.0 mm f/5.0-6.3",
+        "focallength": 150,
+        "aperture": 5,
+        "shutter": 0.03333333333333333,
+        "iso": 200,
+        "ratio": 1.5,
+        "tags": [
+            "accidentals",
+            "usa"
+        ]
+    },
+    {
+        "name": "accidentals-04",
+        "paths": {
+            "large": "\\photos\\accidentals-04_l.webp",
+            "medium": "\\photos\\accidentals-04_m.webp",
+            "small": "\\photos\\accidentals-04_s.webp"
+        },
+        "datestring": "2020-07-23T15:32:09.000Z",
+        "rating": 4,
+        "camera": "NIKON D500",
+        "lens": "150.0-600.0 mm f/5.0-6.3",
+        "focallength": 150,
+        "aperture": 5,
+        "shutter": 0.03333333333333333,
+        "iso": 200,
+        "ratio": 1.5,
+        "tags": [
+            "accidentals",
+            "usa"
+        ]
+    },
+    {
+        "name": "accidentals-05",
+        "paths": {
+            "large": "\\photos\\accidentals-05_l.webp",
+            "medium": "\\photos\\accidentals-05_m.webp",
+            "small": "\\photos\\accidentals-05_s.webp"
+        },
+        "datestring": "2020-07-23T15:26:41.000Z",
+        "rating": 4,
+        "camera": "NIKON D500",
+        "lens": "150.0-600.0 mm f/5.0-6.3",
+        "focallength": 150,
+        "aperture": 10,
+        "shutter": 0.03333333333333333,
+        "iso": 200,
+        "ratio": 1.5,
+        "tags": [
+            "accidentals",
+            "usa"
+        ]
+    },
+    {
+        "name": "accidentals-06",
+        "paths": {
+            "large": "\\photos\\accidentals-06_l.webp",
+            "medium": "\\photos\\accidentals-06_m.webp",
+            "small": "\\photos\\accidentals-06_s.webp"
+        },
+        "datestring": "2020-07-01T15:12:57.000Z",
+        "rating": 4,
+        "camera": "NIKON D500",
+        "lens": "150.0-600.0 mm f/5.0-6.3",
+        "focallength": 150,
+        "aperture": 16,
+        "shutter": 0.04,
+        "iso": 100,
+        "ratio": 1.5,
+        "tags": [
+            "accidentals",
+            "usa"
+        ]
+    },
+    {
+        "name": "accidentals-07",
+        "paths": {
+            "large": "\\photos\\accidentals-07_l.webp",
+            "medium": "\\photos\\accidentals-07_m.webp",
+            "small": "\\photos\\accidentals-07_s.webp"
+        },
+        "datestring": "2020-07-01T15:12:49.000Z",
+        "rating": 4,
+        "camera": "NIKON D500",
+        "lens": "150.0-600.0 mm f/5.0-6.3",
+        "focallength": 150,
+        "aperture": 16,
+        "shutter": 0.03333333333333333,
+        "iso": 100,
+        "ratio": 1.5,
+        "tags": [
+            "accidentals",
+            "usa"
+        ]
+    },
+    {
+        "name": "accidentals-08",
+        "paths": {
+            "large": "\\photos\\accidentals-08_l.webp",
+            "medium": "\\photos\\accidentals-08_m.webp",
+            "small": "\\photos\\accidentals-08_s.webp"
+        },
+        "datestring": "2020-07-01T15:00:59.000Z",
+        "rating": 4,
+        "camera": "NIKON D500",
+        "lens": "150.0-600.0 mm f/5.0-6.3",
+        "focallength": 220,
+        "aperture": 16,
+        "shutter": 0.16666666666666666,
+        "iso": 400,
+        "ratio": 1.5,
+        "tags": [
+            "accidentals",
+            "usa"
+        ]
+    },
+    {
+        "name": "accidentals-09",
+        "paths": {
+            "large": "\\photos\\accidentals-09_l.webp",
+            "medium": "\\photos\\accidentals-09_m.webp",
+            "small": "\\photos\\accidentals-09_s.webp"
+        },
+        "datestring": "2020-07-01T15:00:58.000Z",
+        "rating": 4,
+        "camera": "NIKON D500",
+        "lens": "150.0-600.0 mm f/5.0-6.3",
+        "focallength": 220,
+        "aperture": 16,
+        "shutter": 0.3333333333333333,
+        "iso": 400,
+        "ratio": 1.5,
+        "tags": [
+            "accidentals",
+            "usa"
+        ]
+    },
+    {
+        "name": "accidentals-10",
+        "paths": {
+            "large": "\\photos\\accidentals-10_l.webp",
+            "medium": "\\photos\\accidentals-10_m.webp",
+            "small": "\\photos\\accidentals-10_s.webp"
+        },
+        "datestring": "2020-07-01T15:00:44.000Z",
+        "rating": 3,
+        "camera": "NIKON D500",
+        "lens": "150.0-600.0 mm f/5.0-6.3",
+        "focallength": 150,
+        "aperture": 16,
+        "shutter": 0.3333333333333333,
+        "iso": 400,
+        "ratio": 1.5,
+        "tags": [
+            "accidentals",
+            "usa"
+        ]
+    },
+    {
+        "name": "goslingcall",
+        "paths": {
+            "large": "\\photos\\goslingcall_l.webp",
+            "medium": "\\photos\\goslingcall_m.webp",
+            "small": "\\photos\\goslingcall_s.webp"
+        },
+        "caption": "Gosling call, Milwaukee River",
+        "datestring": "2020-05-06T07:37:23.000Z",
+        "rating": 5,
+        "camera": "NIKON D500",
+        "lens": "150.0-600.0 mm f/5.0-6.3",
+        "focallength": 600,
+        "aperture": 8,
+        "shutter": 0.001,
+        "iso": 640,
+        "ratio": 1.5,
+        "tags": [
+            "milwaukee",
+            "heartland",
+            "usa"
+        ]
+    },
+    {
+        "name": "cycling",
+        "paths": {
+            "large": "\\photos\\cycling_l.webp",
+            "medium": "\\photos\\cycling_m.webp",
+            "small": "\\photos\\cycling_s.webp"
+        },
+        "caption": "Cycling, Gudmundsen Drive, Door County",
+        "datestring": "2019-08-31T15:21:57.000Z",
+        "rating": 5,
+        "camera": "NIKON D500",
+        "lens": "TAMRON 18-400mm F3.5-6.3 Di II VC HLD B028N",
+        "focallength": 18,
+        "aperture": 13,
+        "shutter": 0.125,
+        "iso": 100,
+        "ratio": 1.5,
+        "tags": [
+            "_photos that shoud have names",
+            "story - island",
+            "_new",
+            "world",
+            "door county",
+            "heartland",
+            "usa"
+        ]
+    },
+    {
+        "name": "maplezoom",
+        "paths": {
+            "large": "\\photos\\maplezoom_l.webp",
+            "medium": "\\photos\\maplezoom_m.webp",
+            "small": "\\photos\\maplezoom_s.webp"
+        },
+        "caption": "Young maple, north woods",
+        "datestring": "2019-08-31T14:36:17.000Z",
+        "rating": 4,
+        "camera": "NIKON D500",
+        "lens": "TAMRON 18-400mm F3.5-6.3 Di II VC HLD B028N",
+        "focallength": 46,
+        "aperture": 8,
+        "shutter": 0.125,
+        "iso": 50,
+        "ratio": 1.5,
+        "tags": [
+            "story - treetops",
+            "_photos that shoud have names",
+            "world",
+            "door county",
+            "heartland",
+            "usa"
+        ]
+    }
+]

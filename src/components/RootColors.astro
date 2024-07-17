@@ -1,0 +1,16 @@
+---
+import type { ColorScheme } from '../env';
+import { applyColorSchemeDefaults } from '../lib/themeHelper';
+
+interface Props {
+    colors?: ColorScheme
+}
+
+const {
+    colors = {}
+} = Astro.props;
+
+const withDefaults = applyColorSchemeDefaults(colors);
+
+---
+<style is:global set:html={`:root { --color-text: ${withDefaults.text}; --color-background: ${withDefaults.background}; --color-accent: ${withDefaults.accent}; }`}></style>

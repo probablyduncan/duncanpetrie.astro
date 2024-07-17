@@ -1,0 +1,506 @@
+---
+import { type CollectionEntry, getCollection } from "astro:content";
+import Image from "../../components/Image.astro";
+import { getPhotosByTags } from "../../lib/photoHelper";
+import { getPhotoByName } from "../../lib/photoHelper";
+import type { PhotoName } from "../../data/photoTypes.generated";
+import Footer from "../../components/Footer.astro";
+import BaseHead from "../../components/BaseHead.astro";
+import RootColors from "../../components/RootColors.astro";
+import Link from "../../components/Link.astro";
+
+type Props = CollectionEntry<"g">;
+export async function getStaticPaths() {
+    const posts: any[] = await getCollection("g");
+    return posts.map((post) => ({
+        params: { slug: post.slug },
+        props: post,
+    }));
+}
+
+const post = Astro.props;
+
+const { Content, headings } = await post.render();
+
+const photoData = [
+    ...new Set(
+        [
+            ...getPhotosByTags(...(post.data.photoTags ?? [])),
+            ...(post.data.photoNames ?? []).map((n) =>
+                getPhotoByName(n as PhotoName),
+            ),
+        ].filter((p) => p),
+    ),
+].map((p) => ({
+    src: p.paths.large,
+    caption: p.joinedCaption,
+    ratio: p.ratio,
+}));
+const startIndex: number = 0;
+
+const arrowDownOptions = "⩒↓⇃⇂⇊⇓⇣⇩⇲▼▽⋁⨈";
+const arrowUpOptions = "↑↟↡↧↥↾↿⇑⇈⇞⇡⇧⇧⇩⇮⇱⇵△▲◭◮∆∇∧∨⋀⋁ↆ⩑";
+let arrowOptions = [
+    "⇂↾",
+    "⇃↿",
+    "⩒⩑",
+    "▼▲",
+    "⇲◮",
+    "▽△",
+    "⇲⇱",
+    "↓↑",
+    "↡↟",
+    "⇓⇑",
+    "⇣⇡",
+    "⇩⇧",
+    "⋁⋀",
+    "↧↥",
+    "ↆ",
+];
+
+const allGalleries = await getCollection("g");
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <BaseHead
+            title={post.data.title}
+            description={post.data.description}
+            imgSrc={photoData[0].src}
+        />
+        <RootColors colors={{ ...post.data.colors }} />
+        <!-- <link rel="preload" href={photoData[0].src} as="image">
+        <link rel="preload" href={photoData[1].src} as="image">
+        <link rel="preload" href={photoData.at(-1).src} as="image"> -->
+    </head>
+    <body>
+        <main>
+            <section class:list={["image", { "has-text": post.body }]}>
+                <div
+                    data-container
+                    class="image-container"
+                    style={`aspect-ratio: ${photoData[startIndex].ratio};`}
+                >
+                    <img
+                        data-image
+                        data-start-index={startIndex}
+                        data-photos={JSON.stringify(photoData)}
+                        src={photoData[startIndex].src}
+                        alt={photoData[startIndex].caption}
+                    />
+                </div>
+                <aside class="image-info">
+                    <div class="right no-select controls">
+                        <div>
+                            <button data-button="prev">prev</button>
+                            &nbsp;&nbsp;|&nbsp;&nbsp;
+                            <button data-button="next">next</button>
+                        </div>
+                        <br />
+                        <div class="color-accent">
+                            <span data-count>{startIndex + 1}</span>/{
+                                photoData.length
+                            }
+                        </div>
+                    </div>
+                    <div data-caption={!(post.data.noCaptions ?? false)} class="justify-right italic">
+                        {photoData[startIndex].caption}
+                    </div>
+                </aside>
+            </section>
+
+            {
+                post.body && (
+                    <>
+                        <section class="text">
+                            <article id="text">
+                                <Content components={{ a: Link }} />
+                                {/* <br /><br /> */}
+                            </article>
+                            <aside class="nav-container mono-small">
+                                <nav class="justify">
+                                    Links:{" "}
+                                    <span>
+                                        Go <a href="/">home</a>.
+                                    </span>
+                                    <span>
+                                        Find out what this is all{" "}
+                                        <a href="/about">about</a>.
+                                    </span>
+                                    <span>
+                                        Read some <a href="/writing">writing</a>
+                                        .
+                                    </span>
+                                    <span>
+                                        Browse <a href="/g">all galleries</a>.
+                                    </span>
+                                    <span>
+                                        Scroll down to the{" "}
+                                        <button data-scroll-to="text">
+                                            text
+                                        </button>{" "}
+                                        ►
+                                    </span>
+                                </nav>
+                                <nav>
+                                    <div>Related galleries:</div>
+                                    <br />
+                                    {allGalleries.map((g) => {
+                                        if (g.id == post.id) {
+                                            return;
+                                        }
+
+                                        return (
+                                            <div><b><Link href={"/g/" + g.slug}>{g.data.title}</Link></b>.</div>
+                                        );
+                                    })}
+                                </nav>
+                                <div>
+                                    Back to the{" "}
+                                    <button data-scroll-to>top</button>.
+                                </div>
+                                {/* <button
+                                    class="scroll-link"
+                                    data-scroll-to="text"
+                                >
+                                    <span>⇲</span>
+                                    &nbsp;&nbsp;<span class="bold">TEXT</span>
+                                </button>
+                                <a class="scroll-link" data-scroll-to>
+                                    <span>◮</span>
+                                    &nbsp;&nbsp;<span class="bold">TOP</span>
+                                </a> */}
+                            </aside>
+                        </section>
+                        <Footer width="full" />
+                    </>
+                )
+            }
+        </main>
+        <script>
+            const imgSetup = () => {
+                //#region image switching
+
+                const imageElement = document.querySelector(
+                    "[data-image]",
+                ) as HTMLImageElement;
+                const captionElement = document.querySelector(
+                    "[data-caption]",
+                ) as HTMLElement;
+                const containerElement = document.querySelector(
+                    "[data-container]",
+                ) as HTMLElement;
+                const countElement = document.querySelector(
+                    "[data-count]",
+                ) as HTMLElement;
+
+                if (!imageElement || !containerElement || !countElement) {
+                    return;
+                }
+
+                const photoData = JSON.parse(imageElement.dataset.photos);
+                let currentIndex = 0;
+                const loadedIndices = new Set<number>();
+                document.body.setAttribute("loading", "true");
+
+                imageElement.addEventListener("load", () => {
+                    loadedIndices.add(currentIndex);
+                    document.body.removeAttribute("loading");
+                });
+
+                // if an index was passed in the query param, use that instead
+                const urlIndex = new URLSearchParams(
+                    window.location.search,
+                ).get("i");
+                if (urlIndex) {
+                    currentIndex = clampIndex(Math.abs(parseInt(urlIndex)) - 1);
+                    goToImage(currentIndex);
+                }
+
+                // load next/prev images
+                preload(getIncrementedIndex(true));
+                preload(getIncrementedIndex(false));
+
+                function clampIndex(index: number): number {
+                    return (index + photoData.length) % photoData.length;
+                }
+
+                function getIncrementedIndex(
+                    forward: boolean,
+                    index: number = currentIndex,
+                ): number {
+                    return clampIndex(index + (+forward || -1));
+                }
+
+                function preload(index: number): void {
+                    if (!index || index < 0 || index >= photoData.length) {
+                        return;
+                    }
+
+                    const img = new Image();
+                    img.addEventListener("load", () => {
+                        loadedIndices.add(index);
+                    });
+                    img.src = photoData[index].src;
+                }
+
+                function nextImage(next: boolean) {
+                    if (!document.body.hasAttribute("loading")) {
+                        const nextIndex = getIncrementedIndex(next);
+                        goToImage(
+                            nextIndex,
+                            getIncrementedIndex(next, nextIndex),
+                        );
+                    }
+                }
+
+                function goToImage(index: number, preloadIndex?: number): void {
+                    // first, get next image and data
+                    const newPhoto = photoData[index];
+
+                    // set up callback when src loads
+                    imageElement.addEventListener(
+                        "load",
+                        () => {
+                            // update loading state/etc
+                            currentIndex = index;
+                            loadedIndices.add(currentIndex);
+                            document.body.removeAttribute("loading");
+
+                            // update ui
+                            containerElement.style.aspectRatio = newPhoto.ratio;
+                            countElement.innerHTML = (
+                                currentIndex + 1
+                            ).toString();
+                            if (captionElement) {
+                                captionElement.innerHTML = newPhoto.caption;
+                            }
+                            imageElement.alt = newPhoto.caption;
+
+                            // load next image as well
+                            preload(preloadIndex);
+                        },
+                        { once: true },
+                    );
+
+                    // !!!!!                                                                                       !!!!!
+                    // !!!!! loadedIndices is causing inconsistencies beacuse the browser sometimes unloads images !!!!!
+                    // !!!!!                                                                                       !!!!!
+                    if (loadedIndices.has(index)) {
+                        // if already loaded, preset the aspect ratio
+                        containerElement.style.aspectRatio = newPhoto.ratio;
+                    } else {
+                        // otherwise, set loading state
+                        document.body.setAttribute("loading", "true");
+                    }
+
+                    // now sit back and set src
+                    imageElement.src = newPhoto.src;
+                }
+
+                // button/key listeners
+                document.querySelectorAll("[data-button]").forEach((button) => {
+                    if (!(button instanceof HTMLElement)) {
+                        return;
+                    }
+
+                    button.addEventListener("click", () => {
+                        nextImage(button.dataset.button === "next");
+                    });
+                });
+
+                document.addEventListener("keydown", (e) => {
+                    switch (e.key) {
+                        case "ArrowRight":
+                            nextImage(true);
+                            break;
+                        case "ArrowLeft":
+                            nextImage(false);
+                            break;
+                    }
+                });
+
+                //#endregion
+
+                // scroll buttons
+                document
+                    .querySelectorAll("[data-scroll-to]")
+                    .forEach((button) => {
+                        if (!(button instanceof HTMLElement)) {
+                            return;
+                        }
+
+                        button.addEventListener("click", () => {
+                            window.scrollTo({
+                                top:
+                                    (button.dataset.scrollTo &&
+                                        document.getElementById(
+                                            button.dataset.scrollTo,
+                                        )?.offsetTop) ??
+                                    0,
+                                behavior: "smooth",
+                            });
+                        });
+                    });
+            };
+
+            imgSetup();
+            document.addEventListener("astro:after-swap", imgSetup);
+        </script>
+        <style is:global>
+            main {
+                margin: 20px 20px 20px;
+                width: calc(100vw - 40px);
+            }
+
+            section.image {
+                display: flex;
+                flex-flow: row nowrap;
+                justify-content: space-between;
+
+                width: 100%;
+                height: calc(100vh - 40px);
+                gap: 20px;
+            }
+
+            section.image.has-text {
+                height: calc(100vh - 82px);
+                margin-bottom: 20px;
+            }
+
+            div.image-container {
+                max-height: 100%;
+
+                display: flex;
+                flex-flow: column;
+                justify-content: flex-end;
+
+                user-select: none;
+
+                overflow: hidden;
+            }
+
+            aside.image-info {
+                display: flex;
+                flex-flow: column nowrap;
+                justify-content: space-between;
+                width: 160px;
+                min-width: 160px;
+            }
+
+            body[loading] aside.image-info {
+                opacity: 0.5;
+                pointer-events: none;
+                user-select: none;
+            }
+
+            aside.image-info > div:first-child {
+                position: sticky;
+                top: 20px;
+                margin-bottom: 200px;
+            }
+
+            aside.image-info button:hover {
+                text-decoration: underline;
+            }
+
+            section.text {
+                border-top: 2px solid var(--color-text);
+                display: flex;
+                flex-flow: row-reverse nowrap;
+                justify-content: space-between;
+                align-items: stretch;
+                padding: 0 20px 0 0;
+            }
+
+            article {
+                padding-top: 24px;
+
+                width: calc(50%);
+                /* max-width: 800px; */
+
+                text-align: justify;
+                font-size: 1.5rem;
+
+                columns: 400px auto;
+                column-gap: 40px;
+
+                margin-bottom: 40px;
+            }
+
+            article > p {
+                position: relative;
+            }
+
+            article > p:first-of-type {
+                margin-top: 0;
+            }
+
+            article > p:first-of-type::before {
+                position: absolute;
+
+                content: "►";
+                top: 2px;
+                left: -1.5em;
+
+                /* content: '»';
+                top: 0px;
+                left: -1em; */
+            }
+
+            article > p:last-of-type::after {
+                content: "⁘";
+                margin-left: 0.5rem;
+                position: relative;
+            }
+
+            article a {
+                text-decoration: underline;
+            }
+
+            article a:hover,
+            article a:focus-visible,
+            article a:focus-within {
+                color: var(--color-accent);
+            }
+
+            article a:focus-visible,
+            article a:focus-within {
+                outline: 2px dashed var(--color-accent);
+                outline-offset: 2px;
+            }
+
+            aside.nav-container {
+                display: flex;
+                flex-flow: column;
+                justify-content: space-between;
+                /* justify-content: center; */
+                margin-bottom: 1rem;
+                margin-top: 0.3rem;
+            }
+
+            aside.nav-container nav {
+                width: 420px;
+            }
+
+            .scroll-link {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.1rem;
+                padding: 0.1rem 0.1rem 0.1rem 0;
+                font-size: 1.125rem;
+
+                user-select: none;
+            }
+
+            .scroll-link span:first-child {
+                font-size: 1.25em;
+            }
+
+            .scroll-link span:last-child {
+                margin-top: 4px;
+            }
+        </style></body
+    >
+</html>

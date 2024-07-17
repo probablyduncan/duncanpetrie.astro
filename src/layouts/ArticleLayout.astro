@@ -1,0 +1,385 @@
+---
+import type { MDXLayoutProps } from "astro";
+import BaseHead from "../components/BaseHead.astro";
+import ArticleCard from "../components/ArticleCard.astro";
+import Nbsp from "../components/nbsp.astro";
+import { marked } from "marked";
+import RootColors from "../components/RootColors.astro";
+import { shuffle } from "../lib/miscellaneum";
+import Image from "../components/Image.astro";
+import type { PhotoName } from "../data/photoTypes.generated";
+import type { SideClass, ColorScheme } from "../env";
+import TickerNav from "../components/TickerNav.astro";
+import { applyColorSchemeDefaults } from "../lib/themeHelper";
+import Footer from "../components/Footer.astro";
+import Link from "../components/Link.astro";
+
+interface ArticleOptions {
+    title: string;
+    summary?: string;
+    date: Date;
+    metadata: any;
+    metadataSpacing?: number[];
+    coverImage?: {
+        photoName?: PhotoName;
+        image?: {
+            src: string;
+            caption?: string;
+        };
+        captionAlign?: SideClass;
+        noCaption?: boolean;
+    };
+    colors?: ColorScheme;
+}
+
+type Props = MDXLayoutProps<ArticleOptions>;
+
+const { frontmatter, url, headings } = Astro.props;
+
+const metadata = frontmatter.metadata;
+if (metadata.links === true) {
+    metadata.links =
+        "[Home](/), [Writing](/writing), [Photograhy](/photograhy), [Springtide](/springtide)";
+}
+if (metadata.about === true) {
+    metadata.about =
+        "[who?](/about), [email](mailto:duncanpetrie1@gmail.com), [instagram](https://instagram.com/probablyduncan)";
+}
+if (metadata.url === true) {
+    metadata.url = `[${url}](${url})`;
+}
+
+const shuffleMetadata = false;
+const md3Keys = shuffleMetadata
+    ? shuffle(Object.keys(metadata))
+    : Object.keys(metadata);
+let spacingDebug = "";
+
+// ↂↀↈ◩◘◪ↆ∘⊡↪↷↶▨▦▧▤◊▣▶◄►◌◑◨◢◣◥◤◙●◯◮◭ ▪∗⨰⪦⪧※⁕†
+// ⪦⪧⪦ BEGIN DOCUMENT ⪧⪦⪧
+// ††† BEGIN DOCUMENT †††
+
+const renderer = new marked.Renderer();
+renderer.link = ({ href, title, text }) => {
+    const newTabAttrs =
+        href.startsWith("http") || href.endsWith("pdf")
+            ? ' target="_blank" rel="noopener noreferrer"'
+            : "";
+    return `<a href="${href}" title="${title ?? text}"${newTabAttrs}>${text}</a>`;
+};
+
+const customComponents = {
+    a: Link,
+    // Add other custom components here
+};
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <BaseHead />
+        <RootColors
+            colors={applyColorSchemeDefaults(frontmatter.colors, {
+                accent: "blue",
+            })}
+        />
+    </head>
+    <body>
+        <TickerNav />
+        <main>
+            <header>
+                <div class="metadata mono-small">
+                    <div>
+                        <p>
+                            ► <b>{frontmatter.title}</b> ({
+                                new Date(frontmatter.date).getFullYear()
+                            }) by Duncan Petrie.
+                        </p>
+                        <p>
+                            The following (<i>text</i>|<i>poem</i>|<i
+                                >manifesto</i
+                            >|<i>confession</i>) is an excerpt from the archives
+                            of
+                            <i>duncan&shy;petrie.com</i> for the use of anyone anywhere
+                            at no cost and with almost no restrictions whatsoever.
+                        </p>
+                        <p>
+                            Acceptable uses include: reading to children at
+                            bedtime, taking twice daily with food, printing on
+                            cocktail napkins, throwing out the window, sending
+                            to local politicians, and ignoring entirely.
+                        </p>
+                        <p>Not suitable for resale.</p>
+                        <br />
+                        {
+                            frontmatter.summary && (
+                                <>
+                                    <br />
+                                    <br />
+                                    <p>
+                                        <b>Abstract:</b>
+                                    </p>
+                                    {frontmatter.summary
+                                        .split("//")
+                                        .map((str) => (
+                                            <p
+                                                set:html={marked.parseInline(
+                                                    str,
+                                                )}
+                                            />
+                                        ))}
+                                    <br />
+                                </>
+                            )
+                        }
+                    </div>
+                    <div>
+                        <p class="right">
+                            ◑ Back to <a href="/" title="Home page" class="bold"
+                                >home</a
+                            >.
+                        </p>
+                        <br />
+                        <br />
+                        <p>
+                            <b>◮ Metadata:</b>
+                        </p>
+                        <p>
+                            {
+                                md3Keys.map((key: string, i: number) => {
+                                    let val = metadata[key];
+
+                                    if (val === true) {
+                                        val =
+                                            frontmatter[
+                                                key as keyof ArticleOptions
+                                            ];
+                                    }
+
+                                    let renderKey = true;
+                                    if (val === false) {
+                                        val = key;
+                                        renderKey = false;
+                                    }
+
+                                    val = marked.parseInline(val.toString(), {
+                                        renderer,
+                                    });
+
+                                    const spacing =
+                                        i === md3Keys.length
+                                            ? 0
+                                            : frontmatter.metadataSpacing
+                                              ? frontmatter.metadataSpacing[i]
+                                              : Math.floor(Math.random() * 4) +
+                                                4;
+                                    spacingDebug += spacing + ",";
+
+                                    return (
+                                        <>
+                                            {renderKey && (
+                                                <span>
+                                                    {key[0].toUpperCase() +
+                                                        key.substring(1) +
+                                                        ": "}
+                                                </span>
+                                            )}
+                                            <b set:html={val + "."} />
+                                            <Nbsp i={spacing} />
+                                        </>
+                                    );
+                                })
+                            }
+                        </p>
+                        {
+                            !frontmatter.metadataSpacing && (
+                                <span>[{spacingDebug}]</span>
+                            )
+                        }
+                    </div>
+                </div>
+                <br />
+            </header>
+            <div class="mono-small center">*** BEGIN DOCUMENT ***</div>
+            {
+                frontmatter.coverImage && (
+                    <div class="cover-image">
+                        <Image
+                            photo={{
+                                name: frontmatter.coverImage.photoName,
+                                size: "large",
+                            }}
+                            image={{
+                                src: frontmatter.coverImage.image?.src,
+                                caption: frontmatter.coverImage.image?.caption,
+                            }}
+                            captionAccent={false}
+                            captionAlign={frontmatter.coverImage.captionAlign}
+                            noCaption={frontmatter.coverImage.noCaption}
+                        />
+                    </div>
+                )
+            }
+            <article class="md">
+                <slot />
+            </article>
+            <div class="spacer mono-small center">*** END DOCUMENT ***</div>
+        </main>
+        <Footer />
+        <style is:global>
+            main {
+                width: 800px;
+                max-width: calc(100% - 40px);
+
+                margin: 40px 20px 0;
+
+                display: flex;
+                flex-flow: column;
+                align-items: center;
+            }
+
+            header {
+                max-width: 100%;
+            }
+
+            .metadata {
+                display: flex;
+                flex-flow: row;
+                justify-content: space-between;
+                gap: 40px;
+                margin-top: 40px;
+
+                text-align: justify;
+            }
+
+            .metadata > div {
+                width: 50%;
+            }
+
+            .cover-image {
+                width: 600px;
+                max-width: 100%;
+                margin-top: 40px;
+            }
+
+            article {
+                margin-top: 40px;
+            }
+
+            .md p:last-child {
+                margin-bottom: 0;
+            }
+
+            .md p:has(img) {
+                margin: 40px 0;
+                padding: 0 calc((100% - 600px) / 2);
+            }
+
+            .md > * {
+                position: relative;
+            }
+
+            .md p:last-child::after {
+                /* ●◑◭⁛⁘◐●◆■◻■◪◩ */
+                content: "⁘";
+                margin-left: 0.5rem;
+                position: relative;
+            }
+
+            .md p {
+                font-size: 1.25rem;
+                line-height: 1.875rem;
+            }
+
+            .md h1 {
+                font-size: 3.25rem;
+            }
+
+            .md h2 {
+                font-size: 2.5rem;
+            }
+
+            .md h3 {
+                font-size: 1.5rem;
+            }
+
+            .md a {
+                text-decoration: underline;
+                /* font-style: italic; */
+            }
+
+            .md a:hover,
+            .md a:focus-visible,
+            .md a:focus-within {
+                color: var(--color-accent);
+            }
+
+            .md a:focus-visible,
+            .md a:focus-within {
+                outline: 2px dashed var(--color-accent);
+                outline-offset: 2px;
+            }
+
+            .spacer {
+                /* margin: 20vh 0 70vh; */
+                margin-top: 50vh;
+                height: 50vh;
+            }
+
+            @media screen and (min-width: 1000px) {
+                .md > p:not(:has(img))::before {
+                    content: attr(data-pnum);
+                    position: absolute;
+                    top: 0;
+                    right: -2em;
+                    width: 0;
+                    font-family: monospace;
+                    font-size: 0.75rem;
+                    opacity: 0.2;
+                }
+
+                .md > p:nth-child(5n of p:not(:has(img)))::before {
+                    opacity: 0.6;
+                    /* color: var(--color-accent); */
+                }
+            }
+
+            @media screen and (max-width: 800px) {
+                .metadata {
+                    flex-flow: column-reverse;
+                }
+
+                .metadata > div {
+                    width: 100%;
+                }
+
+                .metadata {
+                    text-align: left;
+                }
+
+                article {
+                    max-width: (100% - 40px);
+                }
+            }
+        </style>
+        <script>
+            document.addEventListener("astro:page-load", () => {
+                const allPs = document.querySelectorAll(".md p:not(:empty)");
+                allPs.forEach((e, i) => {
+                    const num = i + 1;
+                    const str =
+                        num % 5 === 0
+                            ? num + "/" + allPs.length
+                            : num.toString();
+                    (e as HTMLElement).dataset.pnum = "[" + str + "]";
+                });
+
+                // document
+                //     .querySelectorAll(".md > p:not(:has(img))")
+                //     .forEach((e, i) => {
+                //         (e as HTMLElement).dataset.pnum = "[" + (i + 1) + "]";
+                //     });
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,57 @@
+---
+const links: { [key: string]: string } = {
+    Photography: "/photography",
+    Writing: "/writing",
+    "Short Films": "/films",
+    About: "/about",
+    "Design Ethos": "/design",
+    Galleries: "/g",
+    Springtide: "/springtide",
+
+    "Email me": "mailto:duncanpetrie1@gmail.com",
+    Instagram: "https://instagram.com/probablyduncan",
+    Youtube: "https://www.youtube.com/channel/UCdyoMZUOsWzPmZN-H916jxg",
+    Linkedin: "https://linkedin.com/probablyduncan",
+};
+
+---
+
+<script>
+    document.querySelectorAll('.accessible-nav-item').forEach(e => e.addEventListener('focus', () => {}));
+</script>
+<div class="accessible-nav-wrapper">
+    <nav class="accessible-nav color-accent">
+        {
+            Object.keys(links).map((l) => (
+                <a class="accessible-nav-item" href={links[l]}>{l}</a>
+            ))
+        }
+    </nav>
+</div>
+<style type="text/css">
+    .accessible-nav {
+        position: fixed;
+        top: 40px;
+        left: -120px;
+        display: flex;
+        flex-flow: column nowrap;
+    }
+
+    .accessible-nav-item {
+        color: unset;
+    }
+
+    .accessible-nav:focus, .accessible-nav:focus-visible, .accessible-nav:focus-within {
+        left: 40px;
+    }
+
+    .accessible-nav-item:focus, .accessible-nav-item:focus-visible {
+        outline: none;
+        padding: inherit;
+        margin: inherit;
+        /* color: green; */
+        border: 2px dashed #668863;
+        padding: 0 2px;
+        margin: -2px -4px;
+    }
+</style>

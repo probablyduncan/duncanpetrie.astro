@@ -1,0 +1,8 @@
+---
+interface Props {
+    i?: number
+}
+
+const { i = 2 } = Astro.props;
+---
+<span set:html={Array(i).fill('&nbsp;').join('')}></span>

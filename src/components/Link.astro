@@ -1,0 +1,48 @@
+---
+interface Props {
+    href: string;
+    title?: string;
+    newTab?: boolean;
+}
+
+const { href, title, newTab } = Astro.props;
+
+// sanitize text for title
+let text = await Astro.slots.render("default");
+while (text.includes("<") || text.includes(">")) {
+    const leftIndex = text.indexOf("<");
+    const rightIndex = text.indexOf(">");
+
+    if (leftIndex === -1) {
+        text = text.substring(rightIndex + 1);
+    } else if (rightIndex === -1) {
+        text = text.substring(0, leftIndex);
+    } else {
+        text = text.substring(0, leftIndex) + text.substring(rightIndex + 1);
+    }
+}
+
+let rel = "";
+
+const includeNewTabAttributes =
+    newTab === true ||
+    (newTab !== false &&
+        (href.startsWith("http") ||
+            href.endsWith(".pdf") ||
+            href.startsWith("mailto")));
+
+if (includeNewTabAttributes) {
+    rel += "noopener noreferrer ";
+}
+
+if (href === "/about") {
+    rel += "author";
+}
+---
+
+<a
+    href={href}
+    title={includeNewTabAttributes ? href : title ?? text}
+    target={includeNewTabAttributes ? "_blank" : "_self"}
+    rel={rel}><slot /></a
+>

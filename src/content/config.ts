@@ -1,16 +1,37 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection, reference, z } from 'astro:content';
 
-const blog = defineCollection({
+// https://docs.astro.build/en/guides/content-collections/#defining-datatypes-with-zod
+
+const gallery = defineCollection({
 	type: 'content',
-	// Type-check frontmatter using a schema
 	schema: z.object({
 		title: z.string(),
-		description: z.string(),
-		// Transform string to Date object
-		pubDate: z.coerce.date(),
-		updatedDate: z.coerce.date().optional(),
-		heroImage: z.string().optional(),
+		description: z.string().optional(),
+		contentTags: z.array(z.string()).optional(),
+		date: z.coerce.date().optional(),
+		photoTags: z.array(z.string()).optional(),
+		photoNames: z.array(z.string()).optional(),
+		mediaNames: z.array(z.string()).optional(),
+		colors: z.object({text: z.string().optional(), background: z.string().optional(), accent: z.string().optional()}).optional(),
+		noCaptions: z.boolean().optional(),
 	}),
 });
 
-export const collections = { blog };
+const springtideWiki = defineCollection({
+	type: 'content',
+	schema: {
+		title: z.string(),
+		description: z.string(),
+		tags: z.array(z.string()).optional(),
+		date: z.coerce.date(),
+		best: z.boolean().default(false),
+
+		// https://docs.astro.build/en/guides/content-collections/#defining-collection-references
+		related: z.array(reference('w'))
+	}
+})
+
+export const collections = { 
+	g: gallery,
+	w: springtideWiki,
+ };
