@@ -41,29 +41,7 @@ const footerLinksHtml = marked.parseInline(footerLinks, {  });
     </head>
     <body>
         <TickerNav />
-        <main class="flex-columns">
-            <!-- <header class="mono-small">
-                <div>
-                    <p>
-                        ► <b>{frontmatter.title}</b> ({
-                            new Date(frontmatter.date).getFullYear()
-                        }) by Duncan Petrie.
-                    </p>
-                    <p>
-                        The following (<i>text</i>|<i>poem</i>|<i>manifesto</i
-                        >|<i>confession</i>) is an excerpt from the archives of
-                        <i>duncan&shy;petrie.com</i> for the use of anyone anywhere
-                        at no cost and with almost no restrictions whatsoever.
-                    </p>
-                    <p>
-                        Acceptable uses include: reading to children at bedtime,
-                        taking twice daily with food, printing on cocktail
-                        napkins, throwing out the window, sending to local
-                        politicians, and ignoring entirely.
-                    </p>
-                    <p>Not suitable for resale.</p>
-                </div>
-            </header> -->
+        <main>
             <header>
                 <p><b>{frontmatter.title.toUpperCase()}</b></p>
                 <p>
@@ -82,7 +60,7 @@ const footerLinksHtml = marked.parseInline(footerLinks, {  });
             <article>
                 <slot />
             </article>
-            <footer class="mono-small left">
+            <footer class="mono-small">
                 Go <b><a href="/">Home</a></b>. More
                 <b><a href="/writing">Writing</a></b>.
                 <b><a href="/about">About</a>.</b>
@@ -93,31 +71,49 @@ const footerLinksHtml = marked.parseInline(footerLinks, {  });
                 >
             </footer>
         </main>
-        <style is:global>
+        <style>
+
+            main {
+                display: flex;
+                flex-flow: column;
+                align-items: center;
+            }
+
             header,
             article {
                 line-height: 1.6em;
+                width: 400px;
+                max-width: calc(100vw - 20px);
             }
 
             header {
                 padding: 20px 0;
                 border-top: 2px solid var(--color-text);
                 border-bottom: 2px solid var(--color-text);
-                width: 400px;
-                margin: 60px 0 20px;
+                margin: calc(var(--ticker-height) + 40px) 0 40px;
                 text-align: center;
                 /* text-align: right; */
             }
 
             article {
-                max-width: 300px;
+                /* max-width: 300px; */
                 margin-bottom: 50vh;
             }
 
             footer {
                 margin-bottom: 1.25em;
+                width: 100%;
+                max-width: calc(100vw - 20px);
                 /* border-top: 2px solid var(--color-text);
                 padding-top: 1em; */
+            }
+
+            @media screen and (max-width: 700px) {
+                header {
+                    border-top: none;
+                    padding: 0 0 40px;
+                    margin-bottom: 40px;
+                }
             }
         </style>
     </body>

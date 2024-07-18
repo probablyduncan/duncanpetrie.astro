@@ -10,7 +10,6 @@ import { getPhotosByRating } from "../lib/photoHelper";
 const photos = getPhotosByRating(5);
 
 const galleries = await getCollection("g");
-console.log(galleries);
 
 // maybe change up the order?
 // maybe add ::before little annotations with the year or locations or something?
@@ -125,11 +124,11 @@ console.log(galleries);
                     align-items: flex-start;
                     gap: 40px;
                     margin-bottom: 40px;
-                    padding: 80px 0 40px;
+                    padding: calc(var(--ticker-height) + 20px) 0 40px;
                 }
 
                 h1 {
-                    font-size: 4.8rem;
+                    font-size: 4.2rem;
                     max-width: 100%;
                     hyphens: auto;
                 }

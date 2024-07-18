@@ -50,7 +50,7 @@ if (metadata.url === true) {
 }
 
 const shuffleMetadata = false;
-const md3Keys = shuffleMetadata
+const metadataKeys = shuffleMetadata
     ? shuffle(Object.keys(metadata))
     : Object.keys(metadata);
 let spacingDebug = "";
@@ -66,11 +66,6 @@ renderer.link = ({ href, title, text }) => {
             ? ' target="_blank" rel="noopener noreferrer"'
             : "";
     return `<a href="${href}" title="${title ?? text}"${newTabAttrs}>${text}</a>`;
-};
-
-const customComponents = {
-    a: Link,
-    // Add other custom components here
 };
 ---
 
@@ -146,7 +141,7 @@ const customComponents = {
                         </p>
                         <p>
                             {
-                                md3Keys.map((key: string, i: number) => {
+                                metadataKeys.map((key: string, i: number) => {
                                     let val = metadata[key];
 
                                     if (val === true) {
@@ -167,7 +162,7 @@ const customComponents = {
                                     });
 
                                     const spacing =
-                                        i === md3Keys.length
+                                        i === metadataKeys.length
                                             ? 0
                                             : frontmatter.metadataSpacing
                                               ? frontmatter.metadataSpacing[i]
@@ -220,7 +215,7 @@ const customComponents = {
                     </div>
                 )
             }
-            <article class="md">
+            <article>
                 <slot />
             </article>
             <div class="spacer mono-small center">*** END DOCUMENT ***</div>
@@ -231,7 +226,7 @@ const customComponents = {
                 width: 800px;
                 max-width: calc(100% - 40px);
 
-                margin: 40px 20px 0;
+                margin: var(--ticker-height) 20px 0;
 
                 display: flex;
                 flex-flow: column;
@@ -266,56 +261,56 @@ const customComponents = {
                 margin-top: 40px;
             }
 
-            .md p:last-child {
+            article p:last-child {
                 margin-bottom: 0;
             }
 
-            .md p:has(img) {
+            article p:has(img) {
                 margin: 40px 0;
                 padding: 0 calc((100% - 600px) / 2);
             }
 
-            .md > * {
+            article > * {
                 position: relative;
             }
 
-            .md p:last-child::after {
+            article p:last-child::after {
                 /* ●◑◭⁛⁘◐●◆■◻■◪◩ */
                 content: "⁘";
                 margin-left: 0.5rem;
                 position: relative;
             }
 
-            .md p {
+            article p {
                 font-size: 1.25rem;
                 line-height: 1.875rem;
             }
 
-            .md h1 {
+            article h1 {
                 font-size: 3.25rem;
             }
 
-            .md h2 {
+            article h2 {
                 font-size: 2.5rem;
             }
 
-            .md h3 {
+            article h3 {
                 font-size: 1.5rem;
             }
 
-            .md a {
+            article a {
                 text-decoration: underline;
                 /* font-style: italic; */
             }
 
-            .md a:hover,
-            .md a:focus-visible,
-            .md a:focus-within {
+            article a:hover,
+            article a:focus-visible,
+            article a:focus-within {
                 color: var(--color-accent);
             }
 
-            .md a:focus-visible,
-            .md a:focus-within {
+            article a:focus-visible,
+            article a:focus-within {
                 outline: 2px dashed var(--color-accent);
                 outline-offset: 2px;
             }
@@ -327,7 +322,7 @@ const customComponents = {
             }
 
             @media screen and (min-width: 1000px) {
-                .md > p:not(:has(img))::before {
+                article > p:not(:has(img))::before {
                     content: attr(data-pnum);
                     position: absolute;
                     top: 0;
@@ -338,7 +333,7 @@ const customComponents = {
                     opacity: 0.2;
                 }
 
-                .md > p:nth-child(5n of p:not(:has(img)))::before {
+                article > p:nth-child(5n of p:not(:has(img)))::before {
                     opacity: 0.6;
                     /* color: var(--color-accent); */
                 }
@@ -358,13 +353,14 @@ const customComponents = {
                 }
 
                 article {
-                    max-width: (100% - 40px);
+                    max-width: calc(100% - 20px);
+                    margin-right: 20px;
                 }
             }
         </style>
         <script>
             document.addEventListener("astro:page-load", () => {
-                const allPs = document.querySelectorAll(".md p:not(:empty)");
+                const allPs = document.querySelectorAll("article p:not(:empty)");
                 allPs.forEach((e, i) => {
                     const num = i + 1;
                     const str =
@@ -375,7 +371,7 @@ const customComponents = {
                 });
 
                 // document
-                //     .querySelectorAll(".md > p:not(:has(img))")
+                //     .querySelectorAll("article > p:not(:has(img))")
                 //     .forEach((e, i) => {
                 //         (e as HTMLElement).dataset.pnum = "[" + (i + 1) + "]";
                 //     });

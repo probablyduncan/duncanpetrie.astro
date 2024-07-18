@@ -149,17 +149,28 @@ for (let i = 0; i < 4; i++) {
         border-top: 2px solid var(--color-text);
         padding: 12px 20px 16px;
         border-bottom: 2px solid var(--color-text);
+
+        backdrop-filter: blur(4px) grayscale(1);
+        background-color: #fff3;
     }
 
     @media screen and (min-width: 700px) {
         .ticker-wrapper-static {
             display: none;
         }
+
+        :global(:root) {
+            --ticker-height: 1.125rem;
+        }
     }
 
     @media screen and (max-width: 700px) {
         .ticker-wrapper {
             display: none;
+        }
+
+        :global(:root) {
+            --ticker-height: calc(1.125rem + 34px);
         }
     }
 
