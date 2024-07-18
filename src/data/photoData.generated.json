@@ -666,6 +666,220 @@
         ]
     },
     {
+        "name": "adrift-1",
+        "paths": {
+            "large": "\\photos\\adrift-1_l.webp",
+            "medium": "\\photos\\adrift-1_m.webp",
+            "small": "\\photos\\adrift-1_s.webp"
+        },
+        "caption": "Pasture II",
+        "datestring": "2021-01-02T11:41:06.000Z",
+        "rating": 4,
+        "camera": "NIKON D500",
+        "lens": "150.0-600.0 mm f/5.0-6.3",
+        "focallength": 210,
+        "aperture": 8,
+        "shutter": 0.0005,
+        "iso": 400,
+        "ratio": 1.4998520272269902,
+        "tags": [
+            "adrift",
+            "world",
+            "châtel",
+            "france"
+        ]
+    },
+    {
+        "name": "adrift-2",
+        "paths": {
+            "large": "\\photos\\adrift-2_l.webp",
+            "medium": "\\photos\\adrift-2_m.webp",
+            "small": "\\photos\\adrift-2_s.webp"
+        },
+        "caption": "Pasture I",
+        "datestring": "2021-01-01T10:10:19.000Z",
+        "rating": 4,
+        "camera": "NIKON D500",
+        "lens": "150.0-600.0 mm f/5.0-6.3",
+        "focallength": 150,
+        "aperture": 8,
+        "shutter": 0.00125,
+        "iso": 400,
+        "ratio": 1.5,
+        "tags": [
+            "adrift",
+            "world",
+            "châtel",
+            "france"
+        ]
+    },
+    {
+        "name": "adrift-3",
+        "paths": {
+            "large": "\\photos\\adrift-3_l.webp",
+            "medium": "\\photos\\adrift-3_m.webp",
+            "small": "\\photos\\adrift-3_s.webp"
+        },
+        "caption": "Snowfall, pine wood, II",
+        "datestring": "2020-12-28T09:29:52.000Z",
+        "rating": 4,
+        "camera": "NIKON D500",
+        "lens": "150.0-600.0 mm f/5.0-6.3",
+        "focallength": 200,
+        "aperture": 8,
+        "shutter": 0.0025,
+        "iso": 800,
+        "ratio": 1.5,
+        "tags": [
+            "adrift",
+            "world",
+            "châtel",
+            "france"
+        ]
+    },
+    {
+        "name": "adrift-4",
+        "paths": {
+            "large": "\\photos\\adrift-4_l.webp",
+            "medium": "\\photos\\adrift-4_m.webp",
+            "small": "\\photos\\adrift-4_s.webp"
+        },
+        "caption": "Snowline, late morning, V",
+        "datestring": "2020-12-26T13:12:35.000Z",
+        "rating": 4,
+        "camera": "NIKON D500",
+        "lens": "150.0-600.0 mm f/5.0-6.3",
+        "focallength": 150,
+        "aperture": 8,
+        "shutter": 0.0008,
+        "iso": 400,
+        "ratio": 1,
+        "tags": [
+            "adrift",
+            "world",
+            "châtel",
+            "france"
+        ]
+    },
+    {
+        "name": "adrift-5",
+        "paths": {
+            "large": "\\photos\\adrift-5_l.webp",
+            "medium": "\\photos\\adrift-5_m.webp",
+            "small": "\\photos\\adrift-5_s.webp"
+        },
+        "caption": "Snowline, late morning, IV",
+        "datestring": "2020-12-26T12:55:47.000Z",
+        "rating": 4,
+        "camera": "NIKON D500",
+        "lens": "150.0-600.0 mm f/5.0-6.3",
+        "focallength": 150,
+        "aperture": 8,
+        "shutter": 0.0015625,
+        "iso": 400,
+        "ratio": 0.6666666666666666,
+        "tags": [
+            "adrift",
+            "châtel",
+            "france"
+        ]
+    },
+    {
+        "name": "adrift-6",
+        "paths": {
+            "large": "\\photos\\adrift-6_l.webp",
+            "medium": "\\photos\\adrift-6_m.webp",
+            "small": "\\photos\\adrift-6_s.webp"
+        },
+        "caption": "Snowline, late morning, III",
+        "datestring": "2020-12-26T12:51:37.000Z",
+        "rating": 4,
+        "camera": "NIKON D500",
+        "lens": "150.0-600.0 mm f/5.0-6.3",
+        "focallength": 210,
+        "aperture": 8,
+        "shutter": 0.0008,
+        "iso": 400,
+        "ratio": 1.4998468606431854,
+        "tags": [
+            "adrift",
+            "châtel",
+            "france"
+        ]
+    },
+    {
+        "name": "adrift-7",
+        "paths": {
+            "large": "\\photos\\adrift-7_l.webp",
+            "medium": "\\photos\\adrift-7_m.webp",
+            "small": "\\photos\\adrift-7_s.webp"
+        },
+        "caption": "Snowline, late morning, II",
+        "datestring": "2020-12-26T12:39:27.000Z",
+        "rating": 4,
+        "camera": "NIKON D500",
+        "lens": "150.0-600.0 mm f/5.0-6.3",
+        "focallength": 150,
+        "aperture": 8,
+        "shutter": 0.001,
+        "iso": 400,
+        "ratio": 0.6666666666666666,
+        "tags": [
+            "adrift",
+            "world",
+            "châtel",
+            "france"
+        ]
+    },
+    {
+        "name": "adrift-8",
+        "paths": {
+            "large": "\\photos\\adrift-8_l.webp",
+            "medium": "\\photos\\adrift-8_m.webp",
+            "small": "\\photos\\adrift-8_s.webp"
+        },
+        "caption": "Snowline, late morning, I",
+        "datestring": "2020-12-26T12:35:13.000Z",
+        "rating": 5,
+        "camera": "NIKON D500",
+        "lens": "150.0-600.0 mm f/5.0-6.3",
+        "focallength": 210,
+        "aperture": 8,
+        "shutter": 0.0004,
+        "iso": 400,
+        "ratio": 1.4998632759092152,
+        "tags": [
+            "adrift",
+            "world",
+            "châtel",
+            "france"
+        ]
+    },
+    {
+        "name": "adrift-9",
+        "paths": {
+            "large": "\\photos\\adrift-9_l.webp",
+            "medium": "\\photos\\adrift-9_m.webp",
+            "small": "\\photos\\adrift-9_s.webp"
+        },
+        "caption": "Snowfall, pine wood, I",
+        "datestring": "2020-12-24T12:51:30.000Z",
+        "rating": 4,
+        "camera": "NIKON D500",
+        "lens": "150.0-600.0 mm f/5.0-6.3",
+        "focallength": 150,
+        "aperture": 5,
+        "shutter": 0.004,
+        "iso": 1600,
+        "ratio": 0.6666666666666666,
+        "tags": [
+            "adrift",
+            "world",
+            "châtel",
+            "france"
+        ]
+    },
+    {
         "name": "stanthonyhead",
         "paths": {
             "large": "\\photos\\stanthonyhead_l.webp",

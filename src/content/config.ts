@@ -12,8 +12,9 @@ const gallery = defineCollection({
 		photoTags: z.array(z.string()).optional(),
 		photoNames: z.array(z.string()).optional(),
 		mediaNames: z.array(z.string()).optional(),
-		colors: z.object({text: z.string().optional(), background: z.string().optional(), accent: z.string().optional()}).optional(),
+		colors: z.object({ text: z.string().optional(), background: z.string().optional(), accent: z.string().optional() }).optional(),
 		noCaptions: z.boolean().optional(),
+		sort: z.enum(['asc', 'desc']).default('desc'),
 	}),
 });
 
@@ -31,7 +32,7 @@ const springtideWiki = defineCollection({
 	}
 })
 
-export const collections = { 
+export const collections = {
 	g: gallery,
 	w: springtideWiki,
- };
+};

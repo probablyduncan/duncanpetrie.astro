@@ -259,6 +259,10 @@ export async function importPhotos(generateAll: boolean = false) {
         fs.mkdirSync(IMG_DEST_DIR);
         generateAll = true;
     }
+    else if (generateAll) {
+        // if dir exists and we're regenerating, first delete all generated images
+        fs.rmSync(IMG_DEST_DIR, { recursive: true, force: true });
+    }
 
     log('');
     log('👀  reading photo metadata');

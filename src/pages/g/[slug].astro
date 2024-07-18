@@ -36,6 +36,11 @@ const photoData = [
     caption: p.joinedCaption,
     ratio: p.ratio,
 }));
+
+if (post.data.sort == "asc") {
+    photoData.reverse();
+}
+
 const startIndex: number = 0;
 
 const arrowDownOptions = "⩒↓⇃⇂⇊⇓⇣⇩⇲▼▽⋁⨈";
@@ -104,7 +109,10 @@ const allGalleries = await getCollection("g");
                             }
                         </div>
                     </div>
-                    <div data-caption={!(post.data.noCaptions ?? false)} class="justify-right italic">
+                    <div
+                        data-caption={!(post.data.noCaptions ?? false)}
+                        class="justify-right italic"
+                    >
                         {photoData[startIndex].caption}
                     </div>
                 </aside>
@@ -151,9 +159,7 @@ const allGalleries = await getCollection("g");
                                             return;
                                         }
 
-                                        return (
-                                            <div><b><Link href={"/g/" + g.slug}>{g.data.title}</Link></b>.</div>
-                                        );
+                                        return <div><b><Link href={"/g/" + g.slug}>{g.data.title}</Link></b>.</div>;
                                     })}
                                 </nav>
                                 <div>
@@ -345,8 +351,8 @@ const allGalleries = await getCollection("g");
                     });
             };
 
-            imgSetup();
             document.addEventListener("astro:after-swap", imgSetup);
+            imgSetup();
         </script>
         <style is:global>
             main {
