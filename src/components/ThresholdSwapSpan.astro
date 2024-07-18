@@ -66,11 +66,17 @@ const style =
     const MORPH_DURATION = 1000;
     const COOLDOWN_DURATION = 500;
     const THRESHOLD_FILTER_STRING = "url(#threshold) blur(0.6px)";
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
     /**
-     * only run this every few frames
+     * only do animation every few times the page is loaded 
      */
-    function shouldSkip(chance: number): boolean {
+    function shouldNotRun(chance: number): boolean {
+
+        if (reducedMotion.matches) { 
+            return true;
+        }
+
         if (!localStorage) {
             return false;
         }
@@ -91,7 +97,7 @@ const style =
     function startAnimation() {
         const span = document.querySelector("[data-swap-span]") as HTMLElement;
 
-        if (!span || shouldSkip(parseFloat(span.dataset.swapSpanChance))) {
+        if (!span || shouldNotRun(parseFloat(span.dataset.swapSpanChance))) {
             return;
         }
 

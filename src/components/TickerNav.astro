@@ -149,21 +149,22 @@ for (let i = 0; i < 4; i++) {
         border-top: 2px solid var(--color-text);
         padding: 12px 20px 16px;
         border-bottom: 2px solid var(--color-text);
+
+        display: none
     }
 
-    @media screen and (min-width: 700px) {
-        .ticker-wrapper-static {
-            display: none;
-        }
-
-        :global(:root) {
-            --ticker-height: 1.125rem;
-        }
+    :global(:root) {
+        --ticker-height: 1.125rem;
     }
 
-    @media screen and (max-width: 700px) {
+    @media screen and (max-width: 700px), (prefers-reduced-motion: reduce) {
+        
         .ticker-wrapper {
             display: none;
+        }
+
+        .ticker-wrapper-static {
+            display: flex;
         }
 
         :global(:root) {
