@@ -201,6 +201,29 @@
         ]
     },
     {
+        "name": "dungenessboat",
+        "paths": {
+            "large": "\\photos\\dungenessboat_l.webp",
+            "medium": "\\photos\\dungenessboat_m.webp",
+            "small": "\\photos\\dungenessboat_s.webp"
+        },
+        "caption": "Old bones, Dungeness",
+        "datestring": "2024-01-28T13:51:57.000Z",
+        "rating": 4,
+        "camera": "NIKON D500",
+        "lens": "70.0-200.0 mm f/2.8",
+        "focallength": 70,
+        "aperture": 8,
+        "shutter": 0.002,
+        "iso": 400,
+        "ratio": 1.5,
+        "tags": [
+            "kent",
+            "england",
+            "uk"
+        ]
+    },
+    {
         "name": "stannescourt",
         "paths": {
             "large": "\\photos\\stannescourt_l.webp",

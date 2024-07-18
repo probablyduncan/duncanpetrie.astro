@@ -71,6 +71,10 @@ const currentGroup =
         ? getGroups().find((group) => group.slug === month)
         : getGroups()[0];
 
+const widestOfGroup = currentGroup.items.map(p => p.ratio).reduce((result, current) => {
+    return Math.max(result, current);
+}, 0);
+
 // const groupsByYear = groupByKey(getGroups(), 'year');
 // const years = Object.keys(groupsByYear).sort((a: string, b: string) => parseInt(b) - parseInt(a));
 ---
@@ -142,7 +146,7 @@ const currentGroup =
                 }
             </nav>
         </header>
-        <main>
+        <main style={`--sqrt-widest-ratio: ${Math.sqrt(widestOfGroup)};`}>
             {
                 currentGroup.items.map((photo, i) => (
                     <div
@@ -150,7 +154,7 @@ const currentGroup =
                     >
                         <div>
                             <Image
-                                photo={{ name: photo.name, size: "medium" }}
+                                photo={{ name: photo.name, size: "small" }}
                                 captionAlign="right"
                                 captionAccent={false}
                             />
@@ -192,6 +196,7 @@ const currentGroup =
                 display: grid;
                 grid-template-columns: 1fr 1fr 1fr;
                 row-gap: 40px;
+                column-gap: 40px;
                 margin-bottom: 50vh;
             }
 
@@ -207,7 +212,7 @@ const currentGroup =
             }
 
             main > div > div {
-                width: calc(100% * var(--sqrt-ratio) / 1.3333333333);
+                width: calc(100% * var(--sqrt-ratio) / var(--sqrt-widest-ratio));
             }
 
             @media screen and (max-width: 1160px) {
@@ -237,8 +242,6 @@ const currentGroup =
                 }
 
                 nav {
-                    max-width: 100%;
-                    width: 100%;
                     text-align: left;
                 }
 
