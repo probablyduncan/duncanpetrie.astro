@@ -8,6 +8,7 @@ interface Props {
     photo?: {
         name: PhotoName;
         size?: ImageSize;
+        captionOverride?: string;
     };
     image?: {
         src: string;
@@ -35,7 +36,7 @@ const src = photoData ? photoData.paths[photo.size ?? "medium"] : image.src;
 const caption = noCaption
     ? null
     : photoData
-      ? photoData.joinedCaption
+      ? (photo.captionOverride ?? photoData.joinedCaption)
       : image.caption;
 const ratio = photoData ? photoData.ratio : (await getImgSize(src)).ratio;
 ---

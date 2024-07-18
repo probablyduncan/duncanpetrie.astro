@@ -4,12 +4,29 @@ import BaseHead from "../components/BaseHead.astro";
 import TickerNav from "../components/TickerNav.astro";
 import RootColors from "../components/RootColors.astro";
 import { marked } from "marked";
+import type { ColorScheme, SideClass } from "../env";
+import type { PhotoName } from "../data/photoTypes.generated";
+import Image from "../components/Image.astro";
+import { applyColorSchemeDefaults } from "../lib/themeHelper";
 
 interface LayoutOptions {
     title: string;
     date: Date;
     location: string;
     footerLinks?: string;
+    coverImage?: {
+        photo?: {
+            name: PhotoName;
+            captionOverride?: string;
+        };
+        image?: {
+            src: string;
+            caption?: string;
+        };
+        captionAlign?: SideClass;
+        noCaption?: boolean;
+    };
+    colors?: ColorScheme;
 }
 
 type Props = MDXLayoutProps<LayoutOptions>;
@@ -30,14 +47,18 @@ footerLinks = footerLinks
     .replaceAll("](insta)", "](https://instagram.com/probablydunca)")
     .replaceAll("](email)", "](mailto:duncanpetrie1@gmail.com)");
 
-const footerLinksHtml = marked.parseInline(footerLinks, {  });
+const footerLinksHtml = marked.parseInline(footerLinks, {});
 ---
 
 <!doctype html>
 <html lang="en">
     <head>
         <BaseHead />
-        <RootColors />
+        <RootColors
+            colors={applyColorSchemeDefaults(frontmatter.colors, {
+                accent: "red",
+            })}
+        />
     </head>
     <body>
         <TickerNav />
@@ -57,6 +78,28 @@ const footerLinksHtml = marked.parseInline(footerLinks, {  });
                     </i>
                 </p>
             </header>
+            {
+                frontmatter.coverImage && (
+                    <section class="cover-image">
+                        <Image
+                            photo={{
+                                name: frontmatter.coverImage.photo?.name,
+                                size: "small",
+                                captionOverride:
+                                    frontmatter.coverImage.photo
+                                        ?.captionOverride,
+                            }}
+                            image={{
+                                src: frontmatter.coverImage.image?.src,
+                                caption: frontmatter.coverImage.image?.caption,
+                            }}
+                            captionAccent={false}
+                            captionAlign={frontmatter.coverImage.captionAlign}
+                            noCaption={frontmatter.coverImage.noCaption}
+                        />
+                    </section>
+                )
+            }
             <article>
                 <slot />
             </article>
@@ -72,15 +115,21 @@ const footerLinksHtml = marked.parseInline(footerLinks, {  });
             </footer>
         </main>
         <style>
-
             main {
                 display: flex;
                 flex-flow: column;
                 align-items: center;
             }
 
+            .cover-image {
+                width: 600px;
+                max-width: calc(100vw - 20px);
+                margin-bottom: 20px;
+            }
+
             header,
-            article {
+            article,
+            footer {
                 line-height: 1.6em;
                 width: 400px;
                 max-width: calc(100vw - 20px);
@@ -95,6 +144,11 @@ const footerLinksHtml = marked.parseInline(footerLinks, {  });
                 /* text-align: right; */
             }
 
+            header p {
+                width: 70%;
+                margin-left: 15%;
+            }
+
             article {
                 /* max-width: 300px; */
                 margin-bottom: 50vh;
@@ -102,8 +156,6 @@ const footerLinksHtml = marked.parseInline(footerLinks, {  });
 
             footer {
                 margin-bottom: 1.25em;
-                width: 100%;
-                max-width: calc(100vw - 20px);
                 /* border-top: 2px solid var(--color-text);
                 padding-top: 1em; */
             }

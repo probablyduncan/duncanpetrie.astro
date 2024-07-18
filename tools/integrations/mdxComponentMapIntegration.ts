@@ -14,11 +14,8 @@ export default function rehypeAutoImportComponents() {
         }
 
         layout = path.parse(layout).name.toLowerCase();
-        if (!componentMap[layout]) {
-            return;
-        }
 
-        const components = componentMap[layout];
+        const components = Object.assign({ ...componentMap.default }, componentMap[layout] ?? {});
         const tags = Object.keys(components);
         const imports = tags.map(e => `import ${getName(components[e])} from "${components[e]}";\n`);
         const exports = tags.map(e => `${e}: ${getName(components[e])}`);
@@ -45,7 +42,8 @@ function getName(fullPath: string): string {
 }
 
 const componentMap: any = {
-    articlelayout: {
+    articlelayout: {},
+    default: {
         a: '../components/Link.astro',
         img: '../components/markdown/MarkdownImage.astro',
     }

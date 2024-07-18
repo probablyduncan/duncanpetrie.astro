@@ -13,13 +13,13 @@ const { src, alt } = Astro.props;
     <div class="img-container">
         <Image image={{ src, caption: alt }} captionAccent={false} />
     </div>
-    <!-- <img src={src} alt={alt} /><div class="mono-small">{alt}</div> -->
 </div>
 <style>
     .img-wrapper {
         display: flex;
         flex-flow: column;
         align-items: center;
+        margin: 40px 0;
     }
 
     .img-container {

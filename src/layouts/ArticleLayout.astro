@@ -21,7 +21,10 @@ interface ArticleOptions {
     metadata: any;
     metadataSpacing?: number[];
     coverImage?: {
-        photoName?: PhotoName;
+        photo?: {
+            name: PhotoName;
+            captionOverride?: string;
+        };
         image?: {
             src: string;
             caption?: string;
@@ -201,8 +204,9 @@ renderer.link = ({ href, title, text }) => {
                     <div class="cover-image">
                         <Image
                             photo={{
-                                name: frontmatter.coverImage.photoName,
+                                name: frontmatter.coverImage.photo?.name,
                                 size: "large",
+                                captionOverride: frontmatter.coverImage.photo?.captionOverride,
                             }}
                             image={{
                                 src: frontmatter.coverImage.image?.src,
