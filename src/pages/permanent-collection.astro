@@ -79,7 +79,6 @@ const galleries = await getCollection("g");
                 align-items: flex-end;
 
                 width: calc(100vw - 80px);
-                margin-bottom: 400px;
                 padding: 200px 0 40px;
                 border-bottom: 2px solid var(--color-text);
 
@@ -105,15 +104,13 @@ const galleries = await getCollection("g");
                 display: flex;
                 flex-flow: column;
                 align-items: center;
+                margin: 40vh 0;
+                gap: 40vh;
             }
 
             main > div {
                 width: calc(600px * var(--sqrt-ratio));
                 max-width: calc(100vw - 20px);
-                margin-bottom: calc(40vh);
-                /* margin-bottom: min(calc(200px + var(--rand) * 40px)); */
-                /* margin-right: calc(var(--rand) * 20%);
-                margin-left: calc(var(--rand) * -20%); */
             }
 
             @media screen and (max-width: 700px) {
@@ -123,14 +120,12 @@ const galleries = await getCollection("g");
                     flex-flow: column;
                     align-items: flex-start;
                     gap: 40px;
-                    margin-bottom: 40px;
                     padding: calc(var(--ticker-height) + 20px) 0 40px;
                 }
 
                 h1 {
                     font-size: 4.2rem;
                     max-width: 100%;
-                    hyphens: auto;
                 }
 
                 nav {
