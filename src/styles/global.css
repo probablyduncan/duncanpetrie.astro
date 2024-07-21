@@ -34,11 +34,13 @@ body,
 }
 
 body,
-.serif {
+.serif,
+.serif-body {
 	font-family: 'Times New Roman', Times, serif;
 }
 
-.monospace, .mono-small {
+.monospace,
+.mono-small {
 	font-family: 'PT Mono', 'Consolas', monospace;
 }
 
@@ -145,6 +147,7 @@ sup {
 }
 
 
+
 .mono-small {
 	font-size: 0.75rem;
 }
@@ -164,12 +167,52 @@ sup {
 	color: var(--color-accent);
 }
 
-
-
 .mono-small a:focus-visible,
 .mono-small a:focus-within,
 .mono-small button:focus-visible,
 .mono-small button:focus-within {
+	outline: 2px dashed var(--color-accent);
+	outline-offset: 2px;
+}
+
+
+
+.serif-body {
+	font-size: 1.25rem;
+	line-height: 1.6em;
+}
+
+.serif-body.small {
+	font-size: unset;
+}
+
+.serif-body.large {
+	font-size: 1.5rem;
+}
+
+.serif-body a,
+.serif-body button {
+	user-select: auto;
+	text-decoration: underline;
+	color: var(--color-accent);
+}
+
+.serif-body a:hover,
+.serif-body a:focus-visible,
+.serif-body a:focus-within,
+.serif-body button:hover,
+.serif-body button:focus-visible,
+.serif-body button:focus-within {
+	/* color: var(--color-accent); */
+	text-decoration: none;
+}
+
+
+
+.serif-body a:focus-visible,
+.serif-body a:focus-within,
+.serif-body button:focus-visible,
+.serif-body button:focus-within {
 	outline: 2px dashed var(--color-accent);
 	outline-offset: 2px;
 }

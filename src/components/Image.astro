@@ -1,50 +1,43 @@
 ---
 import type { ImageSize } from "../lib/consts";
-import type { PhotoName } from "../data/photoTypes.generated";
 import { getImgSize, getPhotoByName } from "../lib/photoHelper";
-import { type SideClass } from "../env";
+import { type ImageProps } from "../env";
 
-interface Props {
-    photo?: {
-        name: PhotoName;
-        size?: ImageSize;
-        captionOverride?: string;
-    };
-    image?: {
-        src: string;
-        caption?: string;
-    };
-    noCaption?: boolean;
-    captionAlign?: SideClass;
-    captionAccent?: boolean;
-}
+interface Props extends ImageProps {}
 
 const {
-    photo,
-    image,
+    photoName,
+    size,
+    src,
+    caption,
     captionAlign = "left",
     captionAccent = true,
     noCaption = false,
 } = Astro.props;
 
-if (!photo && !image) {
+if (!photoName && !src) {
     throw Error("Image must have a photo or image prop.");
 }
 
-const photoData = photo?.name ? getPhotoByName(photo.name) : null;
-const src = photoData ? photoData.paths[photo.size ?? "medium"] : image.src;
-const caption = noCaption
+const photoData = photoName ? getPhotoByName(photoName) : null;
+
+const srcResolved = photoData
+    ? photoData.paths[(size ?? "medium") as ImageSize]
+    : src;
+
+const captionResolved = noCaption
     ? null
     : photoData
-      ? (photo.captionOverride ?? photoData.joinedCaption)
-      : image.caption;
+      ? caption ?? photoData.joinedCaption
+      : caption;
+
 const ratio = photoData ? photoData.ratio : (await getImgSize(src)).ratio;
 ---
 
-<img src={src} style={`aspect-ratio: ${ratio};`} alt={caption} loading="lazy" />
+<img src={srcResolved} style={`aspect-ratio: ${ratio};`} alt={captionResolved} loading="lazy" />
 
 {
-    caption && (
+    captionResolved && (
         <div
             class:list={[
                 "monospace",
@@ -52,7 +45,7 @@ const ratio = photoData ? photoData.ratio : (await getImgSize(src)).ratio;
                 captionAlign,
             ]}
         >
-            {caption}
+            {captionResolved}
         </div>
     )
 }

@@ -2,7 +2,23 @@ import { defineCollection, reference, z } from 'astro:content';
 
 // https://docs.astro.build/en/guides/content-collections/#defining-datatypes-with-zod
 
-const gallery = defineCollection({
+const articles = defineCollection({
+	type: 'content',
+	schema: z.object({
+		title: z.string(),
+		date: z.date(),
+		colors: z.object({
+			text: z.string().optional(),
+			background: z.string().optional(),
+			accent: z.string().optional(),
+		}).optional(),
+		ticker: z.boolean().default(true),
+		related: z.array(reference('articles')).optional(),
+		layoutType: z.string().default('default'),
+	}).passthrough(),
+})
+
+const galleries = defineCollection({
 	type: 'content',
 	schema: z.object({
 		title: z.string(),
@@ -12,6 +28,8 @@ const gallery = defineCollection({
 		photoTags: z.array(z.string()).optional(),
 		photoNames: z.array(z.string()).optional(),
 		mediaNames: z.array(z.string()).optional(),
+		excludeNames: z.array(z.string()).optional(),
+		excludeTags: z.array(z.string()).optional(),
 		colors: z.object({ text: z.string().optional(), background: z.string().optional(), accent: z.string().optional() }).optional(),
 		noCaptions: z.boolean().optional(),
 		sort: z.enum(['asc', 'desc']).default('desc'),
@@ -33,6 +51,7 @@ const springtideWiki = defineCollection({
 })
 
 export const collections = {
-	g: gallery,
+	articles,
+	galleries,
 	w: springtideWiki,
 };

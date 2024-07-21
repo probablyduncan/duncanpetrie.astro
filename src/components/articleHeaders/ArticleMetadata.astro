@@ -1,0 +1,163 @@
+---
+import { marked } from "marked";
+import type { ArticleMetadataOptions } from "../../lib/articleHeaderComponentRegistry";
+import Nbsp from "../nbsp.astro";
+import { markedRendererWithLink } from "../../lib/linkResolver";
+import { shuffle } from "../../lib/miscellaneum";
+
+interface Props extends ArticleMetadataOptions {
+    title: string;
+    date: Date;
+    slug?: string;
+    shuffleOnBuild?: boolean;
+}
+const {
+    title,
+    date,
+    abstract,
+    tags = {},
+    tagSpacing,
+    slug,
+    shuffleOnBuild = false,
+} = Astro.props;
+
+const tagDefaults = {
+    title: title,
+    url: `[/${slug}](/${slug})`,
+    links: "[Home](), [Writing](/writing), [Photograhy](/photograhy), [Springtide](/springtide)",
+    about: "[who?](/about), [email](), [instagram]()",
+} as const;
+
+Object.keys(tags).forEach((t) => {
+    if (tags[t] === true && t in tagDefaults) {
+        tags[t] = tagDefaults[t as keyof typeof tagDefaults];
+    }
+});
+
+const tagKeys = shuffleOnBuild
+    ? shuffle(Object.keys(tags))
+    : Object.keys(tags);
+let spacingDebug = "";
+
+const renderer = markedRendererWithLink();
+console.log(abstract)
+---
+
+<div class="metadata mono-small">
+    <div>
+        <p>
+            ► <b>{title}</b> ({date.getFullYear()}) by Duncan Petrie.
+        </p>
+        <p>
+            The following (<i>text</i>|<i>poem</i>|<i>manifesto</i>|<i
+                >confession</i
+            >) is an excerpt from the archives of
+            <i>duncan&shy;petrie.com</i> for the use of anyone anywhere at no cost
+            and with almost no restrictions whatsoever.
+        </p>
+        <p>
+            Acceptable uses include: reading to children at bedtime, taking
+            twice daily with food, printing on cocktail napkins, throwing out
+            the window, sending to local politicians, and ignoring entirely.
+        </p>
+        <p>Not suitable for resale.</p>
+        {
+            abstract && (
+                <>
+                    <br />
+                    <br />
+                    <br />
+                    <p>
+                        <b>Abstract:</b>
+                    </p>
+                    {abstract.split("//").map((str) => (
+                        <p set:html={marked.parseInline(str)} />
+                    ))}
+                </>
+            )
+        }
+    </div>
+    <div>
+        <p class="right">
+            ◑ Back to <a href="/" title="Home page" class="bold">home</a>.
+        </p>
+        <br />
+        <br />
+        <p>
+            <b>◮ Metadata:</b>
+        </p>
+        <p>
+            {
+                tagKeys.map((key: string, i: number) => {
+                    let val = tags[key];
+
+                    // if (val === true) {
+                    //     val =
+                    //         frontmatter[
+                    //             key as keyof ArticleOptions
+                    //         ];
+                    // }
+
+                    let renderKey = true;
+                    if (val === false) {
+                        val = key;
+                        renderKey = false;
+                    }
+
+                    val = marked.parseInline(val.toString(), {
+                        renderer,
+                        async: false,
+                    }) as string;
+
+                    const spacing =
+                        i === tagKeys.length
+                            ? 0
+                            : tagSpacing
+                              ? tagSpacing[i]
+                              : Math.floor(Math.random() * 4) + 4;
+                    spacingDebug += spacing + ",";
+
+                    return (
+                        <>
+                            {renderKey && (
+                                <span>
+                                    {key[0].toUpperCase() +
+                                        key.substring(1) +
+                                        ": "}
+                                </span>
+                            )}
+                            <b set:html={val + "."} />
+                            <Nbsp i={spacing} />
+                        </>
+                    );
+                })
+            }
+        </p>
+        {!tagSpacing && <span>[{spacingDebug}]</span>}
+    </div>
+</div>
+<style>
+    .metadata {
+        width: 100%;
+        display: flex;
+        flex-flow: row;
+        justify-content: space-between;
+        gap: 40px;
+        text-align: justify;
+    }
+
+    .metadata > div {
+        width: 50%;
+    }
+
+    @media screen and (max-width: 800px) {
+        .metadata {
+            flex-flow: column-reverse;
+            text-align: left;
+        }
+
+        .metadata > div {
+            width: 100%;
+        }
+    }
+</style>

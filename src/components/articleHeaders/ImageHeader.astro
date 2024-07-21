@@ -1,0 +1,48 @@
+---
+import type { ArticleDefaultLayoutOptions } from "../../lib/articleHeaderComponentRegistry";
+import Image from "../Image.astro";
+import TickerNav from "../TickerNav.astro";
+import ArticleMetadata from "./ArticleMetadata.astro";
+
+interface Props extends ArticleDefaultLayoutOptions {
+    title: string;
+    date: Date;
+    slug?: string;
+}
+const props = Astro.props;
+---
+
+{props.ticker === true && <TickerNav />}
+<header style={`width: ${props.textWidth};`}>
+    <section class="metadata">
+        <ArticleMetadata
+            {...props.metadata}
+            title={props.title}
+            date={props.date}
+            slug={props.slug}
+        />
+    </section>
+    <div class="mono-small center">*** BEGIN DOCUMENT ***</div>
+    {
+        props.image && (
+            <section class="image-container">
+                <Image {...props.image} />
+            </section>
+        )
+    }
+</header>
+<style>
+    header {
+        max-width: calc(100vw - 40px);
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        gap: 40px;
+        margin: calc(var(--ticker-height) + 40px) 0 60px;
+    }
+
+    .image-container {
+        width: 600px;
+        max-width: 100%;
+    }
+</style>

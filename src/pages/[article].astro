@@ -1,0 +1,152 @@
+---
+import { type CollectionEntry, getCollection } from "astro:content";
+import BaseHead from "../components/BaseHead.astro";
+import TickerNav from "../components/TickerNav.astro";
+import RootColors from "../components/RootColors.astro";
+import { applyColorSchemeDefaults } from "../lib/themeHelper";
+import { articleLayoutOptionDefaults } from "../lib/articleHeaderComponentRegistry";
+import MarkdownImage from "../components/articleHeaders/MarkdownImage.astro";
+import Link from "../components/Link.astro";
+
+type Props = CollectionEntry<"articles">;
+export async function getStaticPaths() {
+    const posts: any[] = await getCollection("articles");
+    return posts.map((post) => ({
+        params: { article: post.slug },
+        props: post,
+    }));
+}
+
+const post = Astro.props;
+const { Content, headings } = await post.render();
+
+const articleOptions = Object.assign(
+    {
+        ...articleLayoutOptionDefaults[
+            post.data.layoutType as keyof typeof articleLayoutOptionDefaults
+        ],
+    },
+    {
+        ...post.data,
+        slug: post.slug,
+    },
+);
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <BaseHead title={post.data.title} />
+        <RootColors
+            colors={applyColorSchemeDefaults(post.data.colors, {
+                accent: "blue",
+            })}
+        />
+    </head>
+    <body>
+        <main>
+            <articleOptions.header {...articleOptions} />
+            <article
+                style={`width: ${articleOptions.textWidth ?? "800px"};`}
+                data-line-numbers={articleOptions.lineNumbers}
+                class:list={["serif-body", articleOptions.textSize, {"article-end-dots": articleOptions.articleEndDots}]}
+            >
+                <Content components={{ img: MarkdownImage, a: Link }} />
+            </article>
+            {
+                articleOptions.useDocumentFence && (
+                    <div
+                        style="margin: -20vh 0 50vh;"
+                        class="mono-small center"
+                    >
+                        *** END DOCUMENT ***
+                    </div>
+                )
+            }
+            <articleOptions.footer />
+        </main>
+        <style>
+            main {
+                max-width: calc(100vw - 40px);
+                display: flex;
+                flex-flow: column;
+                align-items: center;
+            }
+
+            article {
+                max-width: 100%;
+                margin: 0 0 50vh;
+            }
+
+            article :global(p):first-child {
+                margin-top: 0;
+            }
+
+            article :global(p):last-child {
+                margin-bottom: 0;
+            }
+
+            article.article-end-dots :global(p):last-child::after {
+                /* ●◑◭⁛⁘◐●◆■◻■◪◩ */
+                content: "⁘";
+                margin-left: 0.5rem;
+                position: relative;
+            }
+
+            /* LINE NUMBERS */
+
+            @media screen and (min-width: 1000px) {
+                article[data-line-numbers] {
+                    width: calc(100% - 2em);
+                }
+
+                article[data-line-numbers] > :global(p) {
+                    position: relative;
+                }
+
+                article[data-line-numbers] > :global(p):not(:empty)::before {
+                    content: attr(data-num);
+                    position: absolute;
+                    top: 0;
+                    right: -2em;
+                    width: 0;
+                    font-family: monospace;
+                    font-size: 0.75rem;
+                    opacity: 0.2;
+                }
+
+                article[data-line-numbers]
+                    > :global(p):nth-child(5n of p:not(:empty))::before {
+                    opacity: 0.6;
+                }
+            }
+
+            @media screen and (max-width: 800px) {
+                article {
+                    max-width: calc(100% - 20px);
+                    margin-right: 20px;
+                }
+            }
+        </style>
+        <script>
+            function setupLineNumbers() {
+                const allLines = document.querySelectorAll(
+                    "article[data-line-numbers] p:not(:empty)",
+                );
+                allLines.forEach((e, i) => {
+                    const num = i + 1;
+                    const str =
+                        "[" +
+                        (num % 5 == 0 ? num + "/" + allLines.length : num) +
+                        "]";
+                    (e as HTMLElement).dataset.num = str;
+                });
+            }
+
+            document.addEventListener("astro:after-swap", () => {
+                setupLineNumbers();
+            });
+            setupLineNumbers();
+        </script>
+    </body>
+</html>

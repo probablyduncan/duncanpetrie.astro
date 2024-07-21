@@ -1,4 +1,5 @@
 ---
+import type { PhotoName } from "../../data/photoTypes.generated";
 import Image from "../Image.astro";
 
 interface Props {
@@ -7,11 +8,12 @@ interface Props {
 }
 
 const { src, alt } = Astro.props;
+const srcIsPhotoName = src.indexOf('/') === -1;
 ---
 
 <div class="img-wrapper">
     <div class="img-container">
-        <Image image={{ src, caption: alt }} captionAccent={false} />
+        <Image src={srcIsPhotoName ? null : src} photoName={srcIsPhotoName ? src as PhotoName : null} caption={alt} captionAccent={false} />
     </div>
 </div>
 <style>

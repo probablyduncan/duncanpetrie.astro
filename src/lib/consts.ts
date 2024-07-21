@@ -6,11 +6,28 @@
  */
 
 
+const SYMBOLS = "¶⁋⁜※⌂↷↶↻↺▱▢▭▯▯▤▧▦▩▨▥◐◑◧◨◫◱⨝◩ↂ◧⨏⩈◫↑↟↡↧↥↾↿⇑⇈⇞⇡⇧⇧⇩⇮⇱⇵△▲◭◮∆∇∧∨⋀⋁ↆ⩑⩒↓⇃⇂⇊⇓⇣⇩⇲▼▽⋁⨈ↂↀↈ◩◘◪ↆ∘⊡↪↷↶▨▦▧▤◊▣▶◄►◌◑◨◢◣◥◤◙●◯◮◭ ▪∗⨰⪦⪧※⁕†"
+const arrowOptions = [
+    "⇂↾",
+    "⇃↿",
+    "⩒⩑",
+    "▼▲",
+    "⇲◮",
+    "▽△",
+    "⇲⇱",
+    "↓↑",
+    "↡↟",
+    "⇓⇑",
+    "⇣⇡",
+    "⇩⇧",
+    "⋁⋀",
+    "↧↥",
+    "ↆ",
+];
 
 
 //#region site information
 
-import type { PhotoName } from "../data/photoTypes.generated";
 
 export const SITE_TITLE = 'Duncan Petrie';
 export const SITE_DESCRIPTION = 'Huzzah!';
@@ -18,21 +35,9 @@ export const SITE_DESCRIPTION = 'Huzzah!';
 //#endregion
 
 
-//#region util types
-
-// export type SideLR = 'left' | 'right';
-// export type SideLRB = 'left' | 'right' | 'both';
-// export type SideLRC = 'left' | 'right' | 'center';
-// export type SideLRCJ = 'left' | 'right' | 'center' | 'justify';
-// export type SideLRBC = 'left' | 'right' | 'both' | 'center';
-
-//#endregion
-
-
-
-
 //#region photo import
 
+import type { PhotoName } from "../data/photoTypes.generated";
 export const SIZE_DATA = {
     large: {
         ext: '_l.webp',
@@ -69,20 +74,19 @@ export type SizeData = typeof SIZE_DATA[ImageSize];
 
 //#region filters/pages/links
 
-const otherones = '¶⁋⁜※⌂↷↶↻↺▱▢▭▯▯▤▧▦▩▨▥◐◑◧◨◫◱'
 export const LEGEND_DATA = {
     'settlement': '•',
     'ruin': '⁘',
     'archive': '◭',
     'photography': '☼',
     'writing': '⩛',
-    'film': 'ↁ', // ⨝◩ↂ
-    'lyric & verse': '⨕', // ⨏⩈
+    'film': 'ↁ',
+    'lyric & verse': '⨕',
     'road': '─',
     'road (unpaved)': '--',
     'road (loopy)': '⅏',
     'story': '†',
-    'photobook': '◱',   // ◧ ◫
+    'photobook': '◱',
     'farm': '⌂',
     'ritual stone': '⁜',
 } as const;

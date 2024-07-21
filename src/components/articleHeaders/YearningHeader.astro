@@ -1,0 +1,149 @@
+---
+import type { ArticleYearningLayoutOptions } from "../../lib/articleHeaderComponentRegistry";
+import { getImgSize, getPhotoByName } from "../../lib/photoHelper";
+import TickerNav from "../TickerNav.astro";
+import ArticleMetadata from "./ArticleMetadata.astro";
+
+interface Props extends ArticleYearningLayoutOptions {
+    title: string;
+    date: Date;
+    slug: string;
+}
+
+const {
+    title,
+    date,
+    subtitle,
+    bottomLeft,
+    bottomRight,
+    image,
+    metadata,
+    slug,
+    ticker,
+} = Astro.props;
+
+const ratio = image
+    ? image.photoName
+        ? getPhotoByName(image.photoName).ratio
+        : (await getImgSize(image.src)).ratio
+    : 1;
+---
+
+{
+    ticker === true && (
+        <TickerNav
+            colorBreakpoints={[
+                {
+                    vh: -1,
+                    color: "var(--color-background)",
+                },
+                {
+                    vh: 99,
+                    color: "inherit",
+                },
+            ]}
+        />
+    )
+}
+<header>
+    <div class="hero">
+        {
+            image && (
+                <div>
+                    <img
+                        src={image.src}
+                        style={`aspect-ratio: ${ratio};`}
+                        alt={image.caption}
+                    />
+                    {image.caption && (
+                        <div class="caption italic">{image.caption}</div>
+                    )}
+                </div>
+            )
+        }
+        <div>
+            <div class="title bold">{title.toUpperCase()}</div>
+            {subtitle && <div class="subtitle italic right">{subtitle}</div>}
+        </div>
+    </div>
+    <span class="italic">{bottomLeft}</span>
+    <span class="italic">{bottomRight}</span>
+</header>
+<section class="metadata">
+    <ArticleMetadata {...metadata} title={title} date={date} slug={slug} />
+</section>
+
+<style>
+    header {
+        width: calc(100vw - 20px);
+        height: calc(100vh - 10px);
+        margin: 0 10px 10px;
+        border-radius: 0 0 8px 8px;
+        background-color: var(--color-text);
+        color: var(--color-background);
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        overflow: hidden;
+
+        position: relative;
+    }
+
+    .hero {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+    }
+
+    .hero > * {
+        position: absolute;
+    }
+
+    .title {
+        white-space: nowrap;
+
+        text-align: center;
+        font-size: min(9.8rem, 12.5vw);
+    }
+
+    .subtitle {
+        font-size: min(2.5vw, 2rem);
+        margin-top: max(-2.5vw, -2rem);
+    }
+
+    .hero img {
+        width: 1000px;
+        max-width: 80vw;
+
+        width: 80vw;
+
+        width: min(1000px, 80vw);
+    }
+
+    .caption {
+        font-size: min(1.4vw, 1em);
+        margin-top: 0.5em;
+    }
+
+    header > span:nth-child(even) {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+    }
+
+    header > span:nth-child(odd) {
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+    }
+
+    .metadata {
+        width: 800px;
+        max-width: calc(100vw - 40px);
+        margin: 40px 0 60px;
+    }
+</style>

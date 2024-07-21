@@ -82,17 +82,10 @@ const footerLinksHtml = marked.parseInline(footerLinks, {});
                 frontmatter.coverImage && (
                     <section class="cover-image">
                         <Image
-                            photo={{
-                                name: frontmatter.coverImage.photo?.name,
-                                size: "small",
-                                captionOverride:
-                                    frontmatter.coverImage.photo
-                                        ?.captionOverride,
-                            }}
-                            image={{
-                                src: frontmatter.coverImage.image?.src,
-                                caption: frontmatter.coverImage.image?.caption,
-                            }}
+                            photoName={frontmatter.coverImage.photo?.name}
+                            size="large"
+                            caption={frontmatter.coverImage.photo?.captionOverride ?? frontmatter.coverImage.image?.caption}
+                            src={frontmatter.coverImage.image?.src}
                             captionAccent={false}
                             captionAlign={frontmatter.coverImage.captionAlign}
                             noCaption={frontmatter.coverImage.noCaption}

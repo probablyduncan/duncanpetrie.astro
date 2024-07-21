@@ -9,7 +9,7 @@ import { getPhotosByRating } from "../lib/photoHelper";
 
 const photos = getPhotosByRating(5);
 
-const galleries = await getCollection("g");
+const galleries = await getCollection("galleries");
 
 // maybe change up the order?
 // maybe add ::before little annotations with the year or locations or something?
@@ -63,7 +63,8 @@ const galleries = await getCollection("g");
                         style={`--rand: ${Math.random() - 0.5}; --i: ${i}; --ratio: ${photo.ratio}; --sqrt-ratio: ${Math.sqrt(photo.ratio)};`}
                     >
                         <Image
-                            photo={{ name: photo.name, size: "medium" }}
+                            photoName={photo.name}
+                            size="medium"
                             captionAlign="right"
                             captionAccent={false}
                         />

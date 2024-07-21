@@ -33,6 +33,16 @@ export interface ColorScheme {
     accent?: string
 }
 
+export interface ImageProps {
+    photoName?: PhotoName;
+    size?: ImageSize;
+    src?: string;
+    caption?: string;
+    noCaption?: boolean;
+    captionAlign?: SideClass;
+    captionAccent?: boolean;
+}
+
 export interface HomePageThemeBase extends ColorScheme {
     name: string
     photoName: PhotoName

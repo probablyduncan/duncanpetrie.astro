@@ -154,7 +154,8 @@ const widestOfGroup = currentGroup.items.map(p => p.ratio).reduce((result, curre
                     >
                         <div>
                             <Image
-                                photo={{ name: photo.name, size: "small" }}
+                                photoName={photo.name}
+                                size="small"
                                 captionAlign="right"
                                 captionAccent={false}
                             />

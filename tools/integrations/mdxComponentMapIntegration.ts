@@ -44,7 +44,7 @@ function getName(fullPath: string): string {
 const componentMap: any = {
     articlelayout: {},
     default: {
-        a: '../components/Link.astro',
-        img: '../components/markdown/MarkdownImage.astro',
+        a: '../../components/Link.astro',
+        img: '../../components/articleHeaders/MarkdownImage.astro',
     }
 }

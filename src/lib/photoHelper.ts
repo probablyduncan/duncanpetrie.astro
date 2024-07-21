@@ -165,6 +165,18 @@ export function getPhotosByRating(rating: number): PhotoData[] {
     return getPhotos((photo) => photo.rating >= rating);
 }
 
+/**
+ * @returns all photos which either have a name in `names` or a tag in `tags`, which do not also have a name in `excludeNames` or a tag in `excludeTags`
+ */
+export function getPhotosByNamesAndTags({ names = [], tags = [], excludeNames = [], excludeTags = [] }: { names?: string[], tags?: string[], excludeNames?: string[], excludeTags?: string[] }): PhotoData[] {
+
+    if (!names?.length && !tags?.length) {
+        return [];
+    }
+
+    return getPhotos((photo) => (tags.some(tag => photo.tags.includes(tag)) || names.includes(photo.name)) && !(excludeNames.includes(photo.name) || excludeTags.some(tag => photo.tags.includes(tag))));
+}
+
 //#endregion
 
 //#region private photo getters

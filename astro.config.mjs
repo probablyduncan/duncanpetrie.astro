@@ -10,7 +10,7 @@ export default defineConfig({
 	site: 'https://beta.duncanpetrie.com',
 	integrations: [
 		mdx({
-			remarkPlugins: [mdxComponentMapIntegration],
+			// remarkPlugins: [mdxComponentMapIntegration],
 		}),
 		sitemap(),
 		// photoImport()

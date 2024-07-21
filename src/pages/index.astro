@@ -2,7 +2,7 @@
 import BaseHead from "../components/BaseHead.astro";
 import TickerNav from "../components/TickerNav.astro";
 import LegendList from "../components/LegendList.astro";
-import Footer from "../components/Footer.astro";
+import Footer from "../components/FooterSerif.astro";
 import { type ListData } from "../lib/consts";
 import HomePageThemeManager from "../components/HomePageThemeManager.astro";
 import { getHomePageThemes } from "../lib/themeHelper";
@@ -175,7 +175,7 @@ const listData: ListData = [
 			</div>
 			<div class="header-img-container">
 				<div class="header-img-wrapper">
-					<img data-theme-element />
+					<img data-theme-element loading="eager" alt="loading..." />
 					<span
 						class="color-accent monospace right"
 						data-theme-element></span>

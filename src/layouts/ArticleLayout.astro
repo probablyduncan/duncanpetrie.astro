@@ -11,8 +11,9 @@ import type { PhotoName } from "../data/photoTypes.generated";
 import type { SideClass, ColorScheme } from "../env";
 import TickerNav from "../components/TickerNav.astro";
 import { applyColorSchemeDefaults } from "../lib/themeHelper";
-import Footer from "../components/Footer.astro";
+import Footer from "../components/FooterSerif.astro";
 import Link from "../components/Link.astro";
+import { markedRendererWithLink } from "../lib/linkResolver";
 
 interface ArticleOptions {
     title: string;
@@ -58,18 +59,7 @@ const metadataKeys = shuffleMetadata
     : Object.keys(metadata);
 let spacingDebug = "";
 
-// ↂↀↈ◩◘◪ↆ∘⊡↪↷↶▨▦▧▤◊▣▶◄►◌◑◨◢◣◥◤◙●◯◮◭ ▪∗⨰⪦⪧※⁕†
-// ⪦⪧⪦ BEGIN DOCUMENT ⪧⪦⪧
-// ††† BEGIN DOCUMENT †††
-
-const renderer = new marked.Renderer();
-renderer.link = ({ href, title, text }) => {
-    const newTabAttrs =
-        href.startsWith("http") || href.endsWith("pdf")
-            ? ' target="_blank" rel="noopener noreferrer"'
-            : "";
-    return `<a href="${href}" title="${title ?? text}"${newTabAttrs}>${text}</a>`;
-};
+const renderer = markedRendererWithLink();
 ---
 
 <!doctype html>
@@ -203,15 +193,10 @@ renderer.link = ({ href, title, text }) => {
                 frontmatter.coverImage && (
                     <div class="cover-image">
                         <Image
-                            photo={{
-                                name: frontmatter.coverImage.photo?.name,
-                                size: "large",
-                                captionOverride: frontmatter.coverImage.photo?.captionOverride,
-                            }}
-                            image={{
-                                src: frontmatter.coverImage.image?.src,
-                                caption: frontmatter.coverImage.image?.caption,
-                            }}
+                            photoName={frontmatter.coverImage.photo?.name}
+                            size="large"
+                            caption={frontmatter.coverImage.photo?.captionOverride ?? frontmatter.coverImage.image?.caption}
+                            src={frontmatter.coverImage.image?.src}
                             captionAccent={false}
                             captionAlign={frontmatter.coverImage.captionAlign}
                             noCaption={frontmatter.coverImage.noCaption}
