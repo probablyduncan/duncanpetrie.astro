@@ -34,13 +34,10 @@ Object.keys(tags).forEach((t) => {
     }
 });
 
-const tagKeys = shuffleOnBuild
-    ? shuffle(Object.keys(tags))
-    : Object.keys(tags);
+const tagKeys = shuffleOnBuild ? shuffle(Object.keys(tags)) : Object.keys(tags);
 let spacingDebug = "";
 
 const renderer = markedRendererWithLink();
-console.log(abstract)
 ---
 
 <div class="metadata mono-small">
@@ -81,59 +78,63 @@ console.log(abstract)
         <p class="right">
             ◑ Back to <a href="/" title="Home page" class="bold">home</a>.
         </p>
-        <br />
-        <br />
-        <p>
-            <b>◮ Metadata:</b>
-        </p>
-        <p>
-            {
-                tagKeys.map((key: string, i: number) => {
-                    let val = tags[key];
+        {
+            tagKeys.length > 0 && (
+                <>
+                    <br />
+                    <br />
+                    <p>
+                        <b>◮ Metadata:</b>
+                    </p>
+                    <p>
+                        {tagKeys.map((key: string, i: number) => {
+                            let val = tags[key];
 
-                    // if (val === true) {
-                    //     val =
-                    //         frontmatter[
-                    //             key as keyof ArticleOptions
-                    //         ];
-                    // }
+                            // if (val === true) {
+                            //     val =
+                            //         frontmatter[
+                            //             key as keyof ArticleOptions
+                            //         ];
+                            // }
 
-                    let renderKey = true;
-                    if (val === false) {
-                        val = key;
-                        renderKey = false;
-                    }
+                            let renderKey = true;
+                            if (val === false) {
+                                val = key;
+                                renderKey = false;
+                            }
 
-                    val = marked.parseInline(val.toString(), {
-                        renderer,
-                        async: false,
-                    }) as string;
+                            val = marked.parseInline(val.toString(), {
+                                renderer,
+                                async: false,
+                            }) as string;
 
-                    const spacing =
-                        i === tagKeys.length
-                            ? 0
-                            : tagSpacing
-                              ? tagSpacing[i]
-                              : Math.floor(Math.random() * 4) + 4;
-                    spacingDebug += spacing + ",";
+                            const spacing =
+                                i === tagKeys.length
+                                    ? 0
+                                    : tagSpacing
+                                      ? tagSpacing[i]
+                                      : Math.floor(Math.random() * 4) + 4;
+                            spacingDebug += spacing + ",";
 
-                    return (
-                        <>
-                            {renderKey && (
-                                <span>
-                                    {key[0].toUpperCase() +
-                                        key.substring(1) +
-                                        ": "}
-                                </span>
-                            )}
-                            <b set:html={val + "."} />
-                            <Nbsp i={spacing} />
-                        </>
-                    );
-                })
-            }
-        </p>
-        {!tagSpacing && <span>[{spacingDebug}]</span>}
+                            return (
+                                <>
+                                    {renderKey && (
+                                        <span>
+                                            {key[0].toUpperCase() +
+                                                key.substring(1) +
+                                                ": "}
+                                        </span>
+                                    )}
+                                    <b set:html={val + "."} />
+                                    <Nbsp i={spacing} />
+                                </>
+                            );
+                        })}
+                    </p>
+                    {!tagSpacing && <span>[{spacingDebug}]</span>}
+                </>
+            )
+        }
     </div>
 </div>
 <style>

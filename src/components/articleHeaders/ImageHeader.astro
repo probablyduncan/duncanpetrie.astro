@@ -14,19 +14,25 @@ const props = Astro.props;
 
 {props.ticker === true && <TickerNav />}
 <header style={`width: ${props.textWidth};`}>
-    <section class="metadata">
-        <ArticleMetadata
-            {...props.metadata}
-            title={props.title}
-            date={props.date}
-            slug={props.slug}
-        />
-    </section>
-    <div class="mono-small center">*** BEGIN DOCUMENT ***</div>
+    {
+        props.metadata && (
+            <>
+                <section class="metadata">
+                    <ArticleMetadata
+                        {...props.metadata}
+                        title={props.title}
+                        date={props.date}
+                        slug={props.slug}
+                    />
+                </section>
+                <div class="mono-small center">*** BEGIN DOCUMENT ***</div>
+            </>
+        )
+    }
     {
         props.image && (
             <section class="image-container">
-                <Image {...props.image} />
+                <Image {...props.image} captionAccent={false} />
             </section>
         )
     }

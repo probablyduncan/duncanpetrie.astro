@@ -1,0 +1,46 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import { getPhotosByNamesAndTags } from '../../lib/photoHelper';
+import BaseHead from '../../components/BaseHead.astro';
+import RootColors from '../../components/RootColors.astro';
+
+type Props = CollectionEntry<"galleries">;
+export async function getStaticPaths() {
+    const posts: any[] = await getCollection("galleries");
+    return posts.map((post) => ({
+        params: { gallery: post.slug },
+        props: post,
+    }));
+}
+
+const post = Astro.props;
+
+const { Content } = await post.render();
+
+const photoData = getPhotosByNamesAndTags({tags: post.data.photoTags, names: post.data.photoNames, excludeTags: post.data.excludeTags, excludeNames: post.data.excludeNames}).map((photo) => ({
+    src: photo.paths.large,
+    caption: photo.joinedCaption,
+    ratio: photo.ratio,
+}));
+
+if (post.data.sort == "asc") {
+    photoData.reverse();
+}
+
+const startIndex: number = 0;
+const allGalleries = await getCollection("galleries");
+---
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <BaseHead
+            title={post.data.title}
+            description={post.data.description}
+            imgSrc={photoData[0].src}
+        />
+        <RootColors colors={{...post.data.colors}} />
+    </head>
+    <body>
+
+    </body>
+</html>

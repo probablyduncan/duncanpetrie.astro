@@ -7,6 +7,8 @@ import { applyColorSchemeDefaults } from "../lib/themeHelper";
 import { articleLayoutOptionDefaults } from "../lib/articleHeaderComponentRegistry";
 import MarkdownImage from "../components/articleHeaders/MarkdownImage.astro";
 import Link from "../components/Link.astro";
+import { stripHtmlTags } from "../lib/linkResolver";
+import { marked } from "marked";
 
 type Props = CollectionEntry<"articles">;
 export async function getStaticPaths() {
@@ -36,7 +38,7 @@ const articleOptions = Object.assign(
 <!doctype html>
 <html lang="en">
     <head>
-        <BaseHead title={post.data.title} />
+        <BaseHead title={post.data.title} description={stripHtmlTags(await marked.parseInline(post.body.substring(0, post.body.substring(100).indexOf('\n') + 100))).trim() + ".."} photoName={articleOptions.image?.photoName} imgSrc={articleOptions.image?.src} />
         <RootColors
             colors={applyColorSchemeDefaults(post.data.colors, {
                 accent: "blue",
@@ -49,19 +51,24 @@ const articleOptions = Object.assign(
             <article
                 style={`width: ${articleOptions.textWidth ?? "800px"};`}
                 data-line-numbers={articleOptions.lineNumbers}
-                class:list={["serif-body", articleOptions.textSize, {"article-end-dots": articleOptions.articleEndDots}]}
+                class:list={[
+                    "serif-body",
+                    articleOptions.textSize,
+                    { "article-end-dots": articleOptions.articleEndDots },
+                ]}
             >
                 <Content components={{ img: MarkdownImage, a: Link }} />
             </article>
             {
-                articleOptions.useDocumentFence && (
-                    <div
-                        style="margin: -20vh 0 50vh;"
-                        class="mono-small center"
-                    >
-                        *** END DOCUMENT ***
-                    </div>
-                )
+                articleOptions.useDocumentFence &&
+                    "metadata" in articleOptions && articleOptions.metadata && (
+                        <div
+                            style="margin: -20vh 0 50vh;"
+                            class="mono-small center"
+                        >
+                            *** END DOCUMENT ***
+                        </div>
+                    )
             }
             <articleOptions.footer />
         </main>

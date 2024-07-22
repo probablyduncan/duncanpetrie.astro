@@ -57,6 +57,7 @@ export const articleLayoutOptionDefaults: { [K in ArticleLayoutOptions['type']]:
         textWidth: '800px',
         articleEndDots: true,
         ticker: true,
+        metadata: null,
     },
     poetry: {
         header: BlockHeader,
