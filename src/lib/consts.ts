@@ -110,7 +110,7 @@ export const TICKER_LINKS = {
     Writing: "/writing",
     Springtide: "/springtide",
     About: "/about",
-    Galleries: "/g",
+    Galleries: "/photography",
     "The Permanent Collection": "/permanent-collection",
     "Design Ethos": "/design",
 
@@ -120,11 +120,11 @@ export const TICKER_LINKS = {
     Linkedin: "https://linkedin.com/probablyduncan",
 
     "Pizza Party": "/pizza",
-    Wikimedia: "/wiki",
+    Wikimedia: "https://www.youtube.com/watch?v=JRXZAaDxGCQ",
     "On Yearning": "/on-yearning",
-    Horizons: "/horizons",
-    "Birds With Hats": "/birdhat",
-    "Birds Without Hats": "/g/birds",
+    Horizons: "/photography/horizons",
+    "Birds With Hats": "/photography/birdhat",
+    "Birds Without Hats": "/photography/birds",
 
     "Myth.pdf": "/myth.pdf",
     "Yearning.pdf": "/yearning.pdf",
@@ -133,7 +133,6 @@ export const TICKER_LINKS = {
     "Who am I?": "/about",
     "What am I?": "/about",
     "Sign in": "/signin",
-    "Sign out": "/signout",
 } as const;
 export type TickerLink = keyof typeof TICKER_LINKS;
 

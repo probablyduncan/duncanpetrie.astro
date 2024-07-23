@@ -36,24 +36,21 @@ const galleries = await getCollection("galleries");
                 <span
                     ><a href="/writing" title="Back! to the home page."
                         >Writing</a
-                    >.
-                </span>
-                <span><a href="/about" title="About me.">About</a>. </span>
-                <span
-                    ><Link href="mailto:duncanpetrie1@gmail.com">Email me</Link
-                    >.
-                </span>
-                <span
-                    ><Link href="https://instagram.com/probablyduncan"
-                        >Instagram</Link
-                    >.
-                </span>
+                    >.</span
+                >
+                <span><a href="/about" title="About me.">About</a>.</span>
+                <span><Link href="mailto">Email me</Link>.</span>
+                <span><Link>Instagram</Link>. </span>
                 <br />
                 <br />
                 <span>⁜ Galleries:</span>
                 <br />
                 <br />
-                {galleries.map(g => <span><Link href={"/g/" + g.slug}>{g.data.title}</Link>.{" "}</span>)}
+                {
+                    galleries.map((g) => (
+                        <span><Link href={"/photography/" + g.slug}>{g.data.title}</Link>.{" "}</span>
+                    ))
+                }
             </nav>
         </header>
         <main>
@@ -83,7 +80,7 @@ const galleries = await getCollection("galleries");
                 padding: 200px 0 40px;
                 border-bottom: 2px solid var(--color-text);
 
-                box-shadow: 0 120px 160px -120px rgba(0,0,0,.05);
+                box-shadow: 0 120px 160px -120px rgba(0, 0, 0, 0.05);
             }
 
             h1 {
@@ -115,7 +112,6 @@ const galleries = await getCollection("galleries");
             }
 
             @media screen and (max-width: 700px) {
-
                 header {
                     width: calc(100vw - 20px);
                     flex-flow: column;

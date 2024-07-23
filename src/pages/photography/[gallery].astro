@@ -1,8 +1,11 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content';
-import { getPhotosByNamesAndTags } from '../../lib/photoHelper';
-import BaseHead from '../../components/BaseHead.astro';
-import RootColors from '../../components/RootColors.astro';
+import { getCollection, type CollectionEntry } from "astro:content";
+import { getPhotosByNamesAndTags } from "../../lib/photoHelper";
+import BaseHead from "../../components/BaseHead.astro";
+import RootColors from "../../components/RootColors.astro";
+import TickerNav from "../../components/TickerNav.astro";
+import Link from "../../components/Link.astro";
+import Image from "../../components/Image.astro";
 
 type Props = CollectionEntry<"galleries">;
 export async function getStaticPaths() {
@@ -17,30 +20,183 @@ const post = Astro.props;
 
 const { Content } = await post.render();
 
-const photoData = getPhotosByNamesAndTags({tags: post.data.photoTags, names: post.data.photoNames, excludeTags: post.data.excludeTags, excludeNames: post.data.excludeNames}).map((photo) => ({
-    src: photo.paths.large,
-    caption: photo.joinedCaption,
-    ratio: photo.ratio,
-}));
+const allPhotos = getPhotosByNamesAndTags({
+    tags: post.data.photoTags,
+    names: post.data.photoNames,
+    excludeTags: post.data.excludeTags,
+    excludeNames: post.data.excludeNames,
+});
 
 if (post.data.sort == "asc") {
-    photoData.reverse();
+    allPhotos.reverse();
 }
 
 const startIndex: number = 0;
 const allGalleries = await getCollection("galleries");
 ---
-<!DOCTYPE html>
+
+<!doctype html>
 <html lang="en">
     <head>
         <BaseHead
             title={post.data.title}
             description={post.data.description}
-            imgSrc={photoData[0].src}
+            imgSrc={allPhotos[0].paths["small"]}
         />
-        <RootColors colors={{...post.data.colors}} />
+        <RootColors colors={{ ...post.data.colors }} />
     </head>
     <body>
+        <TickerNav />
+        <header>
+            <h1>{post.data.title}</h1>
+            <nav class="mono-small">
+                <span>All the best, <br />throughout the ages.</span>
+                <br /><br />
+                <span
+                    >Go <a href="/" title="Back! to the home page.">home</a>.
+                </span>
+                <span
+                    ><a href="/writing" title="Back! to the home page."
+                        >Writing</a
+                    >.
+                </span>
+                <span><a href="/about" title="About me.">About</a>. </span>
+                <span><Link href="mailto">Email me</Link>. </span>
+                <span><Link>Instagram</Link>. </span>
+                <br />
+                <br />
+                <span>⁜ Galleries:</span>
+                <br />
+                <br />
+                {
+                    allGalleries.map((g) => (
+                        <span><Link href={"/photography/" + g.slug}>{g.data.title}</Link>. </span>
+                    ))
+                }
+            </nav>
+        </header>
+        <main>
+            <article class="serif-body small">
+                <Content components={{ a: Link }} />
+            </article>
+            {
+                allPhotos.map((photo, i) => (
+                    <div
+                        style={`--rand: ${Math.random() - 0.5}; --i: ${i}; --ratio: ${photo.ratio}; --sqrt-ratio: ${Math.sqrt(photo.ratio)};`}
+                    >
+                        <Image
+                            photoName={photo.name}
+                            size="medium"
+                            captionAlign="right"
+                            captionAccent={false}
+                        />
+                    </div>
+                ))
+            }
+        </main>
+        <style>
+            header {
+                display: flex;
+                flex-flow: row;
+                justify-content: space-between;
+                align-items: flex-end;
 
+                width: calc(100vw - 80px);
+                padding: 200px 0 40px;
+                border-bottom: 2px solid var(--color-text);
+
+                box-shadow: 0 120px 160px -120px rgba(0, 0, 0, 0.05);
+            }
+
+            h1 {
+                font-size: 5.6rem;
+                font-style: italic;
+                font-weight: normal;
+                max-width: 600px;
+                margin: 0;
+            }
+
+            nav {
+                width: 200px;
+                max-width: 200px;
+                min-width: 200px;
+                text-align: right;
+            }
+
+            main {
+                display: flex;
+                flex-flow: column;
+                align-items: center;
+                margin: 40vh 0;
+                gap: 40vh;
+                max-width: calc(100vw - 80px);
+            }
+
+            article {
+                position: relative;
+                width: 800px;
+                max-width: 100%;
+
+                column-count: 2;
+                column-width: 300px;
+                column-gap: 20px;
+            }
+
+            article :global(:first-child) {
+                margin-top: 0;
+            }
+
+            article :global(p:first-child)::before {
+                position: absolute;
+
+                content: "►";
+                top: 2px;
+                left: -1.5em;
+
+                /* content: '»';
+                top: 0px;
+                left: -1em; */
+            }
+
+            article :global(p):last-of-type::after {
+                content: "⁘";
+                margin-left: 0.5rem;
+                position: relative;
+            }
+
+            /* images */
+            main > div {
+                width: calc(600px * var(--sqrt-ratio));
+                max-width: 100%;
+            }
+
+            @media screen and (max-width: 700px) {
+                header {
+                    width: calc(100vw - 20px);
+                    flex-flow: column;
+                    align-items: flex-start;
+                    gap: 40px;
+                    padding: calc(var(--ticker-height) + 20px) 0 40px;
+                }
+
+                h1 {
+                    font-size: 4.2rem;
+                    max-width: 100%;
+                    hyphens: none;
+                    -webkit-hyphens: none;
+                    -moz-hyphens: none;
+                    -ms-hyphens: none;
+                }
+
+                nav {
+                    text-align: left;
+                    margin-left: 10px;
+                }
+
+                main {
+                    max-width: calc(100vw - 20px);
+                }
+            }
+        </style>
     </body>
 </html>

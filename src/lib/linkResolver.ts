@@ -4,7 +4,8 @@ const staticLinks = {
     home: "/",
     instagram: "https://instagram.com/probablyduncan",
     linkedin: "https://linkedin.com/in/probablyduncan",
-    email: "mailto:duncanpetrie1@gmail.com"
+    email: "mailto:duncanpetrie1@gmail.com",
+    mailto: "mailto:duncanpetrie1@gmail.com"
 } as const;
 
 
