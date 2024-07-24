@@ -7,7 +7,7 @@ export function shuffleRef<ArrayType>(a: ArrayType[], i1?: number, i2?: number, 
 export function shuffle<ElementType>(input: ElementType[]): ElementType[] {
     return input.map(value => ({ value, sort: Math.random() }))
         .sort((a, b) => a.sort - b.sort)
-        .map(({ value }) => value)
+        .map(({ value }) => value);
 }
 
 export function groupByKey<ElementType>(array: ElementType[], groupByKey: keyof ElementType): Record<string, ElementType[]> {

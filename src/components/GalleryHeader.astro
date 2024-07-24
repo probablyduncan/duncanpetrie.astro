@@ -1,0 +1,96 @@
+---
+import { getCollection } from "astro:content";
+import Link from "./Link.astro";
+
+interface Props {
+    permanentCollectionLink?: boolean;
+    bestOfMonthLink?: boolean;
+}
+
+const { permanentCollectionLink = true, bestOfMonthLink = true } = Astro.props;
+
+const galleries = await getCollection("galleries");
+---
+
+<header>
+    <h1><slot name="title" /></h1>
+    <nav class="mono-small">
+        <slot name="description" />
+        <br /><br />
+        <span>Go <a href="/" title="Back! to the home page.">home</a>. </span>
+        <span
+            ><a href="/writing" title="Back! to the home page.">Writing</a
+            >.</span
+        >
+        <span><a href="/about" title="About me.">About</a>.</span>
+        <span><Link href="mailto">Email me</Link>.</span>
+        <span><Link>Instagram</Link>.</span>
+        {permanentCollectionLink && <br /><br />
+        <span><Link href="/permanent-collection">The Permanent Collection</Link>.</span>}
+        {bestOfMonthLink && <br /><br />
+        <span><Link href="/best-of-the-month">Best of the Month</Link>.</span>}
+        <br /><br />
+        <span>⁜ Galleries:</span>
+        <br /><br />
+        {
+            galleries.map((g) => (
+                <span>
+                    <Link href={"/photography/" + g.slug}>{g.data.title}</Link>.{" "}
+                </span>
+            ))
+        }
+    </nav>
+</header>
+<style>
+    header {
+        display: flex;
+        flex-flow: row;
+        justify-content: space-between;
+        align-items: flex-end;
+
+        width: 100%;
+        padding: 200px 0 40px;
+        border-bottom: 2px solid var(--color-text);
+        margin-bottom: var(--gallery-gap);
+
+        box-shadow: 0 120px 160px -120px rgba(0, 0, 0, 0.05);
+    }
+
+    h1 {
+        font-size: 5.6rem;
+        font-style: italic;
+        font-weight: normal;
+        max-width: 600px;
+        margin: 0;
+    }
+
+    nav {
+        width: 200px;
+        max-width: 200px;
+        min-width: 200px;
+        text-align: right;
+    }
+
+    @media screen and (max-width: 700px) {
+        header {
+            flex-flow: column;
+            align-items: flex-start;
+            gap: 40px;
+            padding: calc(var(--ticker-height) + 20px) 0 40px;
+        }
+
+        h1 {
+            font-size: 4.2rem;
+            max-width: 100%;
+            hyphens: none;
+            -webkit-hyphens: none;
+            -moz-hyphens: none;
+            -ms-hyphens: none;
+        }
+
+        nav {
+            text-align: left;
+            margin-left: 10px;
+        }
+    }
+</style>

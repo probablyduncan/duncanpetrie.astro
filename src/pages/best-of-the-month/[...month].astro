@@ -4,7 +4,7 @@ import Image from "../../components/Image.astro";
 import Link from "../../components/Link.astro";
 import RootColors from "../../components/RootColors.astro";
 import TickerNav from "../../components/TickerNav.astro";
-import { getOrdinalSuffix, groupByKey } from "../../lib/miscellaneum";
+import { getOrdinalSuffix } from "../../lib/miscellaneum";
 import { getPhotosByRating, PhotoData } from "../../lib/photoHelper";
 
 interface BestOfTheMonthGroup {
@@ -66,14 +66,20 @@ export function getStaticPaths() {
 }
 
 const { month } = Astro.params;
-const currentGroup =
+const currentGroupIndex =
     month !== undefined
-        ? getGroups().find((group) => group.slug === month)
-        : getGroups()[0];
+        ? getGroups().findIndex((group) => group.slug === month)
+        : 0;
 
-const widestOfGroup = currentGroup.items.map(p => p.ratio).reduce((result, current) => {
-    return Math.max(result, current);
-}, 0);
+const currentGroup = getGroups()[currentGroupIndex];
+const prevGroup = currentGroupIndex <= 0 ? null : getGroups()[currentGroupIndex - 1];
+const nextGroup = currentGroupIndex >= getGroups().length ? null : getGroups()[currentGroupIndex + 1];
+
+const widestOfGroup = currentGroup.items
+    .map((p) => p.ratio)
+    .reduce((result, current) => {
+        return Math.max(result, current);
+    }, 0);
 
 // const groupsByYear = groupByKey(getGroups(), 'year');
 // const years = Object.keys(groupsByYear).sort((a: string, b: string) => parseInt(b) - parseInt(a));
@@ -100,7 +106,7 @@ const widestOfGroup = currentGroup.items.map(p => p.ratio).reduce((result, curre
                     >Go <a href="/" title="Back! to the home page.">home</a>.
                 </span>
                 <span
-                    >More <a href="/photography" title="Back! to the home page."
+                    >More <a href="/permanent-collection" title="Back! to the home page."
                         >photography</a
                     >.
                 </span>
@@ -136,9 +142,13 @@ const widestOfGroup = currentGroup.items.map(p => p.ratio).reduce((result, curre
                                 </span>
                             );
                         } else {
+                            const attrs = {
+                                href: `/best-of-the-month/${i === 0 ? "" : group.slug}`,
+                                title: `Best of the month: ${group.display}`,
+                            };
                             return (
                                 <span>
-                                    <a href={`/best-of-the-month/${i === 0 ? "" : group.slug}`} title={`Best of the month: ${group.display}`}>{group.display}</a>.{" "}
+                                    <a {...attrs}>{group.display}</a>.{" "}
                                 </span>
                             );
                         }
@@ -147,6 +157,11 @@ const widestOfGroup = currentGroup.items.map(p => p.ratio).reduce((result, curre
             </nav>
         </header>
         <main style={`--sqrt-widest-ratio: ${Math.sqrt(widestOfGroup)};`}>
+            <!-- <GalleryPhotoScroll
+                photos={currentGroup.items}
+                widthBasis="600px"
+                shuffle={false}
+            /> -->
             {
                 currentGroup.items.map((photo, i) => (
                     <div
@@ -164,9 +179,20 @@ const widestOfGroup = currentGroup.items.map(p => p.ratio).reduce((result, curre
                 ))
             }
         </main>
+        <footer class="mono-small">
+            <!-- «»←→⇐⇒⇱⇲◀▶◁▷◂▸◃◃▹⪦⪧⫷⫸⫹⫺ -->
+            {prevGroup && <span>⇱ <a href={"/best-of-the-month/" + prevGroup.slug}>{prevGroup.display}</a></span>}
+            <span>Go <a href="/">home</a>.</span>
+            <span>More <Link href="/permanent-collection">photography</Link>.</span>
+            {nextGroup && <span><a href={"/best-of-the-month/" + nextGroup.slug}>{nextGroup.display}</a> ⇲</span>}
+        </footer>
         <style>
-            header {
+
+            header, main, footer {
                 width: calc(100vw - 80px);
+            }
+
+            header {
                 margin: 200px 0 100px;
                 display: flex;
                 flex-flow: row;
@@ -193,7 +219,6 @@ const widestOfGroup = currentGroup.items.map(p => p.ratio).reduce((result, curre
             }
 
             main {
-                width: calc(100vw - 80px);
                 display: grid;
                 grid-template-columns: 1fr 1fr 1fr;
                 row-gap: 40px;
@@ -213,7 +238,17 @@ const widestOfGroup = currentGroup.items.map(p => p.ratio).reduce((result, curre
             }
 
             main > div > div {
-                width: calc(100% * var(--sqrt-ratio) / var(--sqrt-widest-ratio));
+                width: calc(
+                    100% * var(--sqrt-ratio) / var(--sqrt-widest-ratio)
+                );
+            }
+
+            footer {
+                margin-bottom: 20px;
+                display: flex;
+                justify-content: center;
+                align-items: baseline;
+                gap: 20px;
             }
 
             @media screen and (max-width: 1160px) {
@@ -227,7 +262,6 @@ const widestOfGroup = currentGroup.items.map(p => p.ratio).reduce((result, curre
             }
 
             @media screen and (max-width: 750px) {
-
                 header {
                     flex-flow: column-reverse;
                     align-items: flex-start;
@@ -254,6 +288,15 @@ const widestOfGroup = currentGroup.items.map(p => p.ratio).reduce((result, curre
 
                 main > div > div {
                     width: 100%;
+                }
+            }
+
+            @media screen and (max-width: 500px) {
+                footer {
+                    flex-flow: column;
+                    gap: 1em;
+                    margin-bottom: 20px;
+                    width: calc(100vw - 40px);
                 }
             }
         </style>

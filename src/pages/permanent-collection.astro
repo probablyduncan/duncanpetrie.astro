@@ -1,17 +1,13 @@
 ---
-import { getCollection } from "astro:content";
 import BaseHead from "../components/BaseHead.astro";
-import Image from "../components/Image.astro";
-import Link from "../components/Link.astro";
 import RootColors from "../components/RootColors.astro";
 import TickerNav from "../components/TickerNav.astro";
 import { getPhotosByRating } from "../lib/photoHelper";
+import GalleryPhotoScroll from "../components/GalleryPhotoScroll.astro";
+import GalleryHeader from "../components/GalleryHeader.astro";
 
 const photos = getPhotosByRating(5);
 
-const galleries = await getCollection("galleries");
-
-// maybe change up the order?
 // maybe add ::before little annotations with the year or locations or something?
 // maybe like sections saying here's where I was living, here's when I went on a trip, etc
 // maybe links to specific galleries with more like a certain photo
@@ -25,113 +21,29 @@ const galleries = await getCollection("galleries");
     </head>
     <body>
         <TickerNav />
-        <header>
-            <h1>The Permanent<br />Collection.</h1>
-            <nav class="mono-small">
-                <span>All the best, <br />throughout the ages.</span>
-                <br /><br />
-                <span
-                    >Go <a href="/" title="Back! to the home page.">home</a>.
-                </span>
-                <span
-                    ><a href="/writing" title="Back! to the home page."
-                        >Writing</a
-                    >.</span
-                >
-                <span><a href="/about" title="About me.">About</a>.</span>
-                <span><Link href="mailto">Email me</Link>.</span>
-                <span><Link>Instagram</Link>. </span>
-                <br />
-                <br />
-                <span>⁜ Galleries:</span>
-                <br />
-                <br />
-                {
-                    galleries.map((g) => (
-                        <span><Link href={"/photography/" + g.slug}>{g.data.title}</Link>.{" "}</span>
-                    ))
-                }
-            </nav>
-        </header>
         <main>
-            {
-                photos.map((photo, i) => (
-                    <div
-                        style={`--rand: ${Math.random() - 0.5}; --i: ${i}; --ratio: ${photo.ratio}; --sqrt-ratio: ${Math.sqrt(photo.ratio)};`}
-                    >
-                        <Image
-                            photoName={photo.name}
-                            size="medium"
-                            captionAlign="right"
-                            captionAccent={false}
-                        />
-                    </div>
-                ))
-            }
+            <GalleryHeader permanentCollectionLink={false}>
+                <span slot="title">The Permanent<br />Collection.</span>
+                <span slot="description">All the best,<br />throughout the ages.</span>
+            </GalleryHeader>
+            <GalleryPhotoScroll
+                photos={photos}
+                captionAlign="random"
+                widthBasis="800px"
+                imageSize="large"
+                shuffle={true}
+            />
         </main>
         <style>
-            header {
-                display: flex;
-                flex-flow: row;
-                justify-content: space-between;
-                align-items: flex-end;
-
-                width: calc(100vw - 80px);
-                padding: 200px 0 40px;
-                border-bottom: 2px solid var(--color-text);
-
-                box-shadow: 0 120px 160px -120px rgba(0, 0, 0, 0.05);
-            }
-
-            h1 {
-                font-size: 5.6rem;
-                font-style: italic;
-                font-weight: normal;
-                max-width: 600px;
-                margin: 0;
-            }
-
-            nav {
-                width: 200px;
-                max-width: 200px;
-                min-width: 200px;
-                text-align: right;
-            }
-
             main {
-                display: flex;
-                flex-flow: column;
-                align-items: center;
-                margin: 40vh 0;
-                gap: 40vh;
-            }
-
-            main > div {
-                width: calc(600px * var(--sqrt-ratio));
-                max-width: calc(100vw - 20px);
+                --gallery-gap: 40vh;
+                width: calc(100vw - 80px);
+                margin-bottom: var(--gallery-gap);
             }
 
             @media screen and (max-width: 700px) {
-                header {
+                main {
                     width: calc(100vw - 20px);
-                    flex-flow: column;
-                    align-items: flex-start;
-                    gap: 40px;
-                    padding: calc(var(--ticker-height) + 20px) 0 40px;
-                }
-
-                h1 {
-                    font-size: 4.2rem;
-                    max-width: 100%;
-                    hyphens: none;
-                    -webkit-hyphens: none;
-                    -moz-hyphens: none;
-                    -ms-hyphens: none;
-                }
-
-                nav {
-                    text-align: left;
-                    margin-left: 10px;
                 }
             }
         </style>

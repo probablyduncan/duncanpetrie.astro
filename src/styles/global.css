@@ -194,7 +194,6 @@ sup {
 .serif-body button {
 	user-select: auto;
 	text-decoration: underline;
-	color: var(--color-accent);
 }
 
 .serif-body a:hover,
@@ -203,7 +202,7 @@ sup {
 .serif-body button:hover,
 .serif-body button:focus-visible,
 .serif-body button:focus-within {
-	/* color: var(--color-accent); */
+	color: var(--color-accent);
 	text-decoration: none;
 }
 

@@ -49,7 +49,7 @@ const articleOptions = Object.assign(
         <main>
             <articleOptions.header {...articleOptions} />
             <article
-                style={`width: ${articleOptions.textWidth ?? "800px"};`}
+                style={`--text-width: ${articleOptions.textWidth ?? "800px"};`}
                 data-line-numbers={articleOptions.lineNumbers}
                 class:list={[
                     "serif-body",
@@ -81,7 +81,9 @@ const articleOptions = Object.assign(
             }
 
             article {
+                width: var(--text-width);
                 max-width: 100%;
+                padding: 0 calc((100% - var(--text-width)) / 2);
                 margin: 0 0 50vh;
             }
 
@@ -103,7 +105,7 @@ const articleOptions = Object.assign(
             /* LINE NUMBERS */
 
             @media screen and (min-width: 1000px) {
-                article[data-line-numbers] {
+                article[data-line-numbers] :global(p) {
                     width: calc(100% - 2em);
                 }
 

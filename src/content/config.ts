@@ -31,8 +31,9 @@ const galleries = defineCollection({
 		excludeNames: z.array(z.string()).optional(),
 		excludeTags: z.array(z.string()).optional(),
 		colors: z.object({ text: z.string().optional(), background: z.string().optional(), accent: z.string().optional() }).optional(),
-		noCaptions: z.boolean().optional(),
+		noCaptions: z.boolean().default(false),
 		sort: z.enum(['asc', 'desc']).default('desc'),
+		shuffle: z.boolean().default(false),
 	}),
 });
 

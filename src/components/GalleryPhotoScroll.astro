@@ -1,0 +1,120 @@
+---
+import type { SideClass } from "../env";
+import type { ImageSize } from "../lib/consts";
+import type { PhotoData } from "../lib/photoHelper";
+import Image from "./Image.astro";
+
+interface Props {
+    photos: PhotoData[];
+    widthBasis?: string;
+    photoGap?: string;
+    captionAccent?: boolean;
+    captionAlign?: SideClass | "random";
+    noCaptions?: boolean;
+    imageSize?: ImageSize;
+    shuffle?: boolean;
+}
+
+const {
+    photos,
+    widthBasis = "600px",
+    photoGap = "var(--gallery-gap)",
+    captionAccent = false,
+    captionAlign = "right",
+    noCaptions = false,
+    imageSize = "medium",
+    shuffle = false,
+} = Astro.props;
+
+const hasText = Astro.slots.has("default") && (await Astro.slots.render("default")).trim().length > 0;
+
+---
+
+<section style={`--base-width: ${widthBasis}; --photo-gap: ${photoGap}`}>
+    {
+        hasText && (
+            <article class="serif-body small">
+                <slot />
+            </article>
+        )
+    }
+    {
+        photos.map((photo, i) => (
+            <div
+                class="image-wrapper"
+                style={`--rand: ${Math.random() - 0.5}; --i: ${i}; --ratio: ${photo.ratio}; --sqrt-ratio: ${Math.sqrt(photo.ratio)};`}
+            >
+                <Image
+                    photoName={photo.name}
+                    size={imageSize}
+                    captionAlign={
+                        captionAlign === "random"
+                            ? Math.random() < 0.5
+                                ? "left"
+                                : "right"
+                            : captionAlign
+                    }
+                    captionAccent={captionAccent}
+                    noCaption={noCaptions}
+                />
+            </div>
+        ))
+    }
+</section>
+<style>
+    section {
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        gap: var(--photo-gap);
+    }
+
+    .image-wrapper {
+        width: calc(var(--base-width) * var(--sqrt-ratio));
+        max-width: 100%;
+        order: var(--i);
+    }
+
+    article {
+        order: -1;
+        position: relative;
+        width: 800px;
+        max-width: 100%;
+
+        column-count: 2;
+        column-width: 300px;
+        column-gap: 20px;
+    }
+
+    article :global(:first-child) {
+        margin-top: 0;
+    }
+
+    article :global(p:first-child)::before {
+        position: absolute;
+
+        content: "►";
+        top: 2px;
+        left: -1.5em;
+
+        /* content: '»';
+                top: 0px;
+                left: -1em; */
+    }
+
+    article :global(p):last-of-type::after {
+        content: "⁘";
+        margin-left: 0.5rem;
+        position: relative;
+    }
+</style>
+{shuffle && <script is:inline>
+    function shufflePhotos() {
+        document.querySelectorAll('.image-wrapper').forEach((e) => {
+            e.style.setProperty("--i", Math.floor(Math.random() * 1000).toString());
+        });
+    }
+
+    document.addEventListener("astro:after-swap", shufflePhotos);
+    shufflePhotos();
+</script>}
