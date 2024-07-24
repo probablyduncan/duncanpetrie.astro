@@ -55,6 +55,7 @@ export const articleLayoutOptionDefaults: { [K in ArticleLayoutOptions['type']]:
         useDocumentFence: true,
         lineNumbers: true,
         textWidth: '800px',
+        textSize: 'small',
         articleEndDots: true,
         ticker: true,
         metadata: null,
@@ -76,6 +77,7 @@ export const articleLayoutOptionDefaults: { [K in ArticleLayoutOptions['type']]:
         lineNumbers: true,
         subtitleAlign: "right",
         textWidth: '800px',
+        textSize: 'small',
         articleEndDots: true,
         ticker: true,
     }

@@ -1,8 +1,14 @@
 ---
+import type { SideClass } from "../env";
 
+interface Props {
+    align?: SideClass;
+}
+
+const { align = "left" } = Astro.props;
 ---
 
-<footer class="mono-small center">
+<footer class:list={["mono-small", align]}>
     Go <b><a href="/">Home</a></b>. More
     <b><a href="/writing">Writing</a></b>.
     <b><a href="/about">About</a>.</b>
