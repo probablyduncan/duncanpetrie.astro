@@ -1,0 +1,174 @@
+---
+import { getCollection } from "astro:content";
+import BaseHead from "../../../components/BaseHead.astro";
+import Image from "../../../components/Image.astro";
+import Link from "../../../components/Link.astro";
+import RootColors from "../../../components/RootColors.astro";
+import TickerNav from "../../../components/TickerNav.astro";
+import { getOrdinalSuffix } from "../../../lib/miscellaneum";
+import { getBestOfTheMonthGroups } from "../../../lib/bestOfTheMonthGroups";
+import GalleryHeader from "../../../components/GalleryHeader.astro";
+import GalleryPhotoScroll from "../../../components/GalleryPhotoScroll.astro";
+
+
+export function getStaticPaths() {
+    const monthPaths = getBestOfTheMonthGroups().map((group) => group.slug);
+    monthPaths.push(undefined);
+    return monthPaths.map((path) => ({ params: { month: path } }));
+}
+
+const { month } = Astro.params;
+const currentGroupIndex =
+    month !== undefined
+        ? getBestOfTheMonthGroups().findIndex((group) => group.slug === month)
+        : 0;
+
+const currentGroup = getBestOfTheMonthGroups()[currentGroupIndex];
+const prevGroup =
+    currentGroupIndex <= 0 ? null : getBestOfTheMonthGroups()[currentGroupIndex - 1];
+const nextGroup =
+    currentGroupIndex >= getBestOfTheMonthGroups().length
+        ? null
+        : getBestOfTheMonthGroups()[currentGroupIndex + 1];
+
+const widestOfGroup = currentGroup.items
+    .map((p) => p.ratio)
+    .reduce((result, current) => {
+        return Math.max(result, current);
+    }, 0);
+
+// const groupsByYear = groupByKey(getGroups(), 'year');
+// const years = Object.keys(groupsByYear).sort((a: string, b: string) => parseInt(b) - parseInt(a));
+
+const galleries = await getCollection("galleries");
+---
+
+<!doctype html>
+<html>
+    <head>
+        <BaseHead />
+        <RootColors colors={{ accent: "chocolate", background: "#FEF2E9" }} />
+    </head>
+    <body>
+        <TickerNav />
+        <main style={`--sqrt-widest-ratio: ${Math.sqrt(widestOfGroup)};`}>
+            <GalleryHeader months={true} allPhotographyLink={true} >
+                <span slot="title">
+                    {currentGroup.monthLongName} 1<sup>st</sup> through<br />the {
+                        currentGroup.lastOfMonth
+                    }<sup>{getOrdinalSuffix(currentGroup.lastOfMonth)}</sup>, {
+                        currentGroup.year
+                    }.
+                </span>
+            </GalleryHeader>
+            <GalleryPhotoScroll
+                photos={currentGroup.items}
+                widthBasis="600px"
+                shuffle={true}
+            />
+            <!-- <section class="gallery">
+            {
+                currentGroup.items.map((photo, i) => (
+                    <div
+                        style={`--rand: ${Math.random() - 0.5}; --i: ${i}; --ratio: ${photo.ratio}; --sqrt-ratio: ${Math.sqrt(photo.ratio)};`}
+                    >
+                        <div>
+                            <Image
+                                photoName={photo.name}
+                                size="medium"
+                                captionAlign="right"
+                                captionAccent={false}
+                            />
+                        </div>
+                    </div>
+                ))
+            }
+            </section> -->
+        </main>
+        <footer class="mono-small">
+            <!-- «»←→⇐⇒⇱⇲◀▶◁▷◂▸◃◃▹⪦⪧⫷⫸⫹⫺ -->
+            {
+                prevGroup && (<span>⇱ <a href={"/photography/best-of-the-month/" + prevGroup.slug}>{prevGroup.display}</a>.&nbsp;</span>)
+            }
+            <span>Go <a href="/">home</a>.&nbsp;</span>
+            <span>All <Link href="/photography">photography</Link>.&nbsp;</span>
+            {
+                nextGroup && (<span><a href={"/photography/best-of-the-month/" + nextGroup.slug}>{nextGroup.display}</a>. ⇲</span>)
+            }
+        </footer>
+        <style>
+            main,
+            footer {
+                width: calc(100vw - 80px);
+            }
+
+            main {
+                --gallery-gap: 80px;
+                --gallery-gap: 40vh;
+                margin-bottom: 40vh;
+            }
+
+            .gallery {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+                row-gap: 80px;
+                column-gap: 40px;
+                margin-bottom: 50vh;
+                margin-bottom: 160px;
+            }
+
+            .gallery > div {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+            }
+
+            .gallery > div > div {
+                width: calc(
+                    100% * var(--sqrt-ratio) / var(--sqrt-widest-ratio)
+                );
+            }
+
+            footer {
+                margin-bottom: 20px;
+                display: flex;
+                justify-content: center;
+                align-items: baseline;
+                gap: 0;
+            }
+
+            @media screen and (max-width: 1160px) {
+
+                .gallery {
+                    grid-template-columns: 1fr 1fr;
+                }
+            }
+
+            @media screen and (max-width: 750px) {
+
+                main, footer {
+                    width: calc(100vw - 20px);
+                }
+
+                .gallery {
+                    grid-template-columns: 1fr;
+                    row-gap: 20vh;
+                }
+
+                .gallery > div > div {
+                    width: 100%;
+                }
+            }
+
+            @media screen and (max-width: 500px) {
+                footer {
+                    flex-flow: column;
+                    gap: 1em;
+                    margin-bottom: 20px;
+                    width: calc(100vw - 40px);
+                }
+            }
+        </style>
+    </body>
+</html>

@@ -34,6 +34,7 @@ const galleries = defineCollection({
 		noCaptions: z.boolean().default(false),
 		sort: z.enum(['asc', 'desc']).default('desc'),
 		shuffle: z.boolean().default(false),
+		isLocation: z.boolean().default(false),
 	}),
 });
 

@@ -1,9 +1,6 @@
 ---
 import { type CollectionEntry, getCollection } from "astro:content";
-import Image from "../../components/Image.astro";
 import { getPhotosByTags, getPhotosByNamesAndTags } from "../../lib/photoHelper";
-import { getPhotoByName } from "../../lib/photoHelper";
-import type { PhotoName } from "../../data/photoTypes.generated";
 import Footer from "../../components/FooterSerif.astro";
 import BaseHead from "../../components/BaseHead.astro";
 import RootColors from "../../components/RootColors.astro";
@@ -45,9 +42,6 @@ const allGalleries = await getCollection("galleries");
             imgSrc={photoData[0].src}
         />
         <RootColors colors={{ ...post.data.colors }} />
-        <!-- <link rel="preload" href={photoData[0].src} as="image">
-        <link rel="preload" href={photoData[1].src} as="image">
-        <link rel="preload" href={photoData.at(-1).src} as="image"> -->
     </head>
     <body>
         <main>

@@ -1,0 +1,44 @@
+---
+import type { IndexListItem, SideClass } from "../env";
+import Link from "./Link.astro";
+
+interface Props {
+    groups: {
+        group?: string;
+        items: IndexListItem[];
+    }[];
+    align?: SideClass;
+}
+
+const { groups, align = "center" } = Astro.props;
+---
+
+<div class:list={[align]}>
+    {
+        groups.map((g) => (
+            <>
+                {g.group && (
+                    <p class="mono-small">
+                        {g.group[0].toUpperCase() + g.group.substring(1)}:
+                    </p>
+                )}
+                <ul>
+                    {g.items.map((i) => (
+                        <li>
+                            <Link href={i.href} title={i.title}>
+                                {i.display}
+                            </Link>
+                        </li>
+                    ))}
+                </ul>
+            </>
+        ))
+    }
+</div>
+<style>
+    ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+</style>

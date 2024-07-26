@@ -1,44 +1,89 @@
 ---
 import { getCollection } from "astro:content";
 import Link from "./Link.astro";
+import { getBestOfTheMonthGroups } from "../lib/bestOfTheMonthGroups";
+import { getGalleryLinkAlt } from "../lib/galleryHelper";
+import { resolveGalleryTitle } from "../lib/galleryHelper";
 
 interface Props {
+    currentPage?: string;
+    allPhotographyLink?: boolean;
     permanentCollectionLink?: boolean;
     bestOfMonthLink?: boolean;
+    galleries?: boolean
+    months?: boolean
 }
 
-const { permanentCollectionLink = true, bestOfMonthLink = true } = Astro.props;
+const { currentPage = "", allPhotographyLink = false, permanentCollectionLink = false, bestOfMonthLink = false, galleries = false, months = false } = Astro.props;
 
-const galleries = await getCollection("galleries");
+const allGalleries = await getCollection("galleries");
 ---
 
 <header>
     <h1><slot name="title" /></h1>
     <nav class="mono-small">
-        <slot name="description" />
-        <br /><br />
-        <span>Go <a href="/" title="Back! to the home page.">home</a>. </span>
-        <span
-            ><a href="/writing" title="Back! to the home page.">Writing</a
-            >.</span
-        >
-        <span><a href="/about" title="About me.">About</a>.</span>
-        <span><Link href="mailto">Email me</Link>.</span>
-        <span><Link>Instagram</Link>.</span>
-        {permanentCollectionLink && <br /><br />
-        <span><Link href="/permanent-collection">The Permanent Collection</Link>.</span>}
-        {bestOfMonthLink && <br /><br />
-        <span><Link href="/best-of-the-month">Best of the Month</Link>.</span>}
-        <br /><br />
-        <span>⁜ Galleries:</span>
-        <br /><br />
-        {
-            galleries.map((g) => (
-                <span>
-                    <Link href={"/photography/" + g.slug}>{g.data.title}</Link>.{" "}
-                </span>
-            ))
-        }
+        <p>
+            <slot name="description" />
+        </p>
+        <p>
+            Go <Link title="Back! to the home page">home</Link>. <Link href="/writing" title="All writing">Writing</Link>. <Link href="/about" title="About me">About</Link>.
+            <br/>
+            <Link href="mailto">Email me</Link>. <Link>Instagram</Link>. 
+        </p>
+        {allPhotographyLink && <p>
+            <Link href="/photography">Photography index</Link>.
+        </p>}
+        {permanentCollectionLink && <p>
+            See the <Link href="/photography/permanent-collection" title="Photography: The Permanent Collection">Permanent Collection</Link>.
+        </p>}
+        {bestOfMonthLink && <p>
+            {permanentCollectionLink ? "Or" : "See"} the <Link href="/photography/best-of-the-month" title="Photography: The Best of the Month">Best of the Month</Link>.
+        </p>}
+        {galleries && <>
+            <p>
+                ⁜ Galleries:
+            </p>
+            <p class="galleries">
+                {
+                    allGalleries.filter(g => !g.data.isLocation).map((g) => (
+                        <span>
+                            <Link href={"/photography/" + g.slug} title={getGalleryLinkAlt(g)}>{resolveGalleryTitle(g)}</Link>.{" "}
+                        </span>
+                    ))
+                }
+            </p>
+        </>}
+        {months && <>
+            <p>
+                ◮ Photo Archives:
+            </p>
+            <p class="month-archives">
+                {
+                    getBestOfTheMonthGroups().map((group, i) => {
+                        const attrs = {
+                            href: `/photography/best-of-the-month${i === 0 ? "" : `/${group.slug}`}`,
+                            title: `Photography: Best of ${group.monthLongName} ${group.year}`,
+                        }
+                        if (attrs.href === currentPage) {
+                            return (
+                                <span
+                                    class="color-accent"
+                                    style="cursor: not-allowed;"
+                                >
+                                    <b>{group.display}</b>.{" "}
+                                </span>
+                            );
+                        } else {
+                            return (
+                                <span>
+                                    <a {...attrs}>{group.display}</a>.{" "}
+                                </span>
+                            );
+                        }
+                    })
+                }
+            </p>
+        </>}
     </nav>
 </header>
 <style>
@@ -60,18 +105,18 @@ const galleries = await getCollection("galleries");
         font-size: 5.6rem;
         font-style: italic;
         font-weight: normal;
-        max-width: 600px;
+        /* max-width: 600px; */
         margin: 0;
     }
 
     nav {
-        width: 200px;
-        max-width: 200px;
-        min-width: 200px;
+        width: 280px;
+        max-width: 280px;
+        min-width: 280px;
         text-align: right;
     }
 
-    @media screen and (max-width: 700px) {
+    @media screen and (max-width: 750px) {
         header {
             flex-flow: column;
             align-items: flex-start;

@@ -106,12 +106,12 @@ export type ListData = { name: string, items: ListItem[] }[]
 
 export const TICKER_LINKS = {
     Home: "/",
+    About: "/about",
     Photography: "/photography",
     Writing: "/writing",
     Springtide: "/springtide",
-    About: "/about",
     Galleries: "/photography",
-    "The Permanent Collection": "/permanent-collection",
+    "The Permanent Collection": "/photography/permanent-collection",
     "Design Ethos": "/design",
 
     "Email me": "mailto:duncanpetrie1@gmail.com",

@@ -1,0 +1,102 @@
+---
+import { getCollection } from "astro:content";
+import BaseHead from "../../components/BaseHead.astro";
+import IndexList from "../../components/IndexList.astro";
+import RootColors from "../../components/RootColors.astro";
+import TickerNav from "../../components/TickerNav.astro";
+import {
+    getGalleryLinkAlt,
+    resolveGalleryTitle,
+} from "../../lib/galleryHelper";
+import Image from "../../components/Image.astro";
+
+const staticLinks = {};
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <BaseHead
+            title="Photography"
+            description="Photography galleries, stories, theory, practice, and Duncan Petrie's best (which might or might not be very good, depending on how you look at it)."
+        />
+        <RootColors colors={{}} />
+    </head>
+    <body>
+        <TickerNav />
+        <main>
+            <Image photoName="oakleaf" noCaption={true} />
+            <section>
+                <IndexList
+                    align="center"
+                    groups={[
+                        {
+                            group: "",
+                            items: [
+                                {
+                                    display: "The Permanent Collection",
+                                    title: "Photography: The Best of the Best",
+                                    href: "/photography/permanent-collection",
+                                },
+                                {
+                                    display: "Best of the Month",
+                                    title: "Photography: The Best of the Month",
+                                    href: "/photography/best-of-the-month",
+                                },
+                            ],
+                        },
+                        {
+                            group: "galleries",
+                            items: (await getCollection("galleries"))
+                                .filter((g) => !g.data.isLocation)
+                                .map((g) => ({
+                                    display: resolveGalleryTitle(g),
+                                    href: `/photography/${g.slug}`,
+                                    title: getGalleryLinkAlt(g),
+                                })),
+                        },
+                        {
+                            group: "locations",
+                            items: (await getCollection("galleries"))
+                                .filter((g) => g.data.isLocation)
+                                .map((g) => ({
+                                    display: resolveGalleryTitle(g),
+                                    href: `/photography/${g.slug}`,
+                                    title: getGalleryLinkAlt(g),
+                                })),
+                        },
+                        {
+                            group: "other",
+                            items: [
+                                {
+                                    display: "This Page",
+                                    href: "/photography",
+                                },
+                                {
+                                    display: "Home Page",
+                                    href: "/",
+                                },
+                                {
+                                    display: "Writing",
+                                    href: "/writing",
+                                },
+                                {
+                                    display: "Springtide",
+                                    href: "/springtide",
+                                },
+                            ],
+                        },
+                    ]}
+                />
+            </section>
+        </main>
+    </body>
+</html>
+<style>
+    main {
+        margin-top: var(--ticker-height);
+        display: flex;
+        flex-flow: column;
+        gap: var(--ticker-height);
+    }
+</style>

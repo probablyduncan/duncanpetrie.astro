@@ -25,22 +25,10 @@ declare global {
     }
 }
 
-export type ThemeMode = "light" | "dark";
-
 export interface ColorScheme {
     text?: string
     background?: string
     accent?: string
-}
-
-export interface ImageProps {
-    photoName?: PhotoName;
-    size?: ImageSize;
-    src?: string;
-    caption?: string;
-    noCaption?: boolean;
-    captionAlign?: SideClass;
-    captionAccent?: boolean;
 }
 
 export interface HomePageThemeBase extends ColorScheme {
@@ -56,33 +44,21 @@ export type HomePageTheme = HomePageThemeBase & {
     ratio: number
 }
 
-
-
 //#endregion
 
 
-
-//#region article header props
-
-export interface HeaderCardTextOverImage {
-    type: 'textOverImg'
-    image: {
-        src: string
-        caption: string
-    } | PhotoName
-    subtitle?: string
-    bottomLeft?: string
-    bottomRight?: string
-    topLeft?: string
-    topRight?: string
+export interface ImageProps {
+    photoName?: PhotoName;
+    size?: ImageSize;
+    src?: string;
+    caption?: string;
+    noCaption?: boolean;
+    captionAlign?: SideClass;
+    captionAccent?: boolean;
 }
 
-export interface HeaderCardTextNoImage {
-    type: 'textNoImage'
+export interface IndexListItem {
+    href?: string
+    title?: string
+    display: string
 }
-
-export type HeaderCardData = HeaderCardTextNoImage | HeaderCardTextOverImage;
-export type HeaderCardType = HeaderCardData['type'];
-
-
-//#endregion
