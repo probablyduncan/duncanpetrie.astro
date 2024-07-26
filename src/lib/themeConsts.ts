@@ -1,4 +1,4 @@
-import type { HomePageThemeBase, ColorScheme } from "../env";
+import type { HomePageThemeBase, ColorScheme, IndexTheme } from "../env";
 
 export const HomePageLightColorThemes: HomePageThemeBase[] = [
     {
@@ -125,3 +125,19 @@ export const DefaultThemeScheme: ColorScheme = {
     background: '#FFF',
     accent: 'blue',
 }
+
+
+export const PhotographyIndexThemes: IndexTheme[] = [
+    {
+        photoName: "oakleaf",
+        textColor: "#462012",
+    },
+    {
+        photoName: "adrift-1",
+        textColor: "#474545",
+    },
+    {
+        photoName: "catclaws",
+        textColor: "#fff"
+    },
+]

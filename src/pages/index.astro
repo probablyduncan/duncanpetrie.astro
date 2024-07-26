@@ -5,8 +5,9 @@ import LegendList from "../components/LegendList.astro";
 import Footer from "../components/FooterSerif.astro";
 import { type ListData } from "../lib/consts";
 import HomePageThemeManager from "../components/HomePageThemeManager.astro";
-import { getHomePageThemes } from "../lib/themeHelper";
 import ThresholdSwapSpan from "../components/ThresholdSwapSpan.astro";
+import ThemeManager from "../components/ThemeManager.astro";
+import { getGenericHomePageThemes } from "../lib/themeHelper";
 
 const listData: ListData = [
 	{
@@ -182,7 +183,8 @@ const listData: ListData = [
 				</div>
 			</div>
 		</header>
-		<HomePageThemeManager />
+		<!-- <HomePageThemeManager /> -->
+		<ThemeManager storeKey="homePageTheme" themeData={getGenericHomePageThemes()} />
 		<main class="wrapper">
 			<LegendList
 				itemGroups={listData}

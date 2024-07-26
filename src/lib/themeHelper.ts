@@ -1,6 +1,6 @@
-import type { HomePageTheme, HomePageThemeBase, ColorScheme } from "../env";
+import type { HomePageTheme, HomePageThemeBase, ColorScheme, GenericTheme, IndexTheme } from "../env";
 import { getPhotoByName } from "./photoHelper";
-import { HomePageDarkColorThemes, HomePageLightColorThemes, DefaultThemeScheme } from "./themeConsts";
+import { HomePageDarkColorThemes, HomePageLightColorThemes, DefaultThemeScheme, PhotographyIndexThemes } from "./themeConsts";
 
 export function getHomePageThemes(): { light: HomePageTheme[], dark: HomePageTheme[] } {
 	return {
@@ -28,15 +28,51 @@ export function applyColorSchemeDefaults(scheme: ColorScheme = {}, defaults: Col
 	return scheme;
 }
 
-export function staticThemeFromScheme(scheme: ColorScheme): HomePageTheme {
+
+export function getGenericHomePageThemes() {
+	return HomePageLightColorThemes.map(genericThemeFromHomePageTheme);
+}
+
+export function getGenericPhotographyIndexThemes() {
+	return PhotographyIndexThemes.map(genericThemeFromPhotographyIndexTheme)
+}
+
+function genericThemeFromHomePageTheme(theme: HomePageThemeBase): GenericTheme {
+	const photo = getPhotoByName(theme.photoName);
 	return {
-		...applyColorSchemeDefaults(scheme),
-		name: 'static',
-		photoName: null,
-		titleAlign: 'left',
-		imgJustify: 'flex-end',
-		src: null,
-		caption: '',
-		ratio: 1,
+		cssVariables: {
+			"title-align": theme.titleAlign,
+			"img-justify": theme.titleAlign == "left" ? "flex-end" : "flex-start",
+			"img-ratio": photo.ratio,
+			"title-is-left": theme.titleAlign == "left" ? 1 : 0,
+			"color-text": theme.text ?? DefaultThemeScheme.text,
+			"color-background": theme.background ?? DefaultThemeScheme.background,
+			"color-accent": theme.accent ?? DefaultThemeScheme.accent,
+		},
+		elementAttributes: {
+			"img[data-theme-element]": {
+				src: photo.paths.large,
+				alt: photo.joinedCaption,
+			},
+			"span[data-theme-element]": {
+				innerHTML: photo.joinedCaption,
+			}
+		}
+	}
+}
+
+function genericThemeFromPhotographyIndexTheme(theme: IndexTheme): GenericTheme {
+	const photo = getPhotoByName(theme.photoName);
+	return {
+		cssVariables: {
+			"img-ratio": photo.ratio,
+			"over-image-color": theme.textColor,
+		},
+		elementAttributes: {
+			"img[data-theme-element]": {
+				src: photo.paths.large,
+				alt: photo.joinedCaption,
+			},
+		}
 	}
 }

@@ -1,0 +1,81 @@
+---
+import type { GenericTheme } from '../env';
+
+interface Props {
+    themeData?: GenericTheme[];
+    storeKey: string;
+}
+
+const { themeData = [], storeKey } = Astro.props;
+
+// so themeData will have a list of css variable names and values?
+---
+
+<script
+    data-astro-rerun
+    is:inline
+    data-themes={JSON.stringify(themeData)}
+    data-store-key={storeKey}
+>
+
+    (() => {
+        let themes = JSON.parse(document.currentScript.dataset.themes);
+        if (!themes || !themes.length) {
+            return;
+        }
+
+        let storeKey = document.currentScript.dataset.storeKey;
+        const store =
+            typeof localStorage !== undefined
+                ? localStorage
+                : { getItem: () => null, setItem: () => {} };
+
+        function getNextIndex(numThemes = 0) {
+            const fromStore = store.getItem(storeKey);
+            if (numThemes <= 1 || fromStore === null) {
+                return 0;
+            }
+
+            const prevIndex = parseInt(fromStore);
+            while (1) {
+                const next = Math.floor(Math.random() * numThemes);
+                if (next !== prevIndex) {
+                    return next;
+                }
+            }
+        }
+
+        function setVar(name, val) {
+            document.documentElement.style.setProperty(
+                "--" + name,
+                val?.toString(),
+            );
+        }
+
+        function getTheme() {
+
+            // first, clear style from last page
+            document.documentElement.removeAttribute("style");
+
+            // pick theme from list
+            const i = getNextIndex(themes.length);
+            const theme = themes[i];
+
+            Object.keys(theme.cssVariables).forEach(varName => {
+                setVar(varName, theme.cssVariables[varName]);
+            });
+
+            Object.keys(theme.elementAttributes).forEach(selector => {
+                document.querySelectorAll(selector).forEach(e => {
+                    Object.assign(e, theme.elementAttributes[selector]);
+                })
+            })
+
+            // now set store so no repeats
+            store.setItem(storeKey, i);
+        }
+
+        getTheme();
+
+    })();
+</script>

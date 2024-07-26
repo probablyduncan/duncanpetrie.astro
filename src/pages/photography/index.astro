@@ -9,8 +9,11 @@ import {
     resolveGalleryTitle,
 } from "../../lib/galleryHelper";
 import Image from "../../components/Image.astro";
+import ThemeManager from "../../components/ThemeManager.astro";
+import { getGenericPhotographyIndexThemes } from "../../lib/themeHelper";
+import Link from "../../components/Link.astro";
 
-const staticLinks = {};
+const galleries = await getCollection("galleries");
 ---
 
 <!doctype html>
@@ -25,78 +28,171 @@ const staticLinks = {};
     <body>
         <TickerNav />
         <main>
-            <Image photoName="oakleaf" noCaption={true} />
-            <section>
-                <IndexList
-                    align="center"
-                    groups={[
-                        {
-                            group: "",
-                            items: [
-                                {
-                                    display: "The Permanent Collection",
-                                    title: "Photography: The Best of the Best",
-                                    href: "/photography/permanent-collection",
-                                },
-                                {
-                                    display: "Best of the Month",
-                                    title: "Photography: The Best of the Month",
-                                    href: "/photography/best-of-the-month",
-                                },
-                            ],
-                        },
-                        {
-                            group: "galleries",
-                            items: (await getCollection("galleries"))
-                                .filter((g) => !g.data.isLocation)
-                                .map((g) => ({
-                                    display: resolveGalleryTitle(g),
-                                    href: `/photography/${g.slug}`,
-                                    title: getGalleryLinkAlt(g),
-                                })),
-                        },
-                        {
-                            group: "locations",
-                            items: (await getCollection("galleries"))
-                                .filter((g) => g.data.isLocation)
-                                .map((g) => ({
-                                    display: resolveGalleryTitle(g),
-                                    href: `/photography/${g.slug}`,
-                                    title: getGalleryLinkAlt(g),
-                                })),
-                        },
-                        {
-                            group: "other",
-                            items: [
-                                {
-                                    display: "This Page",
-                                    href: "/photography",
-                                },
-                                {
-                                    display: "Home Page",
-                                    href: "/",
-                                },
-                                {
-                                    display: "Writing",
-                                    href: "/writing",
-                                },
-                                {
-                                    display: "Springtide",
-                                    href: "/springtide",
-                                },
-                            ],
-                        },
-                    ]}
+            <div>
+                <img
+                    data-theme-element
+                    src=""
+                    alt="loading..."
+                    loading="eager"
                 />
-            </section>
+                <nav>
+                    <ul>
+                        <li>
+                            <Link
+                                href="/photography/permanent-collection"
+                                title="Photography: The Best of the Best"
+                                >The Permanent Collection</Link
+                            >.
+                        </li>
+                        <li>
+                            <Link
+                                href="/photography/best-of-the-month"
+                                title="Photography: The Best of the Month"
+                                >Best of the Month</Link
+                            >.
+                        </li>
+                    </ul>
+                    <ul>
+                        {
+                            galleries
+                                .filter((g) => !g.data.isLocation)
+                                .map((g) => {
+                                    const attrs = {
+                                        href: "/photography/" + g.slug,
+                                        title: getGalleryLinkAlt(g),
+                                    }
+                                    return (
+                                        <li><Link {...attrs} >{resolveGalleryTitle(g)}</Link>.</li>
+                                    );
+                                })
+                        }
+                    </ul>
+                    <ul>
+                        {
+                            galleries
+                                .filter((g) => g.data.isLocation)
+                                .map((g) => {
+                                    const attrs = {
+                                        href: "/photography/" + g.slug,
+                                        title: getGalleryLinkAlt(g),
+                                    }
+                                    return (
+                                        <li><Link {...attrs} >{resolveGalleryTitle(g)}</Link>.</li>
+                                    );
+                                })
+                        }
+                    </ul>
+                    <ul>
+                        <li><Link href="/">Back to home</Link>.</li>
+                        <li><Link href="/about">About me</Link>.</li>
+                    </ul>
+                </nav>
+            </div>
+            <ThemeManager
+                storeKey="photoIndexTheme"
+                themeData={getGenericPhotographyIndexThemes()}
+            />
         </main>
     </body>
 </html>
 <style>
     main {
-        margin-top: var(--ticker-height);
-        display: flex;
-        flex-flow: column;
-        gap: var(--ticker-height);
+        max-width: calc(100vw - 20px);
+    }
+
+    div {
+        width: 800px;
+        max-width: 100%;
+    }
+
+    ul {
+        list-style: none;
+        line-height: 1.4em;
+        padding: 0;
+        margin: 0;
+    }
+
+    @media screen and (min-width: 701px) {
+        main {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        
+        div {
+            position: relative;
+            aspect-ratio: var(--img-ratio);
+            height: 100%;
+        }
+
+        img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            user-select: none;
+            pointer-events: none;
+        }
+
+        nav {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            color: var(--over-image-color);
+            
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: space-between;
+        }
+
+        ul {
+            display: flex;
+            flex-flow: column nowrap;
+            flex-basis: calc(50% - 1em);
+            margin: 0.3em 0.5em;
+        }
+
+        ul:nth-child(3),
+        ul:nth-child(4) {
+            text-align: right;
+        }
+
+        ul:nth-child(2),
+        ul:nth-child(3) {
+            justify-content: flex-end
+        }
+
+        ul:nth-child(1) {
+            order: 1;
+        }
+
+        ul:nth-child(2) {
+            order: 3;
+        }
+
+        ul:nth-child(3) {
+            order: 4;
+        }
+
+        ul:nth-child(4) {
+            order: 2;
+        }
+    }
+
+    @media screen and (max-width: 700px) {
+
+        main {
+            margin-top: var(--ticker-height);
+        }
+
+        img, nav, ul {
+            margin-top: 10px;
+        }
+
+        ul {
+            margin-left: 10px;
+        }
     }
 </style>

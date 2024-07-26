@@ -25,6 +25,11 @@ declare global {
     }
 }
 
+export interface GenericTheme {
+    cssVariables?: Record<string, string | number>;
+    elementAttributes?: Record<string, Record<string, string>>;
+}
+
 export interface ColorScheme {
     text?: string
     background?: string
@@ -42,6 +47,11 @@ export type HomePageTheme = HomePageThemeBase & {
     caption: string
     imgJustify: 'flex-start' | 'flex-end'
     ratio: number
+}
+
+export interface IndexTheme {
+    photoName: PhotoName,
+    textColor?: string,
 }
 
 //#endregion
