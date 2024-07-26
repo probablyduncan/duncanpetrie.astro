@@ -56,13 +56,10 @@ if (post.data.sort == "asc") {
                 <span slot="title"
                     >{
                         post.data.title.split("//").map((str, i) => (
-                            <span style="white-space: nowrap;">
-                                {i === 0 && post.data.isLocation && (
-                                    <span style="font-style: normal;">▼</span>
-                                )}
+                            <>
                                 {str}
                                 <br />
-                            </span>
+                            </>
                         ))
                     }</span
                 >
