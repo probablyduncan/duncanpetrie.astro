@@ -30,6 +30,7 @@ const hasText = Astro.slots.has("default") && (await Astro.slots.render("default
 
 ---
 
+{hasText && <div class="center" style="margin-bottom: 40px;">[ <button data-skip-text>skip to photos</button> ]</div>}
 <section style={`--base-width: ${widthBasis}; --photo-gap: ${photoGap}`}>
     {
         hasText && (
@@ -61,6 +62,17 @@ const hasText = Astro.slots.has("default") && (await Astro.slots.render("default
         ))
     }
 </section>
+<script>
+    document.addEventListener("astro:page-load", () => {
+        (document.querySelector("[data-skip-text") as HTMLElement)?.addEventListener('click', () => {
+            const article = document.querySelector('article')
+            window.scroll({
+                top: article.offsetTop + article.clientHeight + window.innerHeight *.2,
+                behavior: "smooth",
+            })
+        })
+    })
+</script>
 <style>
     section {
         display: flex;
