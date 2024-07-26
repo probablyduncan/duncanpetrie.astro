@@ -97,6 +97,7 @@ const galleries = await getCollection("galleries");
 </html>
 <style>
     main {
+        margin-top: var(--ticker-height);
         max-width: calc(100vw - 20px);
     }
 
@@ -114,7 +115,7 @@ const galleries = await getCollection("galleries");
 
     @media screen and (min-width: 701px) {
         main {
-            min-height: 100vh;
+            min-height: calc(100vh - var(--ticker-height));
             display: flex;
             align-items: center;
         }
@@ -123,6 +124,7 @@ const galleries = await getCollection("galleries");
             position: relative;
             aspect-ratio: var(--img-ratio);
             height: 100%;
+            margin: 10px 0;
         }
 
         img {
@@ -182,10 +184,6 @@ const galleries = await getCollection("galleries");
     }
 
     @media screen and (max-width: 700px) {
-
-        main {
-            margin-top: var(--ticker-height);
-        }
 
         img, nav, ul {
             margin-top: 10px;
