@@ -24,7 +24,7 @@ const galleries = defineCollection({
 		title: z.string(),
 		description: z.string().optional(),
 		contentTags: z.array(z.string()).optional(),
-		date: z.coerce.date().optional(),
+		date: z.date(),
 		photoTags: z.array(z.string()).optional(),
 		photoNames: z.array(z.string()).optional(),
 		mediaNames: z.array(z.string()).optional(),

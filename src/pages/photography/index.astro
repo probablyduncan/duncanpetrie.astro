@@ -13,7 +13,11 @@ import ThemeManager from "../../components/ThemeManager.astro";
 import { getGenericPhotographyIndexThemes } from "../../lib/themeHelper";
 import Link from "../../components/Link.astro";
 
-const galleries = await getCollection("galleries");
+const galleries = (await getCollection("galleries")).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+if (galleries.length % 2 === 1) {
+    galleries.unshift(null);
+    // galleries.splice(1, 0, null);
+}
 ---
 
 <!doctype html>
@@ -38,7 +42,7 @@ const galleries = await getCollection("galleries");
                 <nav>
                     <ul>
                         <li>
-                            <Link
+                            ◮ <Link
                                 href="/photography/permanent-collection"
                                 title="Photography: The Best of the Best"
                                 >The Permanent Collection</Link
@@ -54,36 +58,22 @@ const galleries = await getCollection("galleries");
                     </ul>
                     <ul>
                         {
-                            galleries
-                                .filter((g) => !g.data.isLocation)
-                                .map((g) => {
-                                    const attrs = {
-                                        href: "/photography/" + g.slug,
-                                        title: getGalleryLinkAlt(g),
-                                    }
-                                    return (
-                                        <li><Link {...attrs} >{resolveGalleryTitle(g)}</Link>.</li>
-                                    );
-                                })
+                            galleries.map((g) => {
+
+                                if (!g) {
+                                    return <li class="placeholder"></li>
+                                }
+
+                                const attrs = {
+                                    href: "/photography/" + g.slug,
+                                    title: getGalleryLinkAlt(g),
+                                }
+                                return (<li><Link {...attrs} >{resolveGalleryTitle(g)}</Link>.</li>);
+                            })
                         }
                     </ul>
                     <ul>
-                        {
-                            galleries
-                                .filter((g) => g.data.isLocation)
-                                .map((g) => {
-                                    const attrs = {
-                                        href: "/photography/" + g.slug,
-                                        title: getGalleryLinkAlt(g),
-                                    }
-                                    return (
-                                        <li><Link {...attrs} >{resolveGalleryTitle(g)}</Link>.</li>
-                                    );
-                                })
-                        }
-                    </ul>
-                    <ul>
-                        <li><Link href="/">Back to home</Link>.</li>
+                        <li>⇱ <Link href="/">Back to home</Link>.</li>
                         <!-- <li><Link href="/about">About me</Link>.</li> -->
                     </ul>
                 </nav>
@@ -154,43 +144,38 @@ const galleries = await getCollection("galleries");
             flex-flow: column nowrap;
             flex-basis: calc(50% - 1em);
             margin: 0.3em 0.5em;
+            font-size: 1rem;
         }
 
-        ul:nth-child(3),
-        ul:nth-child(4) {
+        ul:nth-child(3) {
             text-align: right;
         }
 
-        ul:nth-child(2),
-        ul:nth-child(3) {
-            justify-content: flex-end
-        }
-
-        ul:nth-child(1) {
-            order: 1;
-        }
-
         ul:nth-child(2) {
-            order: 3;
-        }
-
-        ul:nth-child(3) {
-            order: 4;
-        }
-
-        ul:nth-child(4) {
+            flex-basis: 100%;
             order: 2;
+            display: flex;
+            flex-flow: row-reverse wrap;
+            align-content: flex-end;
+        }
+
+        ul:nth-child(2) li {
+            flex-basis: 50%;
+        }
+
+        ul:nth-child(2) li:nth-child(2n - 1) {
+            text-align: right;
         }
     }
 
     @media screen and (max-width: 700px) {
 
-        img, nav, ul {
-            margin-top: 10px;
+        img, nav {
+            margin-top: 20px;
         }
 
         ul {
-            margin-left: 10px;
+            margin: 10px;
         }
     }
 </style>

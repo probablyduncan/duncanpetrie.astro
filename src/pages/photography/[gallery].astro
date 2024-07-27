@@ -40,7 +40,7 @@ if (post.data.sort == "asc") {
         <BaseHead
             title={post.data.title}
             description={post.data.description}
-            imgSrc={allPhotos[0].paths["small"]}
+            imgSrc={allPhotos[0]?.paths["small"]}
         />
         <RootColors colors={{ ...post.data.colors }} />
     </head>

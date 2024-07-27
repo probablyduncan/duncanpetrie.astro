@@ -30,7 +30,7 @@ const hasText = Astro.slots.has("default") && (await Astro.slots.render("default
 
 ---
 
-{hasText && <div class="center" style="margin-bottom: 40px;">[ <button data-skip-text>skip to photos</button> ]</div>}
+<!-- {hasText && <div class="center" style="margin-bottom: 40px; padding-right: 20px">[ <button data-skip-text>skip to photos</button> ]</div>} -->
 <section style={`--base-width: ${widthBasis}; --photo-gap: ${photoGap}`}>
     {
         hasText && (
