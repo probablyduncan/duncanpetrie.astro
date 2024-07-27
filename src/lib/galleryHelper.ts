@@ -5,5 +5,6 @@ export function resolveGalleryTitle(g: any) {
 
 export function getGalleryLinkAlt(g: any) {
     const description = g?.data?.description;
-    return "Photography Gallery: " + resolveGalleryTitle(g) + (description ? ` - ${description}` : "");
+    const type = g?.data?.isLocation ? "On Location" : "Photography Gallery";
+    return type + ": " + resolveGalleryTitle(g) + (description ? ` - ${description}` : "");
 }
