@@ -172,4 +172,12 @@ export const PhotographyIndexThemes: IndexTheme[] = [
         photoName: "sand-st-brelades-bay-jersey-2024-05-25",
         textColor: "#483018",
     },
+    {
+        photoName: "lonely-crag-iceland-2018-06-15",
+        textColor: "#fff",
+    },
+    {
+        photoName: "north-pacific-from-kalaloch-washington-2018-03-22",
+        textColor: "#fff",
+    },
 ]
