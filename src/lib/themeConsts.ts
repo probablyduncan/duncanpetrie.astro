@@ -57,6 +57,22 @@ export const HomePageLightColorThemes: HomePageThemeBase[] = [
         background: "#F5F4F4",
         accent: "#E9A77D",
     },
+    {
+        name: "pinacle",
+        photoName: "le-pinacle-les-landes-jersey-2024-05-25",
+        titleAlign: "left",
+        text: "#222",
+        background: "#FAFBF7",
+        accent: "#B37749",
+    },
+    {
+        name: "yellowfield",
+        photoName: "st-catherines-oratory-isle-of-wight-2024-04-28",
+        titleAlign: "right",
+        text: "#222",
+        background: "#EDF4FF",
+        accent: "#2677BD",
+    },
 ] as const;
 
 export const HomePageDarkColorThemes: HomePageThemeBase[] = [

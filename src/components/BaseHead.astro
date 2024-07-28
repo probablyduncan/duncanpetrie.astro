@@ -13,15 +13,16 @@ interface Props {
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const defaultPhotoName = "high-castle-london-2024-05-13";
 const {
 	title = SITE_TITLE,
 	description = SITE_DESCRIPTION,
 	imgSrc,
-	photoName = "high-castle-london-2024-05-13",
+	photoName = defaultPhotoName,
 } = Astro.props;
 
 // if a src is supplied, use that, otherwise get from photo name
-const imgPath = imgSrc ?? getPhotoByName(photoName).paths.large;
+const imgPath = imgSrc ?? getPhotoByName(photoName)?.paths.large ?? getPhotoByName(defaultPhotoName)?.paths.large;
 
 const faviconPath = ["/favicons/flaxengrass-", ".png"];
 ---
