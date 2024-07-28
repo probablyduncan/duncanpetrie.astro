@@ -6485,13 +6485,13 @@
             "small": "\\photos\\cart-ix-2021-03-17_s.webp"
         },
         "caption": "Cart IX",
-        "datestring": "2021-03-17T11:32:10.000Z",
+        "datestring": "2021-03-17T11:28:19.000Z",
         "rating": 3,
         "camera": "NIKON D500",
         "lens": "70.0-200.0 mm f/2.8",
-        "focallength": 102,
+        "focallength": 70,
         "aperture": 2.8,
-        "shutter": 0.001,
+        "shutter": 0.0015625,
         "iso": 800,
         "ratio": 1,
         "tags": [
