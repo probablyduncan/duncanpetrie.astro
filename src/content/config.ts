@@ -15,6 +15,7 @@ const articles = defineCollection({
 		ticker: z.boolean().default(true),
 		related: z.array(reference('articles')).optional(),
 		layoutType: z.string().default('default'),
+		star: z.boolean().default(false),
 	}).passthrough(),
 })
 
@@ -35,6 +36,7 @@ const galleries = defineCollection({
 		sort: z.enum(['asc', 'desc']).default('desc'),
 		shuffle: z.boolean().default(false),
 		isLocation: z.boolean().default(false),
+		star: z.boolean().default(false),
 	}),
 });
 
@@ -45,7 +47,7 @@ const springtideWiki = defineCollection({
 		description: z.string(),
 		tags: z.array(z.string()).optional(),
 		date: z.coerce.date(),
-		best: z.boolean().default(false),
+		star: z.boolean().default(false),
 
 		// https://docs.astro.build/en/guides/content-collections/#defining-collection-references
 		related: z.array(reference('w'))

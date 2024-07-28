@@ -13,7 +13,9 @@ import ThemeManager from "../../components/ThemeManager.astro";
 import { getGenericPhotographyIndexThemes } from "../../lib/themeHelper";
 import Link from "../../components/Link.astro";
 
-const galleries = (await getCollection("galleries")).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const galleries = (await getCollection("galleries")).sort(
+    (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
 if (galleries.length % 2 === 1) {
     galleries.unshift(null);
     // galleries.splice(1, 0, null);
@@ -59,21 +61,27 @@ if (galleries.length % 2 === 1) {
                     <ul>
                         {
                             galleries.map((g) => {
-
                                 if (!g) {
-                                    return <li class="placeholder"></li>
+                                    return <li class="placeholder" />;
                                 }
 
                                 const attrs = {
                                     href: "/photography/" + g.slug,
                                     title: getGalleryLinkAlt(g),
-                                }
-                                return (<li><Link {...attrs} >{resolveGalleryTitle(g)}</Link>.</li>);
+                                };
+
+                                return (
+                                    <li class:list={{ star: g.data.star }}>
+                                        <Link {...attrs}>
+                                            {resolveGalleryTitle(g)}
+                                        </Link>
+                                    </li>
+                                );
                             })
                         }
                     </ul>
                     <ul>
-                        <li>⇱ <Link href="/">Back to home</Link>.</li>
+                        <li>⇱ <Link href="/">Back to home</Link></li>
                         <!-- <li><Link href="/about">About me</Link>.</li> -->
                     </ul>
                 </nav>
@@ -121,7 +129,7 @@ if (galleries.length % 2 === 1) {
             display: flex;
             align-items: center;
         }
-        
+
         div {
             position: relative;
             aspect-ratio: var(--img-ratio);
@@ -145,7 +153,7 @@ if (galleries.length % 2 === 1) {
             width: 100%;
             height: 100%;
             color: var(--over-image-color);
-            
+
             display: flex;
             flex-flow: row wrap;
             justify-content: space-between;
@@ -178,16 +186,30 @@ if (galleries.length % 2 === 1) {
         ul:nth-child(2) li:nth-child(2n - 1) {
             text-align: right;
         }
+
+        li.star:nth-child(2n)::after,
+        li.star:nth-child(2n - 1)::before {
+            content: "★";
+            padding: 0 0.1em;
+        }
     }
 
     @media screen and (max-width: 700px) {
-
-        img, nav {
+        img,
+        nav {
             margin-top: 20px;
         }
 
         ul {
             margin: 10px;
+        }
+
+        li.star::after {
+            content: "★";
+        }
+
+        main {
+            margin-bottom: 40vh;
         }
     }
 </style>
