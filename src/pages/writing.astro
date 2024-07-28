@@ -1,0 +1,245 @@
+---
+import { getCollection } from "astro:content";
+import BaseHead from "../components/BaseHead.astro";
+import RootColors from "../components/RootColors.astro";
+import TickerNav from "../components/TickerNav.astro";
+import Link from "../components/Link.astro";
+import * as loremIpsumMD from "../data/loremIpsum.md";
+
+// const articles = await getCollection("articles");
+// articles.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const ipsumAll = loremIpsumMD.compiledContent();
+const ipsumWords = ipsumAll.split(" ");
+let ipsumIndex = 0;
+function getNextIpsum() {
+    let result = "";
+    while (result.length < 300) {
+        result += ipsumWords[ipsumIndex] + " ";
+        ipsumIndex++;
+
+        if (ipsumIndex >= ipsumWords.length) {
+            ipsumIndex = 0;
+        }
+    }
+
+    return result;
+}
+
+const items: {
+    href?: string;
+    text?: string;
+    breakAfter?: boolean;
+}[] = [
+    {
+        text: "Home",
+        // breakAfter: true,
+    },
+    {
+        text: "About",
+        breakAfter: true,
+    },
+    {
+        text: "A Necklace of Stars",
+        href: "/a-necklace-of-stars",
+    },
+    {
+        text: "The Man Upstairs",
+        href: "/the-man-upstairs",
+    },
+    {
+        text: "The Baron's Old Fleet",
+        href: "/the-barons-old-fleet",
+    },
+    {
+        text: "Saltish and the Sea-beast",
+        href: "/saltish-and-the-sea-beast",
+        breakAfter: true,
+    },
+    {
+        text: "On Yearning",
+        href: "/on-yearning",
+    },
+    {
+        text: "On Taking and Making",
+        href: "/taking-vs-making",
+    },
+    {
+        text: "A la Cart",
+        href: "/a-la-cart",
+    },
+    {
+        text: "Fluffy Cloud",
+        href: "/fluffy-cloud",
+        breakAfter: true,
+    },
+    // ...articles.map(a => ({href: a.slug, text: a.data.title})),
+];
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <BaseHead
+            title="Photography"
+            description="A list of stories, poems, essays, and anything else that Duncan Petrie has written recently."
+        />
+        <RootColors
+            colors={{
+                text: "black",
+                background: "white",
+            }}
+        />
+    </head>
+    <body>
+        <TickerNav />
+        <span class="invert"></span>
+        <main class="center">
+            {
+                Array(12)
+                    .fill(null)
+                    .map(() => {
+                        return (
+                            <div
+                                data-before={getNextIpsum()}
+                                data-after={getNextIpsum()}
+                            />
+                        );
+                    })
+            }
+            {
+                items.map((item) => {
+                    return (
+                        <>
+                            <div
+                                data-before={getNextIpsum()}
+                                data-after={getNextIpsum()}
+                            >
+                                <Link href={item.href}>{item.text}</Link>
+                            </div>
+                            {item.breakAfter && (
+                                <div
+                                    data-before={getNextIpsum()}
+                                    data-after={getNextIpsum()}
+                                />
+                            )}
+                        </>
+                    );
+                })
+            }
+            {
+                Array(100)
+                    .fill(null)
+                    .map(() => {
+                        return (
+                            <div
+                                data-before={getNextIpsum()}
+                                data-after={getNextIpsum()}
+                            />
+                        );
+                    })
+            }
+        </main>
+    </body>
+</html>
+<style>
+    :global(body) {
+        overflow: hidden;
+        justify-content: center;
+    }
+
+    main {
+        white-space: nowrap;
+        margin-top: -0.6em;
+    }
+
+    div {
+        color: var(--color-text);
+    }
+
+    div::before {
+        content: attr(data-before);
+    }
+
+    div::after {
+        content: attr(data-after);
+    }
+
+    div::before,
+    div::after {
+        /* color: var(--color-text); */
+        opacity: 0.15;
+        /* color: #ddd; */
+    }
+
+    .invert {
+        display: none;
+    }
+
+    @media screen and (min-width: 701px) {
+        :global(*),
+        :global(*:hover) {
+            cursor: none;
+        }
+
+        .invert {
+            display: block;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            position: fixed;
+            top: -100px;
+            left: -100px;
+            background-color: var(--color-text);
+            mix-blend-mode: difference;
+            filter: invert();
+            user-select: none;
+            pointer-events: none;
+            z-index: 10000;
+
+            transition:
+                width 0.2s steps(3, start),
+                height 0.2s steps(3, start),
+                margin 0.2s steps(3, start);
+        }
+
+        .invert.over {
+            width: 50px;
+            height: 50px;
+            margin: -5px;
+        }
+    }
+</style>
+<script>
+    function setupCursor() {
+        const cursor = document.querySelector(".invert") as HTMLElement;
+        document.addEventListener("mousemove", (e) => {
+            cursor.style.top = e.clientY - 20 + "px";
+            cursor.style.left = e.clientX - 20 + "px";
+        });
+
+        const links = document.getElementsByTagName("a");
+        for (let i = 0; i < links.length; i++) {
+            links.item(i).addEventListener("mouseenter", () => {
+                cursor.classList.toggle("over", true);
+            });
+
+            links.item(i).addEventListener("mouseleave", () => {
+                cursor.classList.toggle("over", false);
+            });
+        }
+
+        document.documentElement.addEventListener("mouseenter", () => {
+            if (window.innerWidth > 700) {
+                cursor.style.display = "block";
+            }
+        });
+
+        document.documentElement.addEventListener("mouseleave", () => {
+            cursor.style.display = "none";
+        });
+    }
+
+    document.addEventListener("astro:after-swap", setupCursor);
+    setupCursor();
+</script>
