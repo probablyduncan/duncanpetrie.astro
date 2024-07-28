@@ -33,7 +33,7 @@ const galleries = defineCollection({
 		excludeTags: z.array(z.string()).optional(),
 		colors: z.object({ text: z.string().optional(), background: z.string().optional(), accent: z.string().optional() }).optional(),
 		noCaptions: z.boolean().default(false),
-		sort: z.enum(['asc', 'desc']).default('desc'),
+		sort: z.enum(['asc', 'desc', 'asc rating', 'desc rating', 'rating']).default('desc'),
 		shuffle: z.boolean().default(false),
 		isLocation: z.boolean().default(false),
 		star: z.boolean().default(false),

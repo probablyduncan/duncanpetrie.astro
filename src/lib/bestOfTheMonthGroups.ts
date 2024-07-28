@@ -10,12 +10,12 @@ export interface BestOfTheMonthGroup {
 }
 
 /**
- * all photos >= 4 stars, grouped by month
+ * all photos, grouped by month, sorted by rating
  */
 let _allGroups: BestOfTheMonthGroup[];
 export function getBestOfTheMonthGroups(): BestOfTheMonthGroup[] {
     if (!_allGroups) {
-        _allGroups = getPhotosByRating(4).reduce((result, photo) => {
+        _allGroups = getPhotosByRating(0).sort((a, b) => (b.date.getFullYear() * 1000 + b.date.getMonth() * 10 + b.rating) - (a.date.getFullYear() * 1000 + a.date.getMonth() * 10 + a.rating)).reduce((result, photo) => {
             const displayName = new Intl.DateTimeFormat("default", {
                 month: "short",
                 year: "numeric",

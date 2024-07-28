@@ -1,7 +1,5 @@
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
-import photoImport from './tools/integrations/photoImportIntegration';
-import mdxComponentMapIntegration from './tools/integrations/mdxComponentMapIntegration';
 
 import sitemap from '@astrojs/sitemap';
 

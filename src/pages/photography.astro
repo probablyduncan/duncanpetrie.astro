@@ -1,16 +1,15 @@
 ---
 import { getCollection } from "astro:content";
-import BaseHead from "../../components/BaseHead.astro";
-import RootColors from "../../components/RootColors.astro";
-import TickerNav from "../../components/TickerNav.astro";
+import BaseHead from "../components/BaseHead.astro";
+import RootColors from "../components/RootColors.astro";
+import TickerNav from "../components/TickerNav.astro";
 import {
     getGalleryLinkAlt,
     resolveGalleryTitle,
-} from "../../lib/galleryHelper";
-import Image from "../../components/Image.astro";
-import ThemeManager from "../../components/ThemeManager.astro";
-import { getGenericPhotographyIndexThemes } from "../../lib/themeHelper";
-import Link from "../../components/Link.astro";
+} from "../lib/galleryHelper";
+import ThemeManager from "../components/ThemeManager.astro";
+import { getGenericPhotographyIndexThemes } from "../lib/themeHelper";
+import Link from "../components/Link.astro";
 
 const galleries = (await getCollection("galleries")).sort(
     (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
@@ -44,14 +43,14 @@ if (galleries.length % 2 === 1) {
                     <ul>
                         <li>
                             ◮ <Link
-                                href="/photography/permanent-collection"
+                                href="/permanent-collection"
                                 title="Photography: The Best of the Best"
                                 >The Permanent Collection</Link
                             >.
                         </li>
                         <li>
                             <Link
-                                href="/photography/best-of-the-month"
+                                href="/best-of-the-month"
                                 title="Photography: The Best of the Month"
                                 >Best of the Month</Link
                             >.
@@ -65,7 +64,7 @@ if (galleries.length % 2 === 1) {
                                 }
 
                                 const attrs = {
-                                    href: "/photography/" + g.slug,
+                                    href: "/" + g.slug,
                                     title: getGalleryLinkAlt(g),
                                 };
 

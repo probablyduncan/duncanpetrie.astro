@@ -34,10 +34,10 @@ const allGalleries = await getCollection("galleries");
             <Link href="/photography">Photography index</Link>.
         </p>}
         {permanentCollectionLink && <p>
-            See the <Link href="/photography/permanent-collection" title="Photography: The Permanent Collection">Permanent Collection</Link>.
+            See the <Link href="/permanent-collection" title="Photography: The Permanent Collection">Permanent Collection</Link>.
         </p>}
         {bestOfMonthLink && <p>
-            {permanentCollectionLink ? "Or" : "See"} the <Link href="/photography/best-of-the-month" title="Photography: The Best of the Month">Best of the Month</Link>.
+            {permanentCollectionLink ? "Or" : "See"} the <Link href="/best-of-the-month" title="Photography: The Best of the Month">Best of the Month</Link>.
         </p>}
         {galleries && <>
             <p>
@@ -47,7 +47,7 @@ const allGalleries = await getCollection("galleries");
                 {
                     allGalleries.filter(g => !g.data.isLocation).map((g) => (
                         <span>
-                            <Link href={"/photography/" + g.slug} title={getGalleryLinkAlt(g)}>{resolveGalleryTitle(g)}</Link>.{" "}
+                            <Link href={"/" + g.slug} title={getGalleryLinkAlt(g)}>{resolveGalleryTitle(g)}</Link>.{" "}
                         </span>
                     ))
                 }
@@ -61,7 +61,7 @@ const allGalleries = await getCollection("galleries");
                 {
                     getBestOfTheMonthGroups().map((group, i) => {
                         const attrs = {
-                            href: `/photography/best-of-the-month${i === 0 ? "" : `/${group.slug}`}`,
+                            href: `/best-of-the-month${i === 0 ? "" : `/${group.slug}`}`,
                             title: `Photography: Best of ${group.monthLongName} ${group.year}`,
                         }
                         if (attrs.href === currentPage) {

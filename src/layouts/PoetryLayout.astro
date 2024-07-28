@@ -30,15 +30,7 @@ interface LayoutOptions {
 }
 
 type Props = MDXLayoutProps<LayoutOptions>;
-const { frontmatter, url } = Astro.props;
-
-const linkAliases = {
-    email: "mailto:duncanpetrie1@gmail.com",
-    insta: "https://instagram.com/probablyduncan",
-    about: "/about",
-    writing: "/writing",
-    "": "/",
-};
+const { frontmatter } = Astro.props;
 
 let footerLinks =
     frontmatter.footerLinks ??

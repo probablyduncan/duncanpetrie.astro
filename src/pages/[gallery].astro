@@ -1,13 +1,13 @@
 ---
 import { getCollection, type CollectionEntry } from "astro:content";
-import { getPhotosByNamesAndTags } from "../../lib/photoHelper";
-import BaseHead from "../../components/BaseHead.astro";
-import RootColors from "../../components/RootColors.astro";
-import TickerNav from "../../components/TickerNav.astro";
-import Link from "../../components/Link.astro";
-import FooterMono from "../../components/FooterMono.astro";
-import GalleryPhotoScroll from "../../components/GalleryPhotoScroll.astro";
-import GalleryHeader from "../../components/GalleryHeader.astro";
+import { getPhotosByNamesAndTags } from "../lib/photoHelper";
+import BaseHead from "../components/BaseHead.astro";
+import RootColors from "../components/RootColors.astro";
+import TickerNav from "../components/TickerNav.astro";
+import Link from "../components/Link.astro";
+import FooterMono from "../components/FooterMono.astro";
+import GalleryPhotoScroll from "../components/GalleryPhotoScroll.astro";
+import GalleryHeader from "../components/GalleryHeader.astro";
 
 type Props = CollectionEntry<"galleries">;
 export async function getStaticPaths() {
@@ -32,8 +32,11 @@ const allPhotos = getPhotosByNamesAndTags({
 // can I sort by rating??
 // shuffle should multiply by rating, so 5s are shuffled on top, 4s shuffled below that, etc
 
-if (post.data.sort == "asc") {
+if (post.data.sort.includes("asc")) {
     allPhotos.reverse();
+}
+else if (post.data.sort.includes("rating")) {
+    allPhotos.sort((a, b) => b.rating - a.rating);
 }
 ---
 
@@ -58,7 +61,7 @@ if (post.data.sort == "asc") {
             >
                 <span slot="title"
                     >{
-                        post.data.title.split("//").map((str, i) => (
+                        post.data.title.split("//").map((str) => (
                             <>
                                 {str}
                                 <br />

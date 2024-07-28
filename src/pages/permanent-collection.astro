@@ -1,10 +1,10 @@
 ---
-import BaseHead from "../../components/BaseHead.astro";
-import RootColors from "../../components/RootColors.astro";
-import TickerNav from "../../components/TickerNav.astro";
-import GalleryPhotoScroll from "../../components/GalleryPhotoScroll.astro";
-import GalleryHeader from "../../components/GalleryHeader.astro";
-import { getPhotosByTags } from "../../lib/photoHelper";
+import BaseHead from "../components/BaseHead.astro";
+import RootColors from "../components/RootColors.astro";
+import TickerNav from "../components/TickerNav.astro";
+import GalleryPhotoScroll from "../components/GalleryPhotoScroll.astro";
+import GalleryHeader from "../components/GalleryHeader.astro";
+import { getPhotosByTags } from "../lib/photoHelper";
 
 const photos = getPhotosByTags("site-best");
 

@@ -111,7 +111,7 @@ export const TICKER_LINKS = {
     Writing: "/writing",
     Springtide: "/springtide",
     Galleries: "/photography",
-    "The Permanent Collection": "/photography/permanent-collection",
+    "The Permanent Collection": "/permanent-collection",
     "Design Ethos": "/design",
 
     "Email me": "mailto:duncanpetrie1@gmail.com",
@@ -122,9 +122,9 @@ export const TICKER_LINKS = {
     "Pizza Party": "/pizza",
     Wikimedia: "https://www.youtube.com/watch?v=JRXZAaDxGCQ",
     "On Yearning": "/on-yearning",
-    Horizons: "/photography/horizons",
-    "Birds With Hats": "/photography/birdhat",
-    "Birds Without Hats": "/photography/birds",
+    Horizons: "/horizons",
+    "Birds With Hats": "/birdhat",
+    "Birds Without Hats": "/birds",
 
     "Myth.pdf": "/myth.pdf",
     "Yearning.pdf": "/yearning.pdf",
