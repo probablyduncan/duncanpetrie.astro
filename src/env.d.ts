@@ -66,9 +66,3 @@ export interface ImageProps {
     captionAlign?: SideClass;
     captionAccent?: boolean;
 }
-
-export interface IndexListItem {
-    href?: string
-    title?: string
-    display: string
-}
