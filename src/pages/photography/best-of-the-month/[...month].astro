@@ -1,7 +1,5 @@
 ---
-import { getCollection } from "astro:content";
 import BaseHead from "../../../components/BaseHead.astro";
-import Image from "../../../components/Image.astro";
 import Link from "../../../components/Link.astro";
 import RootColors from "../../../components/RootColors.astro";
 import TickerNav from "../../../components/TickerNav.astro";
@@ -39,8 +37,6 @@ const widestOfGroup = currentGroup.items
 
 // const groupsByYear = groupByKey(getGroups(), 'year');
 // const years = Object.keys(groupsByYear).sort((a: string, b: string) => parseInt(b) - parseInt(a));
-
-const galleries = await getCollection("galleries");
 ---
 
 <!doctype html>
@@ -64,7 +60,7 @@ const galleries = await getCollection("galleries");
             <GalleryPhotoScroll
                 photos={currentGroup.items}
                 widthBasis="600px"
-                shuffle={true}
+                shuffle={false}
             />
             <!-- <section class="gallery">
             {

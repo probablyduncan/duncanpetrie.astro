@@ -249,7 +249,7 @@ export async function getImgSize(src?: string): Promise<{ width: number; height:
 //#region image/json creation
 
 const GENERATED_IMG_DIR = 'photos'
-const PHOTO_SRC_DIR = path.join(process.cwd(), 'src', 'assets', 'photos');
+const PHOTO_SRC_DIR = "C:\\Users\\Duncan Petrie\\Downloads\\allPhotosByDate"; // path.join(process.cwd(), 'src', 'assets', 'photos');
 const IMG_DEST_DIR = path.join(process.cwd(), 'public', GENERATED_IMG_DIR);
 const PHOTO_DATA_PATH = path.join(process.cwd(), 'src', 'data', 'photoData.generated.json');
 const PHOTO_TYPES_PATH = path.join(process.cwd(), 'src', 'data', 'photoTypes.generated.ts');
@@ -260,8 +260,10 @@ export async function importPhotos(generateAll: boolean = false) {
 
     log('beginning image setup');
 
+    const errors = [];
+
     // get all image names in /assets
-    const imgNames = fs.readdirSync(PHOTO_SRC_DIR);
+    const imgFileNames = fs.readdirSync(PHOTO_SRC_DIR);
     const photoData: PhotoDataJSONEntry[] = [];
 
     // [generated path, img buffer]
@@ -280,15 +282,20 @@ export async function importPhotos(generateAll: boolean = false) {
     log('👀  reading photo metadata');
     const allNamesForType: string[] = [];
     const allTagsForType = new Set<string>();
-    for (let i = 0; i < imgNames.length; i++) {
+    for (let i = 0; i < imgFileNames.length; i++) {
 
-        const sourcePath = path.join(PHOTO_SRC_DIR, imgNames[i]);
-        const name = path.parse(sourcePath).name;
+        const sourcePath = path.join(PHOTO_SRC_DIR, imgFileNames[i]);
 
         // start get exif/metadata
         const buffer = fs.readFileSync(sourcePath);
-        const exifPromise = exifr.parse(buffer, true);
-        const metadataPromise = sharp(buffer).metadata();
+        const exif = await exifr.parse(buffer, true);
+        const metadata = await sharp(buffer).metadata();
+
+        if (!exif.Caption) {
+            errors.push("no caption: " + imgFileNames[i]);
+            break;
+        }
+        const name = safeFilename(exif.Caption, exif.DateTimeOriginal);
 
         // iterate through sizes and determine what to generate
         let paths: Record<ImageSize, string> = {} as Record<ImageSize, string>;;
@@ -309,13 +316,29 @@ export async function importPhotos(generateAll: boolean = false) {
             paths[size as ImageSize] = path.normalize(path.join('/', GENERATED_IMG_DIR, filename));
         }
 
-        photoData[i] = new PhotoDataJSONEntry(name, paths, await exifPromise, await metadataPromise);
+        photoData[i] = new PhotoDataJSONEntry(name, paths, exif, metadata);
 
         // this stuff will be added to a generated types file
         allNamesForType.push(name);
         photoData[i].tags.forEach(t => allTagsForType.add(t));
 
-        log(`(${i + 1}/${imgNames.length}) \t${imgNames[i]}`);
+        log(`(${i + 1}/${imgFileNames.length}) \t${name}`);
+    }
+
+    // check if duplicate filenames
+    const duplicateChecker = new Set();
+    photoData.forEach((data) => {
+        if (duplicateChecker.has(data.name)) {
+            errors.push("duplicate caption: ", data.name);
+        } else {
+            duplicateChecker.add(data.name);
+        }
+    });
+
+    if (errors.length > 0) {
+        log("errors found:")
+        errors.forEach(e => { log(e) });
+        return;
     }
 
     log('');
@@ -348,4 +371,30 @@ export async function importPhotos(generateAll: boolean = false) {
         });
     }
 }
+
+function safeFilename(caption: string, date: Date) {
+
+    // if (!caption) {
+    //     caption = srcFilename;
+    // }
+
+    // normalize the string
+    let normalized = caption.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+    // remove non-alphanumeric characters (keeping spaces)
+    let alphanumericOnly = normalized.replace(/[^a-zA-Z0-9 ]/g, "");
+
+    // replace spaces with dashes and trim any extra spaces
+    let safeFilename = alphanumericOnly.trim().replace(/\s+/g, "-");
+
+    // Convert to lower case (optional)
+    safeFilename = safeFilename.toLowerCase();
+
+    if (date) {
+        safeFilename += "-" + date.toISOString().split('T')[0];
+    }
+
+    return safeFilename;
+}
+
 //#endregion

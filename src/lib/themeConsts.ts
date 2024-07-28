@@ -3,7 +3,7 @@ import type { HomePageThemeBase, ColorScheme, IndexTheme } from "../env";
 export const HomePageLightColorThemes: HomePageThemeBase[] = [
     {
         name: "green",
-        photoName: "highcastle",
+        photoName: "high-castle-london-2024-05-13",
         titleAlign: "left",
         text: "#222",
         background: "#F1F5F0",
@@ -11,7 +11,7 @@ export const HomePageLightColorThemes: HomePageThemeBase[] = [
     },
     {
         name: "red",
-        photoName: "broadstairs",
+        photoName: "sea-wall-broadstairs-2023-09-04",
         titleAlign: "right",
         text: "#222",
         background: "#F5F4F4",
@@ -19,7 +19,7 @@ export const HomePageLightColorThemes: HomePageThemeBase[] = [
     },
     {
         name: "brown",
-        photoName: "stannescourt",
+        photoName: "st-annes-court-herne-bay-2024-01-15",
         titleAlign: "left",
         text: "#222",
         background: "#E6EEFF",
@@ -27,7 +27,7 @@ export const HomePageLightColorThemes: HomePageThemeBase[] = [
     },
     {
         name: "purple",
-        photoName: "catclaws",
+        photoName: "catclaws-pennance-point-2021-10-09",
         titleAlign: "left",
         text: "#222",
         background: "#FFFBFF",
@@ -35,7 +35,7 @@ export const HomePageLightColorThemes: HomePageThemeBase[] = [
     },
     {
         name: "yellow",
-        photoName: "flaxengrass",
+        photoName: "flaxengrass-falmouth-2021-10-15",
         titleAlign: "right",
         text: "#222",
         background: "#F2F9FF",
@@ -43,7 +43,7 @@ export const HomePageLightColorThemes: HomePageThemeBase[] = [
     },
     {
         name: "blue",
-        photoName: "fluffycloud",
+        photoName: "cloudswells-falmouth-2021-11-02",
         titleAlign: "left",
         text: "#222",
         background: "#FAFAFF",
@@ -51,7 +51,7 @@ export const HomePageLightColorThemes: HomePageThemeBase[] = [
     },
     {
         name: "orange",
-        photoName: "penzancewait",
+        photoName: "vacant-post-penzance-2021-11-02",
         titleAlign: "right",
         text: "#222",
         background: "#F5F4F4",
@@ -62,7 +62,7 @@ export const HomePageLightColorThemes: HomePageThemeBase[] = [
 export const HomePageDarkColorThemes: HomePageThemeBase[] = [
     {
         name: "green",
-        photoName: "cycling",
+        photoName: "cycling-gudmundsen-drive-door-county-2019-08-31",
         titleAlign: "left",
         text: "#F1F5F0",
         background: "#222",
@@ -70,7 +70,7 @@ export const HomePageDarkColorThemes: HomePageThemeBase[] = [
     },
     {
         name: "red",
-        photoName: "surrogatesea",
+        photoName: "surrogate-sea-villajoyosa-2022-02-18",
         titleAlign: "left",
         text: "#F5F4F4",
         background: "#222",
@@ -78,7 +78,7 @@ export const HomePageDarkColorThemes: HomePageThemeBase[] = [
     },
     {
         name: "purple",
-        photoName: "toenailmoon",
+        photoName: "toenail-moon-maenporth-2021-01-16",
         titleAlign: "left",
         text: "#FFFBFF",
         background: "#222",
@@ -86,7 +86,7 @@ export const HomePageDarkColorThemes: HomePageThemeBase[] = [
     },
     {
         name: "brown",
-        photoName: "paperwindow",
+        photoName: "parchment-paper-window-margate-2023-09-04",
         titleAlign: "left",
         text: "#E6EEFF",
         background: "#222",
@@ -94,7 +94,7 @@ export const HomePageDarkColorThemes: HomePageThemeBase[] = [
     },
     {
         name: "yellow",
-        photoName: "windowsafari",
+        photoName: "window-safari-primrose-hill-2024-05-13",
         titleAlign: "left",
         text: "#F2F9FF",
         background: "#222",
@@ -102,7 +102,7 @@ export const HomePageDarkColorThemes: HomePageThemeBase[] = [
     },
     {
         name: "blue",
-        photoName: "diningroom",
+        photoName: "vacant-post-penzance-2021-11-02",
         titleAlign: "left",
         text: "#E6EEFF",
         background: "#222",
@@ -110,7 +110,7 @@ export const HomePageDarkColorThemes: HomePageThemeBase[] = [
     },
     {
         name: "orange",
-        photoName: "jubileepool",
+        photoName: "jubilee-pool-penzance-2021-11-02",
         titleAlign: "left",
         text: "#F5F4F4",
         background: "#222",
@@ -129,15 +129,31 @@ export const DefaultThemeScheme: ColorScheme = {
 
 export const PhotographyIndexThemes: IndexTheme[] = [
     {
-        photoName: "oakleaf",
+        photoName: "oak-leaf-rothamstead-2023-11-23",
         textColor: "#462012",
     },
     {
-        photoName: "adrift-1",
+        photoName: "pasture-ii-2021-01-02",
         textColor: "#474545",
     },
     {
-        photoName: "catclaws",
+        photoName: "catclaws-pennance-point-2021-10-09",
         textColor: "#fff"
+    },
+    {
+        photoName: "north-atlantic-pennance-point-2021-01-14",
+        textColor: "#f0f7ff",
+    },
+    {
+        photoName: "mosquitoes-i-door-bluff-2021-06-02",
+        textColor: "#fff",
+    },
+    {
+        photoName: "sand-st-bralades-bay-jersey-2024-05-25",
+        textColor: "#483018",
+    },
+    {
+        photoName: "lake-michigan-2018-12-13",
+        textColor: "#fff",
     },
 ]
