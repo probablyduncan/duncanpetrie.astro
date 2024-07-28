@@ -3,14 +3,15 @@ import type { SideClass } from "../env";
 
 interface Props {
     align?: SideClass;
+    moreLink?: string;
 }
 
-const { align = "left" } = Astro.props;
+const { align = "left", moreLink = "Writing"  } = Astro.props;
 ---
 
 <footer class:list={["mono-small", align]}>
     Go <b><a href="/">Home</a></b>. More
-    <b><a href="/writing">Writing</a></b>.
+    <b><a href={"/" + moreLink.toLowerCase()}>{moreLink}</a></b>.
     <b><a href="/about">About</a>.</b>
     <b><a href="mailto:duncanpetrie1@gmail.com">Email</a>.</b>
     <b><a href="https://instagram.com/probablyduncan">Instagram</a>.</b>
