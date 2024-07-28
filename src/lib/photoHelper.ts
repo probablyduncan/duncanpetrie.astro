@@ -65,7 +65,7 @@ class PhotoDataJSONEntry implements IPhotoDataBase {
         this.name = name as PhotoName;
         this.paths = paths;
 
-        this.caption = exif.Caption;
+        this.caption = exif.ImageDescription;
         this.datestring = exif.DateTimeOriginal;
         this.rating = exif.Rating ?? 0;
 
@@ -249,7 +249,7 @@ export async function getImgSize(src?: string): Promise<{ width: number; height:
 //#region image/json creation
 
 const GENERATED_IMG_DIR = 'photos'
-const PHOTO_SRC_DIR = "C:\\Users\\Duncan Petrie\\Downloads\\allPhotosByDate"; // path.join(process.cwd(), 'src', 'assets', 'photos');
+const PHOTO_SRC_DIR = path.join(process.cwd(), 'src', 'assets', 'photos');
 const IMG_DEST_DIR = path.join(process.cwd(), 'public', GENERATED_IMG_DIR);
 const PHOTO_DATA_PATH = path.join(process.cwd(), 'src', 'data', 'photoData.generated.json');
 const PHOTO_TYPES_PATH = path.join(process.cwd(), 'src', 'data', 'photoTypes.generated.ts');
@@ -295,7 +295,7 @@ export async function importPhotos(generateAll: boolean = false) {
             errors.push("no caption: " + imgFileNames[i]);
             break;
         }
-        const name = safeFilename(exif.Caption, exif.DateTimeOriginal);
+        const name = safeFilename(exif.ImageDescription, exif.DateTimeOriginal);
 
         // iterate through sizes and determine what to generate
         let paths: Record<ImageSize, string> = {} as Record<ImageSize, string>;;

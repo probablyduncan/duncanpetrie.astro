@@ -29,6 +29,9 @@ const allPhotos = getPhotosByNamesAndTags({
     excludeNames: post.data.excludeNames,
 });
 
+// can I sort by rating??
+// shuffle should multiply by rating, so 5s are shuffled on top, 4s shuffled below that, etc
+
 if (post.data.sort == "asc") {
     allPhotos.reverse();
 }

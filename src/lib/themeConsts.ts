@@ -65,13 +65,21 @@ export const HomePageLightColorThemes: HomePageThemeBase[] = [
         background: "#FAFBF7",
         accent: "#B37749",
     },
+    // {
+    //     name: "yellowfield",
+    //     photoName: "st-catherines-oratory-isle-of-wight-2024-04-28",
+    //     titleAlign: "right",
+    //     text: "#222",
+    //     background: "#EDF4FF",
+    //     accent: "#2677BD",
+    // },
     {
-        name: "yellowfield",
-        photoName: "st-catherines-oratory-isle-of-wight-2024-04-28",
+        name: "corbiere",
+        photoName: "la-corbiere-st-brelade-jersey-2024-05-25",
         titleAlign: "right",
         text: "#222",
-        background: "#EDF4FF",
-        accent: "#2677BD",
+        background: "#F6F8FA",
+        accent: "#987a62",
     },
 ] as const;
 
@@ -153,10 +161,6 @@ export const PhotographyIndexThemes: IndexTheme[] = [
         textColor: "#474545",
     },
     {
-        photoName: "catclaws-pennance-point-2021-10-09",
-        textColor: "#fff"
-    },
-    {
         photoName: "north-atlantic-pennance-point-2021-01-14",
         textColor: "#f0f7ff",
     },
@@ -165,11 +169,7 @@ export const PhotographyIndexThemes: IndexTheme[] = [
         textColor: "#fff",
     },
     {
-        photoName: "sand-st-bralades-bay-jersey-2024-05-25",
+        photoName: "sand-st-brelades-bay-jersey-2024-05-25",
         textColor: "#483018",
-    },
-    {
-        photoName: "lake-michigan-2018-12-13",
-        textColor: "#fff",
     },
 ]

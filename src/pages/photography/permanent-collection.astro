@@ -2,15 +2,15 @@
 import BaseHead from "../../components/BaseHead.astro";
 import RootColors from "../../components/RootColors.astro";
 import TickerNav from "../../components/TickerNav.astro";
-import { getPhotosByRating } from "../../lib/photoHelper";
 import GalleryPhotoScroll from "../../components/GalleryPhotoScroll.astro";
 import GalleryHeader from "../../components/GalleryHeader.astro";
+import { getPhotosByTags } from "../../lib/photoHelper";
 
-const photos = getPhotosByRating(5);
+const photos = getPhotosByTags("site-best");
 
-// maybe add ::before little annotations with the year or locations or something?
-// maybe like sections saying here's where I was living, here's when I went on a trip, etc
-// maybe links to specific galleries with more like a certain photo
+
+// sort by year, then by rating (year is bigger number so takes precedent)
+photos.sort((a, b) => (b.date.getFullYear() + b.rating) - (a.date.getFullYear() + a.rating));
 ---
 
 <!doctype html>
@@ -31,7 +31,7 @@ const photos = getPhotosByRating(5);
                 captionAlign="random"
                 widthBasis="800px"
                 imageSize="large"
-                shuffle={true}
+                shuffle={false}
             />
         </main>
         <style>
