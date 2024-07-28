@@ -6,9 +6,6 @@ import TickerNav from "../components/TickerNav.astro";
 import Link from "../components/Link.astro";
 import * as loremIpsumMD from "../data/loremIpsum.md";
 
-// const articles = await getCollection("articles");
-// articles.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-
 const ipsumAll = loremIpsumMD.compiledContent();
 const ipsumWords = ipsumAll.split(" ");
 let ipsumIndex = 0;
@@ -33,10 +30,6 @@ const items: {
 }[] = [
     {
         text: "Home",
-        // breakAfter: true,
-    },
-    {
-        text: "About",
         breakAfter: true,
     },
     {
@@ -71,6 +64,10 @@ const items: {
     {
         text: "Fluffy Cloud",
         href: "/fluffy-cloud",
+        breakAfter: true,
+    },
+    {
+        text: "About",
         breakAfter: true,
     },
     // ...articles.map(a => ({href: a.slug, text: a.data.title})),
@@ -145,13 +142,10 @@ const items: {
 <style>
     :global(body) {
         overflow: hidden;
-        /* justify-content: center; */
     }
 
     main {
         white-space: nowrap;
-        /* margin-top: -0.6em; */
-
         overflow: hidden;
         max-width: 100vw;
         height: 100vh;
@@ -176,10 +170,8 @@ const items: {
 
     div::before,
     div::after {
-        /* color: var(--color-text); */
         opacity: 0.15;
         font-size: 1.125rem;
-        /* color: #ddd; */
     }
 
     .invert {
