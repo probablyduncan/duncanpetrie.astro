@@ -34,8 +34,7 @@ const allPhotos = getPhotosByNamesAndTags({
 
 if (post.data.sort.includes("asc")) {
     allPhotos.reverse();
-}
-else if (post.data.sort.includes("rating")) {
+} else if (post.data.sort.includes("rating")) {
     allPhotos.sort((a, b) => b.rating - a.rating);
 }
 ---
@@ -71,7 +70,14 @@ else if (post.data.sort.includes("rating")) {
                 >
                 {
                     post.data.description && (
-                        <span slot="description">{post.data.description}</span>
+                        <span slot="description">
+                            {post.data.description.split("//").map((str) => (
+                                <>
+                                    {str}
+                                    <br />
+                                </>
+                            ))}
+                        </span>
                     )
                 }
             </GalleryHeader>

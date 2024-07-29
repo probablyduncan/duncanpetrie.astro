@@ -65,4 +65,5 @@ export interface ImageProps {
     noCaption?: boolean;
     captionAlign?: SideClass;
     captionAccent?: boolean;
+    ratio?: number;
 }

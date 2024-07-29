@@ -26,15 +26,16 @@ const {
     shuffle = false,
 } = Astro.props;
 
-const hasText = Astro.slots.has("default") && (await Astro.slots.render("default")).trim().length > 0;
-
+const text = Astro.slots.has("default") ? (await Astro.slots.render("default")).trim() : "";
+const hasText = text.length > 0;
+const useColumns = text.split("<p>").length > 3 || text.split(" ").length > 100;
 ---
 
 <!-- {hasText && <div class="center" style="margin-bottom: 40px; padding-right: 20px">[ <button data-skip-text>skip to photos</button> ]</div>} -->
 <section style={`--base-width: ${widthBasis}; --photo-gap: ${photoGap}`}>
     {
         hasText && (
-            <article class="serif-body small">
+            <article class:list={["serif-body", "small", {columns: useColumns}]} class="serif-body small">
                 <slot />
             </article>
         )
@@ -93,6 +94,9 @@ const hasText = Astro.slots.has("default") && (await Astro.slots.render("default
         width: 800px;
         max-width: 100%;
 
+    }
+
+    article.columns {
         column-count: 2;
         column-width: 390px;
         column-gap: 20px;

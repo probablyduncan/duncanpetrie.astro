@@ -13,6 +13,7 @@ const {
     captionAlign = "left",
     captionAccent = true,
     noCaption = false,
+    ratio,
 } = Astro.props;
 
 if (!photoName && !src) {
@@ -28,13 +29,30 @@ const srcResolved = photoData
 const captionResolved = noCaption
     ? null
     : photoData
-      ? caption ?? photoData.joinedCaption
+      ? (caption ?? photoData.joinedCaption)
       : caption;
 
-const ratio = photoData ? photoData.ratio : (await getImgSize(src)).ratio;
+const isVideo = !photoData && src.endsWith(".mp4");
+
+const aspectRatio =
+    ratio ?? (photoData ? photoData.ratio : (await getImgSize(src)).ratio);
 ---
 
-<img src={srcResolved} style={`aspect-ratio: ${ratio};`} alt={captionResolved} loading="lazy" />
+{
+    isVideo ? (
+        <video controls="" style={`width: 100%; aspect-ratio: ${aspectRatio};`}>
+            <source src={src} type="video/mp4" />
+            Your browser does not support video.
+        </video>
+    ) : (
+        <img
+            src={srcResolved}
+            style={`aspect-ratio: ${aspectRatio};`}
+            alt={captionResolved}
+            loading="lazy"
+        />
+    )
+}
 
 {
     captionResolved && (

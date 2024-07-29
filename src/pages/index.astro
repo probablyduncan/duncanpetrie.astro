@@ -123,6 +123,12 @@ const listData: ListData = [
 				alt: "Film: A Triumph of the Commons",
 				imgSrc: "/media/wiki_thumbnail.gif",
 			},
+			{
+				title: "Old Horizons",
+				url: "/horizons",
+				type: "photography",
+				alt: "In these images, I photograph the very human feeling we get when we gaze out at the horizon...",
+			},
 			// {
 			// 	title: "Cloud Discovered, Fluffiest in World",
 			// 	url: "/fluffy-cloud",
@@ -133,6 +139,29 @@ const listData: ListData = [
 		],
 	},
 	{
+		name: "2020",
+		items: [
+			{
+				title: "New Beauty, Old Wisconsin",
+				url: "/heartland",
+				type: "photography",
+				alt: "I grew up in boring old Wisconsin, and I spent the first 18 years of my life waiting to get out..."
+			},
+			{
+				title: "Pizza, Pretty Fast",
+				url: "/pizza",
+				type: "film",
+				alt: "This short film, produced in spring of 2020, was created from almost 2,500 individual photographs over the course of several days."
+			},
+			{
+				title: "Birds!",
+				url: "/birds",
+				type: "photography",
+				alt: "A few years ago, I set out to find every bird..."
+			},
+		],
+	},
+	{
 		name: "2019",
 		items: [
 			{
@@ -140,8 +169,8 @@ const listData: ListData = [
 				url: "/a-la-cart",
 				type: "ritual stone",
 				alt: "I've always had a problem with shopping carts. Not the carts themselves (I generally regard them as a nice way to get peanut butter from point A to point B) but, rather, how lots of people treat them.",
-			}
-		]
+			},
+		],
 	},
 ];
 ---
@@ -193,7 +222,10 @@ const listData: ListData = [
 				</div>
 			</div>
 		</header>
-		<ThemeManager storeKey="homePageTheme" themeData={getGenericHomePageThemes()} />
+		<ThemeManager
+			storeKey="homePageTheme"
+			themeData={getGenericHomePageThemes()}
+		/>
 		<main class="wrapper">
 			<LegendList
 				itemGroups={listData}
