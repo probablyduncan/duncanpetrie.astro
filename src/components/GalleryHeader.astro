@@ -76,7 +76,7 @@ const allGalleries = await getCollection("galleries");
                         } else {
                             return (
                                 <span>
-                                    <a {...attrs}>{group.display}</a>.{" "}
+                                    <a class="month-link" {...attrs}>{group.display}</a>.{" "}
                                 </span>
                             );
                         }
@@ -110,10 +110,14 @@ const allGalleries = await getCollection("galleries");
     }
 
     nav {
-        width: 280px;
-        max-width: 280px;
-        min-width: 280px;
+        width: 340px;
+        max-width: 340px;
+        min-width: 340px;
         text-align: right;
+    }
+
+    .month-link {
+        white-space: nowrap;
     }
 
     @media screen and (max-width: 750px) {
