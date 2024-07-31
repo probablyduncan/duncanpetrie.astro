@@ -40,22 +40,22 @@ const galleries = defineCollection({
 	}),
 });
 
-const springtideWiki = defineCollection({
+const springtide = defineCollection({
 	type: 'content',
-	schema: {
+	schema: z.object({
 		title: z.string(),
 		description: z.string(),
 		tags: z.array(z.string()).optional(),
-		date: z.coerce.date(),
+		date: z.date(),
 		star: z.boolean().default(false),
 
 		// https://docs.astro.build/en/guides/content-collections/#defining-collection-references
-		related: z.array(reference('w'))
-	}
+		related: z.array(reference("springtide")).optional()
+	}),
 })
 
 export const collections = {
 	articles,
 	galleries,
-	w: springtideWiki,
+	springtide,
 };

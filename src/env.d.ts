@@ -66,4 +66,5 @@ export interface ImageProps {
     captionAlign?: SideClass;
     captionAccent?: boolean;
     ratio?: number;
+    crisp?: boolean;
 }

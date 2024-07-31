@@ -1,0 +1,128 @@
+---
+import { getCollection } from "astro:content";
+import BaseHead from "../../components/BaseHead.astro";
+import Image from "../../components/Image.astro";
+import Link from "../../components/Link.astro";
+import RootColors from "../../components/RootColors.astro";
+import TickerNav from "../../components/TickerNav.astro";
+
+
+const wikiItems = await getCollection('springtide');
+
+---
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <BaseHead title="Springtide" description="" />
+        <RootColors colors={{
+            text: "#222",
+            background: "white",
+            accent: "green",
+        }} />
+    </head>
+    <body>
+        <TickerNav />
+        <main>
+            <section class="map-section">
+                <div class="map">
+                    <Image src="/media/bigmapW4_small.jpg" crisp={true} />
+                </div>
+            </section> 
+            <section>
+                <nav>
+                    <span class="mono-small">META</span>
+                    <ul>
+                        <li><Link href="/springtide/about">About this world</Link>.</li>
+                        <li><Link href="/springtide/map">About that map</Link>.</li>
+                        <li><Link href="/springtide/influences">Influences</Link>.</li>
+                    </ul>
+                    <span class="mono-small">STORIES</span>
+                    <ul>
+                        <li class="star"><Link href="/a-necklace-of-stars">A Necklace of Stars</Link>.</li>
+                        <li><Link href="/saltish-and-the-sea-beast">Saltish and the Sea-beast</Link>.</li>
+                        <li><Link href="/the-barons-old-fleet">The Baron's Old Fleet</Link>.</li>
+                    </ul>
+                    <span class="mono-small">WIKI</span>
+                    <ul>
+                        {wikiItems.map(w => <li class:list={{star: w.data.star}}><Link href={"/springtide/" + w.slug} title={"Springtide: " + w.data.title}>{w.data.title}</Link>.</li>)}
+                    </ul>
+                    <span class="mono-small">AWAY</span>
+                    <ul>
+                        <li><Link>Back to home</Link>.</li>
+                        <li>More <Link>writing</Link>.</li>
+                        <li><Link>Photography</Link>.</li>
+                        <li><Link href="/about">About me</Link>.</li>
+                    </ul>
+                </nav>
+                <div>
+
+                </div>
+            </section>
+        </main>
+    </body>
+    <style>
+        main {
+            width: calc(100vw - 20px);
+
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: flex-start;
+        }
+
+        main section {
+            /* width: 50%; */
+            min-height: 100vh;
+            position: relative;
+
+            display: flex;
+            flex-flow: column;
+        }
+        
+        main section:first-child {
+            align-items: flex-start;
+        }
+        
+        main section:last-child {
+            width: 300px;
+            align-items: flex-start;
+        }
+
+        .map {
+            position: sticky;
+            top: 10px;
+
+            height: calc(100vh - 20px);
+            max-width: calc(100%);
+            aspect-ratio: 4/5;
+
+            display: flex;
+            flex-flow: column;
+            justify-content: center;
+        }
+
+        nav {
+            text-align: left;
+            padding: 50vh 10px 10vh;
+        }
+
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+
+            margin-bottom: 40px;
+        }
+
+        li {
+            margin: 10px;
+        }
+
+        li.star::after {
+            content: " ✶";
+        }
+
+        nav span {
+            margin-left: 10px;
+        }
+    </style>
+</html>

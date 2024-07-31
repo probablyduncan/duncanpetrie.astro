@@ -14,6 +14,7 @@ const {
     captionAccent = true,
     noCaption = false,
     ratio,
+    crisp = false,
 } = Astro.props;
 
 if (!photoName && !src) {
@@ -46,6 +47,7 @@ const aspectRatio =
         </video>
     ) : (
         <img
+            class:list={{ crisp }}
             src={srcResolved}
             style={`aspect-ratio: ${aspectRatio};`}
             alt={captionResolved}
