@@ -120,10 +120,12 @@ export const TICKER_LINKS = {
     Linkedin: "https://linkedin.com/probablyduncan",
 
     "Pizza Party": "/pizza",
+    "Unfinished Songs": "/unfinished-songs",
     Wikimedia: "https://www.youtube.com/watch?v=JRXZAaDxGCQ",
     "On Yearning": "/on-yearning",
     Horizons: "/horizons",
     "Birds With Hats": "/birdhat",
+    "Horses": "/unfinished-songs#horses",
     "Birds Without Hats": "/birds",
 
     "Myth.pdf": "/myth.pdf",

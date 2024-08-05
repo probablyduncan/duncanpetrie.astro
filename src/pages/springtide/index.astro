@@ -26,6 +26,7 @@ const wikiItems = await getCollection('springtide');
             <section class="map-section">
                 <div class="map">
                     <Image src="/media/bigmapW4_small.jpg" crisp={true} />
+                    <!-- <Image src="/media/bigmapW4_names.jpg" /> -->
                 </div>
             </section> 
             <section>
@@ -47,6 +48,9 @@ const wikiItems = await getCollection('springtide');
                     <ul>
                         <li class="star"><Link href="/the-man-upstairs">The Man Upstairs</Link>.</li>
                         <li><Link href="/little-man-edge-of-heaven">Little Man, Edge of Heaven</Link>.</li>
+                        <li><Link href="/unfinished-songs">Unfinished Songs</Link>.</li>
+                        <!-- <li><Link href="/unfinished-songs#bells">The Bells Again</Link>.</li>
+                        <li><Link href="/unfinished-songs#morningsong">A Morningsong</Link>.</li> -->
                     </ul>
                     <span class="mono-small">WIKI</span>
                     <ul>
@@ -54,8 +58,8 @@ const wikiItems = await getCollection('springtide');
                     </ul>
                     <span class="mono-small">AWAY</span>
                     <ul>
-                        <li><Link>Back to home</Link>.</li>
-                        <li>More <Link>writing</Link>.</li>
+                        <li><Link href="/">Back to home</Link>.</li>
+                        <li><Link href="/writing">More writing</Link>.</li>
                         <li><Link>Photography</Link>.</li>
                         <li><Link href="/about">About me</Link>.</li>
                     </ul>
@@ -98,7 +102,7 @@ const wikiItems = await getCollection('springtide');
             top: 10px;
 
             height: calc(100vh - 20px);
-            max-width: calc(100%);
+            max-width: 100%;
             aspect-ratio: 4/5;
 
             display: flex;
@@ -129,6 +133,27 @@ const wikiItems = await getCollection('springtide');
 
         nav span {
             margin-left: 10px;
+        }
+
+        @media (max-width: 700px), (max-aspect-ratio: 5/4) {
+            main {
+                flex-flow: column;
+            }
+
+            nav {
+                padding: 20px 0 10vh;
+            }
+
+            main section {
+                min-height: unset;
+            }
+
+            .map {
+                height: unset;
+                width: 100%;
+                position: relative;
+                margin-top: calc(var(--ticker-height));
+            }
         }
     </style>
 </html>

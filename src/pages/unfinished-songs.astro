@@ -1,0 +1,171 @@
+---
+import { getCollection } from "astro:content";
+import BaseHead from "../components/BaseHead.astro";
+import TickerNav from "../components/TickerNav.astro";
+import RootColors from "../components/RootColors.astro";
+import FooterMono from "../components/FooterMono.astro";
+import Link from "../components/Link.astro";
+
+const songs = await getCollection("songs");
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <BaseHead
+            title="Unfinished Songs"
+            description="All the songs I cannot finish. Maybe you can help?"
+        />
+        <RootColors />
+    </head>
+    <body>
+        <TickerNav />
+        <main>
+            <header>
+                <h1>Unfinished Songs</h1>
+                <div style="max-width: 400px;" class="mono-small">
+                    Often, when I'm walking, I start humming. Sometimes, words
+                    appear. And if I'm lucky, those words are good enough to
+                    remember.
+                    <br /><br />
+                    Some of these songs <i>are</i> finished. Some of them are just
+                    too short. And some of them end in the middle of a line. When
+                    you write the first half of something in the woods, or on top
+                    of a mountain, or wherever, it's often hard to go home to your
+                    little white-walled room and write the second half. So here we
+                    are.
+                </div>
+                <br />
+                <nav class="mono-small">
+                    <ul>
+                        <li><Link>Home</Link>.</li>
+                        <li><Link href="/about">About me</Link>.</li>
+                        <li><Link href="/writing">More writing</Link>.</li>
+                        <li><Link>Photography</Link>.</li>
+                    </ul>
+                </nav>
+            </header>
+            <div class="songs">
+                {
+                    songs.map(async (s, i) => {
+                        const { Content } = await s.render();
+                        const isUphill = s.slug === "uphill";
+
+                        return (
+                            <section
+                                id={s.slug}
+                                style={isUphill ? "order: 1001;" : `--i: ${i}`}
+                            >
+                                <button
+                                    data-copy
+                                    title="Copy link"
+                                    class="mono-small bold"
+                                >
+                                    #{s.slug}
+                                </button>
+                                <Content />
+                            </section>
+                        );
+                    })
+                }
+            </div>
+            <FooterMono />
+        </main>
+    </body>
+</html>
+<style>
+    main {
+        width: 600px;
+        max-width: calc(100vw - 20px);
+        margin-top: var(--ticker-height);
+    }
+
+    nav ul {
+        list-style: none;
+        /* margin: 0; */
+        padding: 0;
+        display: flex;
+        gap: 1em;
+    }
+
+    .songs {
+        display: flex;
+        flex-flow: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+
+        margin-bottom: 50vh;
+    }
+
+    section {
+        margin-bottom: 100px;
+        border-top: 2px solid var(--color-text);
+        padding-top: 80px;
+
+        order: var(--i);
+    }
+
+    section :global(blockquote) {
+        font-family: monospace;
+        font-weight: bold;
+        font-size: 0.75rem;
+
+        max-width: 400px;
+
+        margin: 0;
+
+        hyphens: none;
+        -moz-hyphens: none;
+        -ms-hyphens: none;
+        -webkit-hyphens: none;
+    }
+
+    /* section button::after {
+        content: attr(data-copy);
+        text-decoration: none;
+        padding-left: 0.5em;
+        opacity: 0.5;
+    } */
+</style>
+<script>
+    function setupSongLinks() {
+        const buttons = document.querySelectorAll("section button[data-copy]");
+
+        if (buttons.length > 0) {
+            buttons.forEach((b) => {
+                b.addEventListener("click", () => {
+                    const link =
+                        window.location.href.split("#")[0] +
+                        "#" +
+                        b.parentElement.id;
+                    navigator.clipboard.writeText(link);
+                    window.history.pushState({}, null, link);
+                    window.scrollTo({
+                        top: (b as HTMLElement).offsetTop - 100,
+                        behavior: "smooth",
+                    });
+                    // (b as HTMLElement).dataset.copy = "Link copied to clipboard!"
+                    // setTimeout(() => {
+                    //     (b as HTMLElement).dataset.copy = "";
+                    // }, 1000);
+                });
+            });
+        }
+    }
+
+    document.addEventListener("astro:after-swap", setupSongLinks);
+    setupSongLinks();
+</script>
+<script is:inline>
+    function shufflePhotos() {
+        document.querySelectorAll("section").forEach((e) => {
+            e.style.setProperty(
+                "--i",
+                Math.floor(Math.random() * 1000).toString(),
+            );
+        });
+    }
+
+    document.addEventListener("astro:after-swap", shufflePhotos);
+    shufflePhotos();
+</script>

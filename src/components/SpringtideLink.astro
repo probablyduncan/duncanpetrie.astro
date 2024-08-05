@@ -18,11 +18,8 @@ let href = baseHref ?? "";
 let splitHref = href.split("#");
 let isBad = false;
 
-// console.log(allSlugs)
-
 if (baseHref.includes("/")) {
     // assume it's just a link, skip processing
-    console.log(baseHref)
 }
 else if (!baseHref) {
     if (innerHtmlDashed.includes("/")) {
