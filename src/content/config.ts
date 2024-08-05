@@ -51,7 +51,7 @@ const springtide = defineCollection({
 		star: z.boolean().default(false),
 
 		// https://docs.astro.build/en/guides/content-collections/#defining-collection-references
-		related: z.array(reference("springtide")).optional()
+		// related: z.array(reference("springtide")).optional()
 	}),
 })
 

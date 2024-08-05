@@ -1,0 +1,110 @@
+---
+import { getCollection } from "astro:content";
+
+interface Props {
+    href?: string;
+}
+
+const { href: baseHref } = Astro.props;
+
+const collection = await getCollection("springtide");
+const allSlugs: string[] = collection.map((s) => s.slug);
+
+const innerHtml = await Astro.slots.render("default");
+const innerHtmlDashed = innerHtml.toLowerCase().replaceAll(" ", "-");
+
+let targetPageTitle = null;
+let href = baseHref ?? "";
+let splitHref = href.split("#");
+let isBad = false;
+
+// console.log(allSlugs)
+
+if (baseHref.includes("/")) {
+    // assume it's just a link, skip processing
+    console.log(baseHref)
+}
+else if (!baseHref) {
+    if (innerHtmlDashed.includes("/")) {
+        // assume it's a link, skip processing
+        href = innerHtmlDashed;
+    }
+    if (allSlugs.includes(innerHtmlDashed)) {
+        // like the [Ingle]() or old [Edya]()
+        href = "/springtide/" + innerHtmlDashed;
+        targetPageTitle = collection.find((d) => d.slug == innerHtmlDashed).data
+            .title;
+    } else {
+        // just assume innerhtml is a link i guess
+        isBad = true;
+    }
+} else if (allSlugs.includes(baseHref)) {
+    // just basic wiki link, [some text](page)
+    href = "/springtide/" + baseHref;
+} else if (baseHref.startsWith("#")) {
+    if (allSlugs.includes(innerHtmlDashed)) {
+        // header on innerHtml page - like [halfisle](#frid)
+        href = "/springtide/" + innerHtmlDashed + baseHref;
+        targetPageTitle =
+            collection.find((d) => d.slug == innerHtmlDashed).data.title +
+            ": " +
+            baseHref.replace("#", "")[0].toUpperCase() +
+            baseHref.replace("#", "").substring(1);
+    } else {
+        // header on this page - like [link text](#heading)
+        href = baseHref;
+        targetPageTitle = "Go to heading: " + baseHref.replace("#", "");
+    }
+} else if (baseHref.endsWith("#")) {
+    if (allSlugs.includes(splitHref[0])) {
+        // just link to link page, heading is innerhtml
+        href = "/springtide/" + splitHref[0] + "#" + innerHtmlDashed;
+    } else {
+        isBad = true;
+    }
+} else if (splitHref.length == 2) {
+    if (allSlugs.includes(splitHref[0])) {
+        // standard link to heading, like [link text](page#heading)
+        href = "/springtide/" + baseHref;
+        targetPageTitle =
+            collection.find((d) => d.slug == splitHref[0]).data.title +
+            ": " +
+            splitHref[1][0].toUpperCase() +
+            splitHref[1].substring(1);
+    } else {
+        isBad = true;
+    }
+} else {
+    isBad = true;
+}
+---
+
+<style>
+    a {
+        color: blue;
+    }
+
+    a.bad,
+    span {
+        color: rgb(184, 49, 49);
+    }
+</style>
+{
+    isBad ? (
+        <span title="I'm still workin' on it!">
+            <slot />
+        </span>
+    ) : (
+        <a
+            href={href}
+            title={targetPageTitle ?? href}
+            target={
+                !href.includes("springtide") && href.includes("/")
+                    ? "_blank"
+                    : "_self"
+            }
+        >
+            <slot />
+        </a>
+    )
+}
