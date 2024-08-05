@@ -12,7 +12,20 @@ const { title, subtitle, date, image, ticker } = Astro.props;
 
 {ticker === true && <TickerNav />}
 <header>
-    <p><b>{title.toUpperCase()}</b></p>
+    <p>
+        <b
+            >{
+                title
+                    .toUpperCase()
+                    .split("//")
+                    .map((h) => (
+                        <>
+                            {h}
+                            <br />
+                        </>
+                    ))
+            }</b>
+    </p>
     <p>
         <i>
             {subtitle}

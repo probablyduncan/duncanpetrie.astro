@@ -43,6 +43,11 @@ const wikiItems = await getCollection('springtide');
                         <li class="star"><Link href="/the-barons-old-fleet">The Baron's Old Fleet</Link>.</li>
                         <li class="star"><Link href="/springtide/zigglewomping">Zigglewomping</Link>.</li>
                     </ul>
+                    <span class="mono-small">LYRIC & VERSE</span>
+                    <ul>
+                        <li class="star"><Link href="/the-man-upstairs">The Man Upstairs</Link>.</li>
+                        <li><Link href="/little-man-edge-of-heaven">Little Man, Edge of Heaven</Link>.</li>
+                    </ul>
                     <span class="mono-small">WIKI</span>
                     <ul>
                         {wikiItems.map(w => <li class:list={{star: w.data.star}}><Link href={"/springtide/" + w.slug} title={"Springtide: " + w.data.title}>{w.data.title}</Link>.</li>)}

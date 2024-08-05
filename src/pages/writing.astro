@@ -46,6 +46,14 @@ const items: {
     {
         text: "Saltish and the Sea-beast",
         href: "/saltish-and-the-sea-beast",
+    },
+    {
+        text: "Little Man, Edge of Heaven",
+        href: "/little-man-edge-of-heaven",
+    },
+    {
+        text: "Unfinished Songs",
+        href: "/unfinished-songs",
         breakAfter: true,
     },
     {
@@ -220,6 +228,11 @@ const items: {
     // inspiration: https://codepen.io/m3t4lch7/pen/VwwOKNd
     function setupCursor() {
         const cursor = document.querySelector(".invert") as HTMLElement;
+        
+        if (!cursor) {
+            return;
+        }
+
         document.addEventListener("mousemove", (e) => {
             cursor.style.top = e.clientY - 20 + "px";
             cursor.style.left = e.clientX - 20 + "px";
