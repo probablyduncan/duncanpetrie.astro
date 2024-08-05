@@ -8,6 +8,8 @@ import Link from "../components/Link.astro";
 import FooterMono from "../components/FooterMono.astro";
 import GalleryPhotoScroll from "../components/GalleryPhotoScroll.astro";
 import GalleryHeader from "../components/GalleryHeader.astro";
+import fs from "fs";
+import path from "path";
 
 type Props = CollectionEntry<"galleries">;
 export async function getStaticPaths() {
@@ -28,6 +30,15 @@ const allPhotos = getPhotosByNamesAndTags({
     excludeTags: post.data.excludeTags,
     excludeNames: post.data.excludeNames,
 });
+const allMedia = post.data.mediaNames ?? [];
+
+if (post.data.mediaFolder) {
+    const fullPath = path.join(process.cwd(), "public", "media", post.data.mediaFolder);
+    if (fs.existsSync(fullPath)) {
+        const inFolder = fs.readdirSync(fullPath);
+        allMedia.push(...inFolder.map(filename => path.join("media", post.data.mediaFolder, filename)));
+    }
+}
 
 // can I sort by rating??
 // shuffle should multiply by rating, so 5s are shuffled on top, 4s shuffled below that, etc
@@ -83,6 +94,7 @@ if (post.data.sort.includes("asc")) {
             </GalleryHeader>
             <GalleryPhotoScroll
                 photos={allPhotos}
+                media={allMedia}
                 widthBasis="600px"
                 shuffle={post.data.shuffle}
                 noCaptions={post.data.noCaptions}
