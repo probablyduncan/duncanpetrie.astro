@@ -47,7 +47,7 @@ const listData: ListData = [
 		items: [
 			{
 				title: "To Pigeon-Fill the Sky",
-				url: "/pigeon-fill",
+				url: "/pigeon-fill-the-sky",
 				type: "photobook",
 				alt: "Photobook: To Pigeon-Fill the Sky",
 				imgSrc: "/media/pigeon-fill_s.jpg",
@@ -192,7 +192,7 @@ const listData: ListData = [
 	</head>
 	<body>
 		<TickerNav staticSidePadding="20px" />
-		<header class="wrapper">
+		<header>
 			<div>
 				<h1>
 					Hello! I'm
@@ -237,7 +237,7 @@ const listData: ListData = [
 			storeKey="homePageTheme"
 			themeData={getGenericHomePageThemes()}
 		/>
-		<main class="wrapper">
+		<main>
 			<LegendList
 				itemGroups={listData}
 				legendLabels={["settlement", "ruin"]}
@@ -253,6 +253,12 @@ const listData: ListData = [
 		</main>
 		<Footer />
 		<style type="text/css">
+
+			header, main {
+				width: 50rem;
+				max-width: calc(100vw - 20px);
+			}
+
 			header {
 				position: relative;
 				margin: 40px 0 100px;
@@ -307,7 +313,7 @@ const listData: ListData = [
 				header {
 					display: flex;
 					flex-flow: column-reverse;
-					margin: calc(var(--ticker-height) + 5vw) 0 100px;
+					margin: calc(var(--ticker-height) + 10px) 0 100px;
 				}
 
 				h1 {
