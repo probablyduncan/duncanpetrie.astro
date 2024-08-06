@@ -41,7 +41,7 @@ else if (!baseHref) {
 } else if (baseHref.startsWith("#")) {
     if (allSlugs.includes(innerHtmlDashed)) {
         // header on innerHtml page - like [halfisle](#frid)
-        href = "/springtide/" + innerHtmlDashed + baseHref;
+        href = "/springtide/" + innerHtmlDashed + "/" + baseHref;
         targetPageTitle =
             collection.find((d) => d.slug == innerHtmlDashed).data.title +
             ": " +
@@ -55,7 +55,7 @@ else if (!baseHref) {
 } else if (baseHref.endsWith("#")) {
     if (allSlugs.includes(splitHref[0])) {
         // just link to link page, heading is innerhtml
-        href = "/springtide/" + splitHref[0] + "#" + innerHtmlDashed;
+        href = "/springtide/" + splitHref[0] + "/#" + innerHtmlDashed;
     } else {
         isBad = true;
     }
