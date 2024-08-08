@@ -28,9 +28,8 @@ const arrowOptions = [
 
 //#region site information
 
-
 export const SITE_TITLE = 'Duncan Petrie';
-export const SITE_DESCRIPTION = 'Huzzah!';
+export const SITE_DESCRIPTION = 'Duncan Petrie - Photographer, writer, web developer. Welcome to my garden.';
 
 //#endregion
 
