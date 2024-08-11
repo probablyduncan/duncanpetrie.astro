@@ -13,10 +13,14 @@ const songs = await getCollection("songs");
 <html lang="en">
     <head>
         <BaseHead
-            title="Unfinished Songs"
+            title="Unfinished Songs - Duncan Petrie"
             description="All the songs I cannot finish. Maybe you can help?"
         />
-        <RootColors />
+        <RootColors
+            colors={{
+                background: "#FAFAFF",
+            }}
+        />
     </head>
     <body>
         <TickerNav />
@@ -34,6 +38,10 @@ const songs = await getCollection("songs");
                     of a mountain, or wherever, it's often hard to go home to your
                     little white-walled room and write the second half. So here we
                     are.
+                    <br /><br />
+                    If you figure out how to end one of these unfinished songs, email
+                    me at <Link href="mailto">duncanpetrie1@gmail.com</Link> and
+                    I'll add your contribution down below.
                 </div>
                 <br />
                 <nav class="mono-small">
@@ -49,13 +57,14 @@ const songs = await getCollection("songs");
                 {
                     songs.map(async (s, i) => {
                         const { Content } = await s.render();
-                        const isUphill = s.slug === "uphill";
+                        const month = new Intl.DateTimeFormat("en-US", {
+                            month: "long",
+                        })
+                            .format(s.data.date)
+                            .toLowerCase();
 
                         return (
-                            <section
-                                id={s.slug}
-                                style={isUphill ? "order: 1001;" : `--i: ${i}`}
-                            >
+                            <section id={s.slug} style={`--i: ${i}`}>
                                 <button
                                     data-copy
                                     title="Copy link"
@@ -63,6 +72,9 @@ const songs = await getCollection("songs");
                                 >
                                     #{s.slug}
                                 </button>
+                                <span class="mono-small bold">
+                                    | {month}, {s.data.date.getFullYear()}
+                                </span>
                                 <Content />
                             </section>
                         );
@@ -82,7 +94,6 @@ const songs = await getCollection("songs");
 
     nav ul {
         list-style: none;
-        /* margin: 0; */
         padding: 0;
         display: flex;
         gap: 1em;
@@ -119,13 +130,6 @@ const songs = await getCollection("songs");
         -ms-hyphens: none;
         -webkit-hyphens: none;
     }
-
-    /* section button::after {
-        content: attr(data-copy);
-        text-decoration: none;
-        padding-left: 0.5em;
-        opacity: 0.5;
-    } */
 </style>
 <script>
     function setupSongLinks() {
@@ -144,10 +148,6 @@ const songs = await getCollection("songs");
                         top: (b as HTMLElement).offsetTop - 100,
                         behavior: "smooth",
                     });
-                    // (b as HTMLElement).dataset.copy = "Link copied to clipboard!"
-                    // setTimeout(() => {
-                    //     (b as HTMLElement).dataset.copy = "";
-                    // }, 1000);
                 });
             });
         }
