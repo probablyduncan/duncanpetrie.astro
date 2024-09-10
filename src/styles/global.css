@@ -215,3 +215,9 @@ sup {
 	outline: 2px dashed var(--color-accent);
 	outline-offset: 2px;
 }
+
+
+
+.white-space-pre {
+	white-space: pre;
+}

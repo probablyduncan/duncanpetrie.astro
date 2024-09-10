@@ -45,6 +45,6 @@ const componentMap: any = {
     articlelayout: {},
     default: {
         a: '../../components/Link.astro',
-        img: '../../components/articleHeaders/MarkdownImage.astro',
+        img: '../../components/MarkdownImage.astro',
     }
 }

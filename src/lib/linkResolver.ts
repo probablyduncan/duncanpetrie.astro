@@ -32,23 +32,35 @@ export function resolveLink({ href, title, innerHtml, forceNewTab }: {
     target: '_blank' | '_self',
     rel: 'noopener noreferrer' | '',
 } {
-
     const innerText = stripHtmlTags(innerHtml);
     const innerTextLower = innerText.toLowerCase();
+
     if (!href) {
         if (innerTextLower in staticLinks) {
+            // if the text fits one of the presets, use that href (prefil links to socials, for example)
+            // i.e. "my [Linkedin]()" should go to linkedin.com
             href = staticLinks[innerTextLower as keyof typeof staticLinks];
         }
         else {
-            href = "/" + innerTextLower.replace(' ', '-');
+            // otherwise, assume we're linking to a page that's the same name as the text
+            // i.e. "[Writing]()" should go to /writing
+            href = innerTextLower.replace(' ', '-');
         }
     }
     else if (href.toLowerCase() in staticLinks) {
+        // if href exists, but is the key to a preset link, get the real link
+        // i.e. "my [Linkedin profile](linkedin)" should go to https://linkedin..etc
         href = staticLinks[href.toLowerCase() as keyof typeof staticLinks];
     }
 
-    // should use new tab if external link or pdf
-    const useNewTab = forceNewTab || href.startsWith("http") || href.startsWith("mailto") || href.endsWith("pdf");
+    const isExternalLink = href.startsWith("http") || href.startsWith("mailto") || href.endsWith("pdf");
+    const useNewTab = isExternalLink || forceNewTab;
+
+    // basically, if we got the link from the inner text
+    // (like "[writing]()", not like "[google.com]()")
+    if (!isExternalLink && !href.startsWith("/")) {
+        href = "/" + href;
+    }
 
     return {
         href,

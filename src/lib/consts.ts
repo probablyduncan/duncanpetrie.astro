@@ -118,7 +118,7 @@ export const TICKER_LINKS = {
     Youtube: "https://www.youtube.com/channel/UCdyoMZUOsWzPmZN-H916jxg",
     Linkedin: "https://linkedin.com/probablyduncan",
 
-    "Pizza Party": "/pizza/",
+    "Pizza Party": "https://youtu.be/-sBHX07eIMY",
     "Pigeons": "/pigeon-fill-the-sky/",
     "Unfinished Songs": "/unfinished-songs/",
     Wikimedia: "https://www.youtube.com/watch?v=JRXZAaDxGCQ",
