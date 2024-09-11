@@ -39,7 +39,7 @@ const hasColumns = useColumns && (text.split("<p>").length > 3 || text.split(" "
 <section style={`--base-width: ${widthBasis}; --photo-gap: ${photoGap}`}>
     {
         hasText && (
-            <article class:list={["serif-body", "small", {columns: useColumns}]} class="serif-body small">
+            <article class:list={["serif-body", "small", {columns: useColumns}]}>
                 <slot />
             </article>
         )

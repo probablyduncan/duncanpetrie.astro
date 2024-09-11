@@ -25,7 +25,7 @@ for (let i = 0; i < 4; i++) {
     keys.push(...tempKeys);
 }
 ---
-<div class="ticker-wrapper" style={`color: ${initialColor};`}>
+<div class="ticker-wrapper monospace bold" style={`color: ${initialColor};`}>
     <div class="ticker italic">
         {
             keys.map((l) => (
@@ -35,7 +35,7 @@ for (let i = 0; i < 4; i++) {
         }
     </div>
 </div>
-<div class="ticker-wrapper-static italic" tabindex="-1" style={`--side-padding: ${staticSidePadding};`}>
+<div class="ticker-wrapper-static italic monospace bold" tabindex="-1" style={`--side-padding: ${staticSidePadding};`}>
     {Object.keys(TICKER_LINKS).map(l => (<a href={TICKER_LINKS[l as TickerLink]}>{l}</a><span>/</span>))}
 </div>
 {colorBreakpoints && colorBreakpoints.length > 0 && <script is:inline define:vars={{colorBreakpoints, initialColor}}>
@@ -90,7 +90,7 @@ for (let i = 0; i < 4; i++) {
         display: flex;
         flex-flow: row-reverse nowrap;
         justify-content: space-between;
-        gap: 0.625em;
+        gap: 1em;
         transform: translate3d(0, 0, 0);
         white-space: nowrap;
         animation-iteration-count: infinite;
@@ -144,7 +144,7 @@ for (let i = 0; i < 4; i++) {
         white-space: nowrap;
         display: flex;
         flex-flow: row nowrap;
-        gap: 0.625rem;
+        gap: 1rem;
 
         background-color: var(--color-background);
         border-top: 2px solid var(--color-text);

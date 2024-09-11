@@ -1,6 +1,6 @@
 import type { HomePageTheme, HomePageThemeBase, ColorScheme, GenericTheme, IndexTheme } from "../env";
 import { getPhotoByName } from "./photoHelper";
-import { HomePageDarkColorThemes, HomePageLightColorThemes, DefaultThemeScheme, PhotographyIndexThemes } from "./themeConsts";
+import { HomePageDarkColorThemes, HomePageLightColorThemes, DefaultThemeScheme, PhotographyIndexThemes, ArticleThemes } from "./themeConsts";
 
 export function getHomePageThemes(): { light: HomePageTheme[], dark: HomePageTheme[] } {
 	return {
@@ -34,7 +34,11 @@ export function getGenericHomePageThemes() {
 }
 
 export function getGenericPhotographyIndexThemes() {
-	return PhotographyIndexThemes.map(genericThemeFromPhotographyIndexTheme)
+	return PhotographyIndexThemes.map(genericThemeFromPhotographyIndexTheme);
+}
+
+export function getGenericArticleThemes() {
+	return ArticleThemes.map(genericThemeFromArticleTheme);
 }
 
 function genericThemeFromHomePageTheme(theme: HomePageThemeBase): GenericTheme {
@@ -73,6 +77,17 @@ function genericThemeFromPhotographyIndexTheme(theme: IndexTheme): GenericTheme 
 				src: photo.paths.large,
 				alt: photo.joinedCaption,
 			},
+		}
+	}
+}
+
+function genericThemeFromArticleTheme(theme: typeof ArticleThemes[number]): GenericTheme {
+	return {
+		cssVariables: {
+			"color-text": theme.text ?? DefaultThemeScheme.text,
+			"color-background": theme.background ?? DefaultThemeScheme.background,
+			"color-accent": theme.accent ?? DefaultThemeScheme.accent,
+			"color-article-background": theme.articleBackground ?? "#DDDDDD",
 		}
 	}
 }

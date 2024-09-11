@@ -11,6 +11,8 @@ import MarkdownImage from "../components/MarkdownImage.astro";
 import Image from "../components/Image.astro";
 import type { ImageProps } from "../env";
 import { getEntryBySlug } from "astro:content";
+import ThemeManager from "../components/ThemeManager.astro";
+import { getGenericArticleThemes } from "../lib/themeHelper";
 
 type Props = CollectionEntry<"articles">;
 export async function getStaticPaths() {
@@ -80,13 +82,7 @@ const topIconSwap = iconSwaps[10];
                 ),
             ).trim() + ".."}
         />
-        <RootColors
-            colors={{
-                text: "#222222",
-                background: "#E7ECE6",
-                accent: "#668863",
-            }}
-        />
+        <RootColors colors={{}} />
     </head>
     <body>
         <TickerNav />
@@ -116,8 +112,9 @@ const topIconSwap = iconSwaps[10];
                                 const link = (r.collection === 'springtide' ? "/springtide/" : "/") + (r.slug);
                                 const comma = i > 0 ? ", " : "";
                                 const entry = await entryPromise;
-                                const title = r.collection[0].toUpperCase() + r.collection.substring(1) + ": " + entry.data.title;
-                                return <>{comma}<Link href={link} title={title}><b>{entry.data.title}</b></Link></>;
+                                const title = entry.data.title.replace("//", " ");
+                                const titleWithCollection = r.collection[0].toUpperCase() + r.collection.substring(1) + ": " + title;
+                                return <>{comma}<Link href={link} title={titleWithCollection}><b>{entry.data.title.replace("//", " ")}</b></Link></>;
                             })}.
                         <br/><br/>
                         </>
@@ -190,44 +187,9 @@ const topIconSwap = iconSwaps[10];
                                 })
                         }
                     </div>
-                    <!-- {
-                        headings.length && (
-                            <div class="_sticky">
-                                <button
-                                    id="contents-control"
-                                    data-hover-swap-trigger
-                                    data-accordion-control
-                                    class="nav-link"
-                                    aria-expanded="false"
-                                    aria-controls="contents-content"
-                                    title="Click to show table of contents."
-                                >
-                                    <span data-show-text><span data-hover-swap={JSON.stringify(contentsIconSwap[0])}>{contentsIconSwap[0][0]}</span> Show </span>
-                                    <span data-hide-text hidden><span data-hover-swap={JSON.stringify(contentsIconSwap[1])}>{contentsIconSwap[1][0]}</span> Hide </span>
-                                    <span class="nav-link-hover">contents</span>
-                                </button>.
-                                <br /><br />
-                                <div
-                                    data-accordion-content
-                                    id="contents-content"
-                                    aria-labelledby="contents-control"
-                                    hidden
-                                >
-                                    {headings.map((h, i) => {
-                                        return <>
-                                            {i > 0 && <><br/><br/></>}
-                                            <Link href={"#" + h.slug}>
-                                                {h.text}
-                                            </Link>
-                                        </>;
-                                    })}
-                                </div>
-                            </div>
-                        )
-                    } -->
                 </nav>
                 <nav>
-                    <button class="nav-link sticky" data-hover-swap-trigger="" data-go-to>
+                    <button class="nav-link" data-hover-swap-trigger="" data-go-to>
                         <span data-hover-swap={JSON.stringify(topIconSwap)}>{topIconSwap[0]}</span><Nbsp/>Back to <span class="nav-link-hover">top</span>
                     </button>.
                 </nav>
@@ -237,7 +199,6 @@ const topIconSwap = iconSwaps[10];
                     heroImage && (
                         <>
                             <>
-                                <br />
                                 <Image {...heroImage} />
                                 <br />
                                 <br />
@@ -249,13 +210,22 @@ const topIconSwap = iconSwaps[10];
                 <h4 class="white-space-pre">{dateDisplay}<Nbsp />|<Nbsp />{post.data.location}</h4>
                 <Content components={{ a: Link, img: MarkdownImage }} />
             </article>
-            <div class="ruler"></div>
+            <div id="progress-bar">
+                <div class="progress-ruler ruler"></div>
+                <div class="ruler"></div>
+            </div>
         </main>
     </body>
+    <ThemeManager
+        storeKey="photoIndexTheme"
+        themeData={getGenericArticleThemes()}
+    />
 </html>
 <script>
     function attachEvents() {
+        
         // simple hover swap, just switch between two strings when hovering
+        
         document.querySelectorAll("[data-hover-swap-trigger]").forEach((_e) => {
             const e = _e as HTMLElement;
             const targets = e.querySelectorAll("[data-hover-swap");
@@ -281,7 +251,8 @@ const topIconSwap = iconSwaps[10];
             });
         });
 
-        // more complicated, bc also need to swap icon set
+        // accordion open/close and icon swap
+
         document.querySelectorAll("[data-accordion-control]").forEach((_e) => {
             const button = _e as HTMLElement;
             const contentID = button.getAttribute("aria-controls");
@@ -305,16 +276,44 @@ const topIconSwap = iconSwaps[10];
             });
         });
 
+        // scroll to buttons
+
         document.querySelectorAll("[data-go-to").forEach((_e) => {
             const e = _e as HTMLElement;
-            const target = document.getElementById(e.dataset.goTo);
+            const goToID = e.dataset.goTo;
+            const goToOffset = goToID && document.getElementById(goToID)?.offsetTop || 0;
             e.addEventListener("click", () => {
                 window.scrollTo({
-                    top: target?.offsetTop ?? 0,
+                    top: goToOffset,
                     behavior: "smooth",
                 });
             });
         });
+
+        // ruler scroll tracking
+
+        const ruler = document.getElementById("progress-bar");
+        const article = document.querySelector("article");
+        if (ruler && article) {
+            document.addEventListener("scroll", () => {
+
+                // if article is smaller than window, don't use this
+                if (window.innerHeight > article.clientHeight) {
+                    ruler.style.setProperty("--scroll-pos", "0");
+                    return;
+                }
+
+                // we need a lerp value between: when top of article is at top of page and bottom of article is at bottom of page
+                // this amounts to: the distance from the top of the article (trueOffsetTop) to the top of the viewport (scrollY),
+                // divided by the total height of the article minus the viewport height 
+                const trueArticleOffsetTop = article.offsetTop + article.parentElement.offsetTop;
+                const scrollFromArticleTop = Math.max(0, window.scrollY - trueArticleOffsetTop);
+                const totalPossibleScrollHeight = article.clientHeight - window.innerHeight;
+                const articleScrollLerp = Math.min(1, Math.max(0, scrollFromArticleTop / totalPossibleScrollHeight));
+
+                ruler.style.setProperty("--scroll-pos", articleScrollLerp.toString());
+            });
+        }
     }
 
     document.addEventListener("astro:after-swap", () => {
@@ -325,8 +324,7 @@ const topIconSwap = iconSwaps[10];
 <style>
     main {
         position: relative;
-        margin-top: calc(var(--ticker-height) + 100px);
-        margin-bottom: 80px;
+        margin-top: 60px;
         margin-bottom: calc(100vh - 60px);
 
         display: flex;
@@ -341,10 +339,16 @@ const topIconSwap = iconSwaps[10];
     article {
         padding: 60px;
         border: 2px solid var(--color-text);
-        background-color: var(--color-background);
-        background-color: #f1f5f0;
+        background-color: var(--color-article-background);
 
         width: 680px;
+        min-height: calc(100vh - 240px);
+    }
+
+    article :global(p):last-of-type::after {
+        content: "⁘";
+        margin-left: 0.5rem;
+        position: relative;
     }
 
     :global(h1) {
@@ -433,11 +437,6 @@ const topIconSwap = iconSwaps[10];
         color: var(--color-accent);
     }
 
-    div.sticky {
-        position: sticky;
-        top: 80px;
-    }
-
     .ruler {
         /* inspiration: https://dev.to/madsstoumann/build-a-css-ruler-2opn */
 
@@ -461,13 +460,37 @@ const topIconSwap = iconSwaps[10];
         background-repeat: repeat-y;
         background-size:
             var(--ruler-height) var(--ruler-spacing),
-            calc(var(--ruler-height) * 2)
-                calc(
-                    var(--ruler-spacing) *
-                        (var(--ruler-large-tick-increment) + 1)
-                );
+            calc(var(--ruler-height) * 2) calc( var(--ruler-spacing) * (var(--ruler-large-tick-increment) + 1));
 
-        width: 8px;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    #progress-bar {
+
+        width: 12px;
         margin-top: 8px;
+        max-height: 100vh;
+        position: sticky;
+        top: 0;
+
+        --scroll-pos: 0;
+    }
+
+    .progress-ruler {
+        z-index: 2;
+        height: calc(var(--scroll-pos) * 100%);
+        --ruler-height: 6px;
+    }
+
+    .progress-ruler::after {
+        content: "◀";
+        position: absolute;
+        bottom: -12px;
+        left: calc(100% + 4px);
+        width: 110px;
     }
 </style>
