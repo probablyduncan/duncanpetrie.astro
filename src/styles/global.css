@@ -218,6 +218,6 @@ sup {
 
 
 
-.white-space-pre {
-	white-space: pre;
+.preserve-white-space {
+	white-space: break-spaces;
 }

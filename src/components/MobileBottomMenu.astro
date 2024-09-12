@@ -1,0 +1,59 @@
+---
+import Link from "./Link.astro";
+
+interface Props {
+    moreLink?: "writing" | "photography" | "springtide" | "none" | "slot";
+    sidePadding?: string;
+    maxWidth?: number;
+    backgroundColor?: string;
+}
+
+const {
+    moreLink = "slot",
+    sidePadding = "10px",
+    backgroundColor = "var(--color-background)",
+} = Astro.props;
+---
+
+<nav
+    class="mono-small"
+    style={`--side-padding: ${sidePadding}; --mobile-bottom-menu-background-color: ${backgroundColor};`}
+>
+    <span><Link href="/">duncanpetrie.com</Link>.</span>
+    {
+        moreLink !== "none" &&
+            (moreLink === "slot" ? (
+                <span>
+                    <slot />
+                </span>
+            ) : (
+                <span>
+                    <Link href={moreLink}>{moreLink}</Link>.
+                </span>
+            ))
+    }
+</nav>
+<style>
+    nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: calc(100vw - 2 * var(--side-padding));
+        padding: 1em var(--side-padding);
+
+        display: flex;
+        justify-content: space-between;
+
+        color: var(--color-text);
+        background-color: var(--mobile-bottom-menu-background-color);
+        border-top: 2px solid var(--color-text);
+
+        z-index: 10;
+    }
+
+    @media screen and (min-width: 841px) {
+        nav {
+            display: none;
+        }
+    }
+</style>

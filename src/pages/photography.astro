@@ -93,13 +93,12 @@ if (galleries.length % 2 === 1) {
 </html>
 <style>
     main {
-        margin-top: calc(var(--ticker-height) / 2);
         max-width: calc(100vw - 20px);
     }
 
     div {
-        width: 1200px;
-        max-width: 100%;
+        width: 100%;
+        margin-top: calc(var(--ticker-height) + 10px);
     }
 
     ul {
@@ -107,24 +106,6 @@ if (galleries.length % 2 === 1) {
         line-height: 1.4em;
         padding: 0;
         margin: 0;
-    }
-
-    @media screen and (max-width: 1440px) {
-        div {
-            width: 1080px;
-        }
-    }
-
-    @media screen and (max-width: 1280px) {
-        div {
-            width: 900px;
-        }
-    }
-
-    @media screen and (max-width: 980px) {
-        div {
-            width: 680px;
-        }
     }
 
     @media screen and (min-width: 701px) {
@@ -138,7 +119,12 @@ if (galleries.length % 2 === 1) {
             position: relative;
             aspect-ratio: var(--img-ratio);
             height: 100%;
-            margin: 10px 0;
+            /* margin: 10px 0; */
+
+            width: Min(
+                calc(100vw - 160px), 
+                calc(100vh * 3/2 - (2 * var(--ticker-height)) - 80px));
+            margin-top: 0;
         }
 
         img {
