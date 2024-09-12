@@ -94,23 +94,18 @@ const topIconSwap = iconSwaps[10];
                         id="home-link"
                         data-hover-swap-trigger
                         href="/"
-                        ><span data-hover-swap={JSON.stringify(homeIconSwap)}
-                            >{homeIconSwap[0]}</span
-                        > Back to <span class="nav-link-hover">home</span></a
-                    >.
-                    <br /><br />
-                    More: <b
-                        ><Link>Writing</Link>. <Link>Photography</Link>. <Link
-                            >Springtide</Link
-                        >. <Link>About</Link>.</b
                     >
+                        <span data-hover-swap={JSON.stringify(homeIconSwap)}>{homeIconSwap[0]}</span> Back to <span class="nav-link-hover">home</span>
+                    </a>.
+                    <br /><br />
+                    More: <b><Link>Writing</Link>. <Link>Photography</Link>. <Link>Springtide</Link>. <Link>About</Link>.</b>
                     <br /><br />
                     {
                         post.data.related?.length && <>
                             Related: {post.data.related.map(async (r, i) => {
                                 const entryPromise = getEntryBySlug(r.collection, r.slug);
                                 const link = (r.collection === 'springtide' ? "/springtide/" : "/") + (r.slug);
-                                const comma = i > 0 ? ", " : "";
+                                const comma = i > 0 ? ", or " : "";
                                 const entry = await entryPromise;
                                 const title = entry.data.title.replace("//", " ");
                                 const titleWithCollection = r.collection[0].toUpperCase() + r.collection.substring(1) + ": " + title;
@@ -489,7 +484,8 @@ const topIconSwap = iconSwaps[10];
     .progress-ruler::after {
         content: "◀";
         position: absolute;
-        bottom: -12px;
+        font-size: 0.675rem;
+        bottom: -8.5px;
         left: calc(100% + 4px);
         width: 110px;
     }

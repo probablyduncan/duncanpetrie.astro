@@ -93,7 +93,7 @@ if (galleries.length % 2 === 1) {
 </html>
 <style>
     main {
-        margin-top: var(--ticker-height);
+        margin-top: calc(var(--ticker-height) / 2);
         max-width: calc(100vw - 20px);
     }
 
@@ -107,6 +107,12 @@ if (galleries.length % 2 === 1) {
         line-height: 1.4em;
         padding: 0;
         margin: 0;
+    }
+
+    @media screen and (max-width: 1440px) {
+        div {
+            width: 1080px;
+        }
     }
 
     @media screen and (max-width: 1280px) {
