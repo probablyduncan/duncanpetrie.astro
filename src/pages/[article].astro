@@ -1,13 +1,19 @@
 ---
-import { type CollectionEntry, getCollection } from "astro:content";
+import { getCollection, type CollectionEntry } from "astro:content";
 import BaseHead from "../components/BaseHead.astro";
-import RootColors from "../components/RootColors.astro";
-import { applyColorSchemeDefaults } from "../lib/themeHelper";
-import { articleLayoutOptionDefaults } from "../lib/articleHeaderComponentRegistry";
-import MarkdownImage from "../components/articleHeaders/MarkdownImage.astro";
-import Link from "../components/Link.astro";
-import { stripHtmlTags } from "../lib/linkResolver";
 import { marked } from "marked";
+import { markedRendererWithLink, stripHtmlTags } from "../lib/linkResolver";
+import TickerNav from "../components/TickerNav.astro";
+import RootColors from "../components/RootColors.astro";
+import Nbsp from "../components/nbsp.astro";
+import Link from "../components/Link.astro";
+import MarkdownImage from "../components/MarkdownImage.astro";
+import Image from "../components/Image.astro";
+import type { ImageProps } from "../env";
+import { getEntryBySlug } from "astro:content";
+import ThemeManager from "../components/ThemeManager.astro";
+import { getGenericArticleThemes } from "../lib/themeHelper";
+import MobileBottomMenu from "../components/MobileBottomMenu.astro";
 
 type Props = CollectionEntry<"articles">;
 export async function getStaticPaths() {
@@ -21,140 +27,627 @@ export async function getStaticPaths() {
 const post = Astro.props;
 const { Content, headings } = await post.render();
 
-const articleOptions = Object.assign(
-    {
-        ...articleLayoutOptionDefaults[
-            post.data.layoutType as keyof typeof articleLayoutOptionDefaults
-        ],
-    },
-    {
-        ...post.data,
-        slug: post.slug,
-    },
-);
+const dateDisplay =
+    new Intl.DateTimeFormat("en-US", { month: "long" }).format(post.data.date) +
+    ", " +
+    post.data.date.getFullYear();
+
+const heroImage = post.data.image as ImageProps;
+
+//#region metadata resolving
+
+const metadataRenderer = markedRendererWithLink();
+const metadata: Record<string, string> = {
+    url: `[/${post.slug}]()`,
+};
+for (const key in post.data.metadata as object) {
+    metadata[key] = post.data.metadata[key].toString();
+}
+
+//#endregion
+//#region metadata icons
+// ⟪⟫ ⟬ ⟭ ⟦ ⟧ ⁎ ⁑ ․ ⁚ ⁖ ⁙ ⁘ ⁝ ⁍⁌⁋¶ ⇱↸⇲  ⇡⇵↨↥↰⇈⇊⇞⇡⇝↿↾↥↟↑↕ ◨
+const iconSwaps = [
+    ["◑", "◐"],
+    ["◑", "◗"],
+    ["◑", "◖"],
+    [">", "<"],
+    ["◮", "◭"],
+    ["◪", "◩"],
+    ["⟧", "⟭"],
+    ["⟦", "⟬"],
+    ["⇱", "⇲"],
+    ["↸", "⇲"],
+    ["⇡", "↥"],
+    ["↑", "↕"],
+];
+
+const homeIconSwap = iconSwaps[0];
+const metadataIconSwap = [iconSwaps[4], iconSwaps[5]];
+const contentsIconSwap = [iconSwaps[8], iconSwaps[9]];
+const topIconSwap = iconSwaps[10];
+//#endregion
 ---
 
 <!doctype html>
 <html lang="en">
     <head>
-        <BaseHead title={post.data.title} description={stripHtmlTags(await marked.parseInline(post.body.substring(0, post.body.substring(100).indexOf('\n') + 100))).trim() + ".."} photoName={articleOptions.image?.photoName} imgSrc={articleOptions.image?.src} />
-        <RootColors
-            colors={applyColorSchemeDefaults(post.data.colors, {
-                accent: "blue",
-            })}
+        <BaseHead
+            title={post.data.title}
+            description={stripHtmlTags(
+                await marked.parseInline(
+                    post.body.substring(
+                        0,
+                        post.body.substring(100).indexOf("\n") + 100,
+                    ),
+                ),
+            ).trim() + ".."}
         />
+        <RootColors colors={{}} />
     </head>
     <body>
-        <main>
-            <articleOptions.header {...articleOptions} />
-            <article
-                style={`--text-width: ${articleOptions.textWidth ?? "800px"};`}
-                data-line-numbers={articleOptions.lineNumbers}
-                class:list={[
-                    "serif-body",
-                    articleOptions.textSize,
-                    { "article-end-dots": articleOptions.articleEndDots },
-                ]}
-            >
-                <Content components={{ img: MarkdownImage, a: Link }} />
-            </article>
-            {
-                articleOptions.useDocumentFence &&
-                    "metadata" in articleOptions && articleOptions.metadata && (
-                        <div
-                            style="margin: -20vh 0 50vh;"
-                            class="mono-small center"
+        <TickerNav mobileBehavior="nochange" />
+        <MobileBottomMenu sidePadding="20px">
+            <button data-toggle-menu>Menu</button>.
+        </MobileBottomMenu>
+        <div class="page-container">
+            <aside class="monospace">
+                <nav>
+                    <a class="nav-link" id="home-link" data-hover-swap-trigger href="/"><span data-hover-swap={JSON.stringify(homeIconSwap)}>{homeIconSwap[0]}</span> Back to <span class="nav-link-hover">home</span></a>.
+                    <br /><br />
+                    More: <b><Link>Writing</Link>. <Link>Photography</Link>. <Link>Springtide</Link>. <Link>About</Link>.</b>
+                    <br /><br />
+                    {
+                        post.data.related?.length && <>
+                            Related: {post.data.related.map(async (r, i) => {
+                                const entryPromise = getEntryBySlug(r.collection, r.slug);
+                                const link = (r.collection === 'springtide' ? "/springtide/" : "/") + (r.slug);
+                                const comma = i > 0 ? ", or " : "";
+                                const entry = await entryPromise;
+                                const title = entry.data.title.replace("//", " ");
+                                const titleWithCollection = r.collection[0].toUpperCase() + r.collection.substring(1) + ": " + title;
+                                return <>{comma}<Link href={link} title={titleWithCollection}><b>{entry.data.title.replace("//", " ")}</b></Link></>;
+                            })}.
+                        <br/><br/>
+                        </>
+                    }
+                    <button
+                        id="metadata-control"
+                        data-hover-swap-trigger
+                        data-accordion-control
+                        class="nav-link"
+                        aria-expanded="false"
+                        aria-controls="metadata-content"
+                        title="Click to show additional document information."
+                    >
+                        <span data-show-text
+                            ><span
+                                data-hover-swap={JSON.stringify(
+                                    metadataIconSwap[0],
+                                )}>{metadataIconSwap[0][0]}</span
+                            > Show</span
                         >
-                            *** END DOCUMENT ***
-                        </div>
-                    )
+                        <span data-hide-text hidden
+                            ><span
+                                data-hover-swap={JSON.stringify(
+                                    metadataIconSwap[1],
+                                )}>{metadataIconSwap[1][0]}</span
+                            > Hide</span
+                        >
+                        <span class="nav-link-hover">metadata</span>
+                    </button>.
+                    <br /><br />
+                    <div
+                        data-accordion-content
+                        id="metadata-content"
+                        aria-labelledby="metadata-control"
+                        hidden
+                    >
+                        <span><b>{post.data.title}</b> ({post.data.date?.getFullYear()}) by Duncan Petrie.</span>
+                        <br /><br />
+                        <span
+                            ><b>The following</b> (text|poem|manifesto|confession)
+                            is an excerpt from the archives of duncan­petrie.com
+                            for the use of anyone anywhere at no cost and with almost
+                            no restrictions whatsoever.</span
+                        >
+                        <br /><br />
+                        <span
+                            ><b>Acceptable uses include:</b> reading to children
+                            at bedtime, taking twice daily with food, printing on
+                            cocktail napkins, throwing out the window, sending to
+                            local politicians, and ignoring entirely.</span
+                        >
+                        <br /><br />
+                        <b>Not suitable for resale. </b>
+                        {
+                            metadata &&
+                                Object.keys(metadata).map((key) => {
+                                    const upperKey = key[0].toUpperCase() + key.substring(1);
+                                    const parsedVal = marked.parseInline(
+                                        metadata[key].toString(),
+                                        {
+                                            renderer: metadataRenderer,
+                                            async: false,
+                                        },
+                                    ) as string;
+
+                                    return <>
+                                        <br /><br />
+                                        <b>{upperKey}:</b> <span set:html={parsedVal} />
+                                    </>;
+                                })
+                        }
+                    </div>
+                    <div class="top-button" style="position: sticky; top: calc(20px + var(--ticker-height));">
+                        <button class="nav-link" data-hover-swap-trigger="" data-go-to>
+                            <span data-hover-swap={JSON.stringify(topIconSwap)}>{topIconSwap[0]}</span><Nbsp/>Back to <span class="nav-link-hover">top</span>
+                        </button>.
+                    </div>
+                    <div class="close-menu-button">
+                        <button data-toggle-menu class="nav-link">
+                            <span class="nav-link-hover">Close menu</span>.
+                        </button>
+                    </div>
+                </nav>
+                <div class="ruler"></div>
+            </aside>
+            <div class="main-column">
+                <div class="article-ruler-container">
+                    <article>
+                        {
+                            heroImage && (
+                                <>
+                                    <>
+                                        <Image {...heroImage} />
+                                        <br />
+                                        <br />
+                                    </>
+                                </>
+                            )
+                        }
+                        <h1>{post.data.title.split("//").map((h) => (<>{h}<br /></>))}</h1>
+                        <h4 class="preserve-white-space">{dateDisplay}<Nbsp />|<Nbsp />{post.data.location}</h4>
+                        <Content components={{ a: Link, img: MarkdownImage }} />
+                    </article>
+                    <div id="progress-bar">
+                        <div class="progress-ruler ruler"></div>
+                        <div class="ruler"></div>
+                    </div>
+                </div>
+                <footer class="monospace">
+                    <br /><br /><br /><br /><br /><br /><br /><br />
+                    <a class="nav-link" id="home-link" data-hover-swap-trigger href="/"><span data-hover-swap={JSON.stringify(homeIconSwap)}>{homeIconSwap[0]}</span> Back to <span class="nav-link-hover">home</span></a>.
+                    More: <b><Link>Writing</Link>. <Link>Photography</Link>. <Link>Springtide</Link>. <Link>About</Link>.</b>
+                    <br /><br />
+                </footer>
+            </div>
+        </div>
+    </body>
+    <ThemeManager
+        storeKey="photoIndexTheme"
+        themeData={getGenericArticleThemes()}
+    />
+</html>
+<script>
+    function attachEvents() {
+        
+        // simple hover swap, just switch between two strings when hovering
+        
+        document.querySelectorAll("[data-hover-swap-trigger]").forEach((_e) => {
+            const e = _e as HTMLElement;
+            const targets = e.querySelectorAll("[data-hover-swap");
+
+            if (!targets || !targets.length) {
+                return;
             }
-            <articleOptions.footer />
-        </main>
-        <style>
-            main {
-                max-width: calc(100vw - 20px);
-                display: flex;
-                flex-flow: column;
-                align-items: center;
-            }
 
-            article {
-                width: var(--text-width);
-                max-width: 100%;
-                padding: 0 calc((100% - var(--text-width)) / 2);
-                margin: 0 0 50vh;
-            }
-
-            article :global(p):first-child {
-                margin-top: 0;
-            }
-
-            article :global(p):last-child {
-                margin-bottom: 0;
-            }
-
-            article.article-end-dots :global(p):last-child::after {
-                /* ●◑◭⁛⁘◐●◆■◻■◪◩ */
-                content: "⁘";
-                margin-left: 0.5rem;
-                position: relative;
-            }
-
-            /* LINE NUMBERS */
-
-            @media screen and (min-width: 1000px) {
-                article[data-line-numbers] :global(p) {
-                    width: calc(100% - 2em);
-                }
-
-                article[data-line-numbers] > :global(p) {
-                    position: relative;
-                }
-
-                article[data-line-numbers] > :global(p):not(:empty)::before {
-                    content: attr(data-num);
-                    position: absolute;
-                    top: 0;
-                    right: -2em;
-                    width: 0;
-                    font-family: monospace;
-                    font-size: 0.75rem;
-                    opacity: 0.2;
-                }
-
-                article[data-line-numbers]
-                    > :global(p):nth-child(5n of p:not(:empty))::before {
-                    opacity: 0.6;
-                }
-            }
-
-            /* @media screen and (max-width: 800px) {
-                article {
-                    max-width: calc(100% - 20px);
-                    margin-right: 20px;
-                }
-            } */
-        </style>
-        <script>
-            function setupLineNumbers() {
-                const allLines = document.querySelectorAll(
-                    "article[data-line-numbers] p:not(:empty)",
-                );
-                allLines.forEach((e, i) => {
-                    const num = i + 1;
-                    const str =
-                        "[" +
-                        (num % 5 == 0 ? num + "/" + allLines.length : num) +
-                        "]";
-                    (e as HTMLElement).dataset.num = str;
+            function swapIcon(isOver: boolean) {
+                targets.forEach((_t) => {
+                    const t = _t as HTMLElement;
+                    t.innerHTML = JSON.parse(t.dataset.hoverSwap)[
+                        isOver ? 1 : 0
+                    ];
                 });
             }
 
-            document.addEventListener("astro:after-swap", () => {
-                setupLineNumbers();
+            e.addEventListener("mouseenter", () => {
+                swapIcon(true);
             });
-            setupLineNumbers();
-        </script>
-    </body>
-</html>
+            e.addEventListener("mouseleave", () => {
+                swapIcon(false);
+            });
+        });
+
+        // accordion open/close and icon swap
+
+        document.querySelectorAll("[data-accordion-control]").forEach((_e) => {
+            const button = _e as HTMLElement;
+            const contentID = button.getAttribute("aria-controls");
+            const content = document.getElementById(contentID) as HTMLElement;
+
+            const buttonShowText = button.querySelector(
+                "[data-show-text",
+            ) as HTMLElement;
+            const buttonHideText = button.querySelector(
+                "[data-hide-text",
+            ) as HTMLElement;
+
+            button.addEventListener("click", () => {
+                const nowShowing =
+                    button.getAttribute("aria-expanded") !== "true";
+                button.setAttribute("aria-expanded", nowShowing.toString());
+                content.hidden = !nowShowing;
+
+                buttonShowText.hidden = nowShowing;
+                buttonHideText.hidden = !nowShowing;
+            });
+        });
+
+        // scroll to buttons
+
+        document.querySelectorAll("[data-go-to").forEach((_e) => {
+            const e = _e as HTMLElement;
+            const goToID = e.dataset.goTo;
+            const goToOffset = goToID && document.getElementById(goToID)?.offsetTop || 0;
+            e.addEventListener("click", () => {
+                window.scrollTo({
+                    top: goToOffset,
+                    behavior: "smooth",
+                });
+            });
+        });
+
+        // ruler scroll tracking
+
+        const ruler = document.getElementById("progress-bar");
+        const article = document.querySelector("article");
+        if (ruler && article) {
+            document.addEventListener("scroll", () => {
+
+                // if article is smaller than window, don't use this
+                if (window.innerHeight > article.clientHeight) {
+                    ruler.style.setProperty("--scroll-pos", "0");
+                    return;
+                }
+
+                // we need a lerp value between: when top of article is at top of page and bottom of article is at bottom of page
+                // this amounts to: the distance from the top of the article (trueOffsetTop) to the top of the viewport (scrollY),
+                // divided by the total height of the article minus the viewport height 
+                const trueArticleOffsetTop = article.offsetTop + article.parentElement.offsetTop;
+                const scrollFromArticleTop = Math.max(0, window.scrollY - trueArticleOffsetTop);
+                const totalPossibleScrollHeight = article.clientHeight - window.innerHeight;
+                const articleScrollLerp = Math.min(1, Math.max(0, scrollFromArticleTop / totalPossibleScrollHeight));
+
+                ruler.style.setProperty("--scroll-pos", articleScrollLerp.toString());
+            });
+        }
+
+        // menu open/close
+
+        const menu = document.querySelector("aside");
+
+        document.querySelectorAll("[data-toggle-menu]").forEach((_e) => {
+            const e = _e as HTMLElement;
+            e.addEventListener("click", () => {
+                if (menu.classList.contains("open")) {
+                    menu.classList.remove("open");
+                }
+                else {
+                    menu.classList.add("open");
+                    article.addEventListener("click", () => {
+                        menu.classList.remove("open");
+                    }, { once: true })
+                }
+            });
+        });
+    }
+
+    document.addEventListener("astro:after-swap", () => {
+        attachEvents();
+    });
+    attachEvents();
+</script>
+<style>
+
+    /* has sidebar/menu and article */
+    .page-container {
+
+        position: relative;
+
+        display: flex;
+        align-items: stretch;
+
+        max-width: 100%;
+    }
+
+    /* has article and footer stuff */
+    .main-column {
+        margin-top: 60px;
+        max-width:100%
+    }
+
+    .article-ruler-container {
+        display: flex;
+        align-items: stretch;
+    }
+
+    article {
+        padding: 60px;
+        border: 2px solid var(--color-text);
+        background-color: var(--color-article-background);
+
+        width: 680px;
+        min-height: calc(100vh - 240px);
+    }
+
+    article :global(p):last-of-type::after {
+        content: "⁘";
+        margin-left: 0.5rem;
+        position: relative;
+    }
+
+    :global(h1) {
+        font-size: 3rem;
+    }
+
+    :global(h2) {
+        font-size: 2rem;
+    }
+
+    :global(h3) {
+        font-size: 1.5rem;
+    }
+
+    :global(h4) {
+        font-style: italic;
+        font-weight: normal;
+        font-size: 1em;
+    }
+
+    :global(p) {
+        line-height: 2em;
+        margin: 1em 0 0;
+    }
+
+    article :global(a) {
+        color: var(--color-accent);
+    }
+
+    h1 {
+        margin: 8px 0 0;
+    }
+
+    h4 {
+        margin: 8px 0 32px;
+    }
+
+    .monospace {
+        font-size: 0.9rem;
+    }
+
+    aside {
+        max-width: 250px;
+        min-width: 250px;
+
+        margin-right: 40px;
+        margin-top: 120px;
+
+        display: grid;
+        grid-template-rows: 1fr auto;
+
+        hyphens: none;
+        -moz-hyphens: none;
+        -ms-hyphens: none;
+        -webkit-hyphens: none;
+    }
+
+    .close-menu-button {
+        display: none;
+    }
+
+    aside .ruler {
+        display: none;
+    }
+
+    footer {
+        margin-left: 60px
+    }
+
+    nav {
+        padding: 2px;
+    }
+
+    nav button {
+        user-select: unset;
+    }
+
+    a.nav-link:hover,
+    button.nav-link {
+        text-decoration: unset;
+    }
+
+    a.nav-link span.nav-link-hover,
+    button.nav-link span.nav-link-hover {
+        font-weight: bold;
+    }
+
+    a.nav-link:hover span.nav-link-hover,
+    button.nav-link:hover span.nav-link-hover {
+        text-decoration: underline;
+    }
+
+    [data-accordion-content] {
+        margin-left: 5px;
+        padding-left: 14px;
+        border-left: 2px solid var(--color-text);
+        margin-bottom: 3em;
+    }
+
+    #metadata-content :global(a) {
+        color: var(--color-accent);
+    }
+
+    .ruler {
+        /* inspiration: https://dev.to/madsstoumann/build-a-css-ruler-2opn */
+
+        --ruler-thickness: 2px;
+        --ruler-color: var(--color-text);
+        --ruler-height: 4px;
+        --ruler-spacing: 8px;
+        --ruler-large-tick-increment: 4;
+
+        background-image: linear-gradient(
+                -180deg,
+                var(--ruler-color) 0 var(--ruler-thickness),
+                transparent 0
+            ),
+            linear-gradient(
+                -180deg,
+                var(--ruler-color) 0 var(--ruler-thickness),
+                transparent 0
+            );
+
+        background-repeat: repeat-y;
+        background-size:
+            var(--ruler-height) var(--ruler-spacing),
+            calc(var(--ruler-height) * 2) calc( var(--ruler-spacing) * (var(--ruler-large-tick-increment) + 1));
+
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    #progress-bar {
+
+        width: 12px;
+        margin-top: 8px;
+        max-height: 100vh;
+        position: sticky;
+        top: 0;
+
+        --scroll-pos: 0;
+    }
+
+    .progress-ruler {
+        z-index: 2;
+        height: calc(var(--scroll-pos) * 100%);
+        --ruler-height: 6px;
+    }
+
+    .progress-ruler::after {
+        content: "◀";
+        position: absolute;
+        font-size: 0.75rem;
+        bottom: -0.5rem;
+        left: calc(100% + 0.25rem);
+    }
+
+    aside.ruler {
+        display: none;
+    }
+
+    @media screen and (max-width: 1200px) {
+        aside {
+            max-width: 180px;
+            min-width: 180px;
+            font-size: 0.8rem;
+
+            margin-right: 40px;
+        }
+    }
+
+    @media screen and (max-width: 1080px) {
+        aside {
+            display: none;
+        }
+
+        .progress-ruler::after {
+            display: none;
+        }
+    }
+
+    @media screen and (max-width: 840px) {
+
+        :global(body), :global(html) {
+            background-color: var(--color-article-background);
+        }
+
+        article {
+            border: none;
+            width: 100%;
+            background-color: unset;
+            padding: 40px 20px 50vh;
+        }
+
+        .main-column {
+            margin-top: 0;
+        }
+
+        .article-ruler-container {
+            flex-flow: row-reverse;
+            justify-content: flex-end;
+        }
+
+        #progress-bar {
+            margin-top: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: calc(100% - 40px);
+        }
+
+        footer {
+            display: none;
+        }
+
+        aside.open {
+            left: 0;
+        }
+
+        aside {
+            min-width: 250px;
+            max-width: 250px;
+            height: calc(100vh - 40px);
+            display: grid;
+
+            position: fixed;
+            top: 0;
+            left: -100vw;
+
+            margin-top: 0;
+            background-color: var(--color-background);
+
+            border-right: 2px solid var(--color-text);
+
+            transition: left 0.5s;
+
+            z-index: 15;
+        }
+
+        aside nav {
+            overflow-y: scroll;
+            padding: 20px 20px 120px;
+        }
+
+        aside .ruler {
+            display: unset;
+            transform: rotate(180deg);
+            transform: scaleX(-1);
+            top: 0px;
+            right: 0;
+            left: unset;
+            width: calc(var(--ruler-height) * 2);
+        }
+
+        .top-button {
+            display: none;
+        }
+
+        .close-menu-button {
+            display: unset;
+        }
+    }
+</style>

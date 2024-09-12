@@ -181,3 +181,36 @@ export const PhotographyIndexThemes: IndexTheme[] = [
         textColor: "#fff",
     },
 ]
+
+export const ArticleThemes: (ColorScheme & { articleBackground?: string })[] = [
+    {
+        text: "#222222",
+        background: "#E7ECE6",
+        articleBackground: "#F1F5F0",
+        accent: "#668863",
+    },
+    {
+        text: "#222222",
+        background: "#E6EEFF",
+        articleBackground: "#FAFAFF",
+        accent: "#AE805B",
+    },
+    {
+        text: "#222222",
+        background: "#F2F9FF",
+        articleBackground: "#FFFFFF",
+        accent: "#F4AD58",
+    },
+    {
+        text: "#222222",
+        background: "#F5F4F4",
+        articleBackground: "#FEFDFD",
+        accent: "#CD846C",
+    },
+    {
+        text: "#222222",
+        background: "#E6E6F0",
+        articleBackground: "#FAFAFF",
+        accent: "#687A92",
+    },
+]

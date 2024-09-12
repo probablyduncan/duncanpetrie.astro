@@ -8,9 +8,10 @@ interface Props {
         color: string;
     }[];
     staticSidePadding?: string;
+    mobileBehavior?: "hide" | "nochange" | "static";
 }
 
-const { colorBreakpoints = [], staticSidePadding = "10px" } = Astro.props;
+const { colorBreakpoints = [], staticSidePadding = "10px", mobileBehavior = "static" } = Astro.props;
 
 let initialColor = 'inherit';
 if (colorBreakpoints?.length && colorBreakpoints[0].vh <= 0) {
@@ -25,7 +26,7 @@ for (let i = 0; i < 4; i++) {
     keys.push(...tempKeys);
 }
 ---
-<div class="ticker-wrapper" style={`color: ${initialColor};`}>
+<div class:list={{ "ticker-wrapper": true, "mobile-hidden": mobileBehavior !== "nochange", }} class="ticker-wrapper" style={`color: ${initialColor};`}>
     <div class="ticker italic">
         {
             keys.map((l) => (
@@ -35,9 +36,9 @@ for (let i = 0; i < 4; i++) {
         }
     </div>
 </div>
-<div class="ticker-wrapper-static italic" tabindex="-1" style={`--side-padding: ${staticSidePadding};`}>
+{mobileBehavior === "static" && <div class="ticker-wrapper-static italic" tabindex="-1" style={`--side-padding: ${staticSidePadding};`}>
     {Object.keys(TICKER_LINKS).map(l => (<a href={TICKER_LINKS[l as TickerLink]}>{l}</a><span>/</span>))}
-</div>
+</div>}
 {colorBreakpoints && colorBreakpoints.length > 0 && <script is:inline define:vars={{colorBreakpoints, initialColor}}>
     function onScroll() {
         const ticker = document.getElementsByClassName('ticker-wrapper')[0];
@@ -90,7 +91,7 @@ for (let i = 0; i < 4; i++) {
         display: flex;
         flex-flow: row-reverse nowrap;
         justify-content: space-between;
-        gap: 0.625em;
+        gap: 0.8em;
         transform: translate3d(0, 0, 0);
         white-space: nowrap;
         animation-iteration-count: infinite;
@@ -144,7 +145,7 @@ for (let i = 0; i < 4; i++) {
         white-space: nowrap;
         display: flex;
         flex-flow: row nowrap;
-        gap: 0.625rem;
+        gap: 0.8rem;
 
         background-color: var(--color-background);
         border-top: 2px solid var(--color-text);
@@ -160,7 +161,7 @@ for (let i = 0; i < 4; i++) {
 
     @media screen and (max-width: 700px), (prefers-reduced-motion: reduce) {
         
-        .ticker-wrapper {
+        .ticker-wrapper.mobile-hidden {
             display: none;
             user-select: none;
         }

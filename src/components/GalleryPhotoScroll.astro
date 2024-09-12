@@ -14,6 +14,7 @@ interface Props {
     noCaptions?: boolean;
     imageSize?: ImageSize;
     shuffle?: boolean;
+    useColumns?: boolean;
 }
 
 const {
@@ -26,18 +27,19 @@ const {
     noCaptions = false,
     imageSize = "medium",
     shuffle = false,
+    useColumns = true,
 } = Astro.props;
 
 const text = Astro.slots.has("default") ? (await Astro.slots.render("default")).trim() : "";
 const hasText = text.length > 0;
-const useColumns = text.split("<p>").length > 3 || text.split(" ").length > 100;
+const hasColumns = useColumns && (text.split("<p>").length > 3 || text.split(" ").length > 100);
 ---
 
 <!-- {hasText && <div class="center" style="margin-bottom: 40px; padding-right: 20px">[ <button data-skip-text>skip to photos</button> ]</div>} -->
 <section style={`--base-width: ${widthBasis}; --photo-gap: ${photoGap}`}>
     {
         hasText && (
-            <article class:list={["serif-body", "small", {columns: useColumns}]} class="serif-body small">
+            <article class:list={["serif-body", "small", {columns: useColumns}]}>
                 <slot />
             </article>
         )

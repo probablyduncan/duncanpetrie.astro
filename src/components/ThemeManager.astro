@@ -61,15 +61,19 @@ const { themeData = [], storeKey } = Astro.props;
             const i = getNextIndex(themes.length);
             const theme = themes[i];
 
-            Object.keys(theme.cssVariables).forEach(varName => {
-                setVar(varName, theme.cssVariables[varName]);
-            });
+            if (theme.cssVariables) {
+                Object.keys(theme.cssVariables).forEach(varName => {
+                    setVar(varName, theme.cssVariables[varName]);
+                });
+            }
 
-            Object.keys(theme.elementAttributes).forEach(selector => {
-                document.querySelectorAll(selector).forEach(e => {
-                    Object.assign(e, theme.elementAttributes[selector]);
-                })
-            })
+            if (theme.elementAttributes) {
+                Object.keys(theme.elementAttributes).forEach(selector => {
+                    document.querySelectorAll(selector).forEach(e => {
+                        Object.assign(e, theme.elementAttributes[selector]);
+                    })
+                });
+            }
 
             // now set store so no repeats
             store.setItem(storeKey, i);

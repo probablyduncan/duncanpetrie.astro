@@ -7,14 +7,14 @@ const articles = defineCollection({
 	schema: z.object({
 		title: z.string(),
 		date: z.date(),
+		location: z.string(),
 		colors: z.object({
 			text: z.string().optional(),
 			background: z.string().optional(),
 			accent: z.string().optional(),
 		}).optional(),
-		ticker: z.boolean().default(true),
-		related: z.array(reference('articles')).optional(),
-		layoutType: z.string().default('default'),
+		related: z.array(reference('articles').or(reference('galleries')).or(reference('springtide'))).optional(),
+		metadata: z.record(z.string(), z.string().or(z.boolean()).or(z.any())).optional(),
 		star: z.boolean().default(false),
 	}).passthrough(),
 })
@@ -38,6 +38,7 @@ const galleries = defineCollection({
 		shuffle: z.boolean().default(false),
 		isLocation: z.boolean().default(false),
 		star: z.boolean().default(false),
+		useColumns: z.boolean().default(true),
 	}),
 });
 
