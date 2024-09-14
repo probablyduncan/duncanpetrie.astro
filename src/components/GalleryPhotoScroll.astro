@@ -15,6 +15,7 @@ interface Props {
     imageSize?: ImageSize;
     shuffle?: boolean;
     useColumns?: boolean;
+    includeImageRelatedGalleryLink?: boolean;
 }
 
 const {
@@ -28,6 +29,7 @@ const {
     imageSize = "medium",
     shuffle = false,
     useColumns = true,
+    includeImageRelatedGalleryLink = false,
 } = Astro.props;
 
 const text = Astro.slots.has("default") ? (await Astro.slots.render("default")).trim() : "";
@@ -36,10 +38,10 @@ const hasColumns = useColumns && (text.split("<p>").length > 3 || text.split(" "
 ---
 
 <!-- {hasText && <div class="center" style="margin-bottom: 40px; padding-right: 20px">[ <button data-skip-text>skip to photos</button> ]</div>} -->
-<section style={`--base-width: ${widthBasis}; --photo-gap: ${photoGap}`}>
+<section style={`--base-width: ${widthBasis}; --photo-gap: ${photoGap}`} class:list={{ shuffle }}>
     {
         hasText && (
-            <article class:list={["serif-body", "small", {columns: useColumns}]}>
+            <article class:list={["serif-body", "small", {columns: hasColumns}]}>
                 <slot />
             </article>
         )
@@ -62,6 +64,7 @@ const hasColumns = useColumns && (text.split("<p>").length > 3 || text.split(" "
                     }
                     captionAccent={captionAccent}
                     noCaption={noCaptions}
+                    includeRelatedGalleryLink={includeImageRelatedGalleryLink}
                 />
             </div>
         ))
@@ -74,7 +77,7 @@ const hasColumns = useColumns && (text.split("<p>").length > 3 || text.split(" "
                     class="image-wrapper"
                     style={`--rand: ${Math.random() - 0.5}; --i: ${i + photos.length}; --ratio: ${ratio}; --sqrt-ratio: ${Math.sqrt(ratio)};`}
                 >
-                    <Image src={path}/>
+                    <Image src={path} includeRelatedGalleryLink={includeImageRelatedGalleryLink}/>
                 </div>
         )})
     }
@@ -142,7 +145,7 @@ const hasColumns = useColumns && (text.split("<p>").length > 3 || text.split(" "
 </style>
 {shuffle && <script is:inline>
     function shufflePhotos() {
-        document.querySelectorAll('.image-wrapper').forEach((e) => {
+        document.querySelectorAll('.shuffle .image-wrapper').forEach((e) => {
             e.style.setProperty("--i", Math.floor(Math.random() * 1000).toString());
         });
     }

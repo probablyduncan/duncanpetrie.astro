@@ -7,38 +7,48 @@ import { type ListData } from "../lib/consts";
 import ThresholdSwapSpan from "../components/ThresholdSwapSpan.astro";
 import ThemeManager from "../components/ThemeManager.astro";
 import { getGenericHomePageThemes } from "../lib/themeHelper";
+import GalleryPhotoScroll from "../components/GalleryPhotoScroll.astro";
+import { getPhotosByTags } from "../lib/photoHelper";
+import Link from "../components/Link.astro";
 
 const listData: ListData = [
 	{
 		name: "ongoing",
 		items: [
 			{
-				title: "The Permanent Collection",
-				url: "/permanent-collection",
+				title: "Photography",
+				url: "/photography",
 				type: "photography",
 				alt: "Photography Gallery",
 				// photoName: "cycling",
 			},
 			{
-				title: "Best of the Month",
-				url: "/best-of-the-month",
+				title: "Writing",
+				url: "/writing",
 				type: "archive",
-				alt: "Archives: Best of the Month",
-				// photoName: "falmouthclock",
+				alt: "Photography Gallery",
+				// photoName: "cycling",
 			},
+			// {
+			// 	title: "The Permanent Collection",
+			// 	url: "/permanent-collection",
+			// 	type: "photography",
+			// 	alt: "Photography Gallery",
+			// 	// photoName: "cycling",
+			// },
+			// {
+			// 	title: "Best of the Month",
+			// 	url: "/best-of-the-month",
+			// 	type: "archive",
+			// 	alt: "Archives: Best of the Month",
+			// 	// photoName: "falmouthclock",
+			// },
 			{
 				title: "Palimpsest",
 				url: "/palimpsest",
 				type: "photobook",
 				alt: "Photobook: Palimpsest",
 				// photoName: "paperwindow",
-			},
-			{
-				title: "Springtide",
-				url: "/springtide",
-				type: "ruin",
-				alt: "Springtide",
-				imgSrc: "/media/bigmapW4_small.jpg",
 			},
 		],
 	},
@@ -103,18 +113,18 @@ const listData: ListData = [
 		name: "2021",
 		items: [
 			{
-				title: "On Yearning",
-				url: "/on-yearning",
-				type: "archive",
-				alt: "Dissertation: On Yearning",
-				imgSrc: "/media/diss/1.jpg",
-			},
-			{
 				title: "A Triumph of the Commons",
 				url: "https://www.youtube.com/watch?v=JRXZAaDxGCQ",
 				type: "film",
 				alt: "Film: A Triumph of the Commons",
 				imgSrc: "/media/wiki_thumbnail.gif",
+			},
+			{
+				title: "On Yearning",
+				url: "/on-yearning",
+				type: "archive",
+				alt: "Dissertation: On Yearning",
+				imgSrc: "/media/diss/1.jpg",
 			},
 			{
 				title: "Old Horizons",
@@ -176,13 +186,20 @@ const listData: ListData = [
 				// photoName: "goslingcall",
 			},
 			{
+				title: "Springtide",
+				url: "/springtide",
+				type: "ruin",
+				alt: "Springtide",
+				imgSrc: "/media/bigmapW4_small.jpg",
+			},
+			{
 				title: "Wrap map",
 				url: "https://www.google.com/maps/d/edit?mid=15A5_e_KS2Es4xs3ZhXmYR31dRmc0cpA&usp=sharing",
 				type: "farm",
 				alt: "All the falafel I have known",
 			},
 		]
-	}
+	},
 ];
 ---
 
@@ -250,6 +267,19 @@ const listData: ListData = [
 					"road (loopy)",
 				]}
 			/>
+			<div style="height: 40vh;"/>
+			<GalleryPhotoScroll
+				photos={getPhotosByTags("site-best").filter(p => p.rating === 5)}
+                captionAlign="random"
+                widthBasis="800px"
+                imageSize="large"
+				photoGap="40vh"
+				useColumns={false}
+				shuffle={true}
+                includeImageRelatedGalleryLink={true}
+			>
+			</GalleryPhotoScroll>
+			<div style="height: 20vh;"/>
 		</main>
 		<Footer />
 		<style type="text/css">

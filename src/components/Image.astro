@@ -1,9 +1,13 @@
 ---
 import type { ImageSize } from "../lib/consts";
-import { getImgSize, getPhotoByName } from "../lib/photoHelper";
+import { getImgSize, getPhotoByName, getPhotosByNamesAndTags } from "../lib/photoHelper";
 import { type ImageProps } from "../env";
+import { getCollection } from "astro:content";
+import Link from "./Link.astro";
 
-interface Props extends ImageProps {}
+interface Props extends ImageProps {
+    includeRelatedGalleryLink?: boolean,
+}
 
 const {
     photoName,
@@ -15,6 +19,7 @@ const {
     noCaption = false,
     ratio,
     crisp = false,
+    includeRelatedGalleryLink = true,
 } = Astro.props;
 
 if (!photoName && !src) {
@@ -22,6 +27,45 @@ if (!photoName && !src) {
 }
 
 const photoData = photoName ? getPhotoByName(photoName) : null;
+
+
+//#region related gallery
+
+const galleries = (await getCollection("galleries")).filter(g => g.data.star);
+const galleriesForThisImage: typeof galleries = []
+for (var i = 0; i < galleries.length; i++) {
+    const gallery = galleries[i];
+
+    if (!includeRelatedGalleryLink || ("/" + Astro.url.pathname + "/").includes("/" + gallery.slug + "/")) {
+        continue;
+    }
+
+    if (photoData) {
+
+        if (photoData.rating != 5) {
+            continue;
+        }
+
+        const photosInGallery = getPhotosByNamesAndTags({
+            tags: gallery.data.photoTags,
+            names: gallery.data.photoNames,
+            excludeTags: gallery.data.excludeTags,
+            excludeNames: gallery.data.excludeNames,
+        });
+        if (photosInGallery.includes(photoData)) {
+            galleriesForThisImage.push(gallery);
+        }
+    }
+    else if (src) {
+        if (gallery.data.mediaNames.some(m => src.includes(m)) || src.includes(gallery.data.mediaFolder)) {
+            galleriesForThisImage.push(gallery);
+        }
+    }
+}
+
+const relatedGallery = galleriesForThisImage[Math.floor(galleriesForThisImage.length * Math.random())];
+
+//#endregion
 
 const srcResolved = photoData
     ? photoData.paths[(size ?? "medium") as ImageSize]
@@ -65,7 +109,7 @@ const aspectRatio =
                 captionAlign,
             ]}
         >
-            {captionResolved}
+            {captionResolved}{includeRelatedGalleryLink && relatedGallery && <span> Also in: <Link href={"/" + relatedGallery.slug}>{relatedGallery.data.title}</Link>.</span>}
         </div>
     )
 }
@@ -75,5 +119,9 @@ const aspectRatio =
         font-size: 0.8rem;
         font-weight: bold;
         margin: 4px 0;
+    }
+
+    div :global(a) {
+        color: var(--color-accent);
     }
 </style>
