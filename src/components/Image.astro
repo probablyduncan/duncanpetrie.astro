@@ -7,6 +7,7 @@ import Link from "./Link.astro";
 
 interface Props extends ImageProps {
     includeRelatedGalleryLink?: boolean,
+    relatedGalleryText?: string,
 }
 
 const {
@@ -20,6 +21,7 @@ const {
     ratio,
     crisp = false,
     includeRelatedGalleryLink = true,
+    relatedGalleryText = "Also in:"
 } = Astro.props;
 
 if (!photoName && !src) {
@@ -109,7 +111,7 @@ const aspectRatio =
                 captionAlign,
             ]}
         >
-            {captionResolved}{includeRelatedGalleryLink && relatedGallery && <span> Also in: <Link href={"/" + relatedGallery.slug}>{relatedGallery.data.title}</Link>.</span>}
+            {captionResolved}{includeRelatedGalleryLink && relatedGallery && <span>&nbsp;{relatedGalleryText}&nbsp;<Link href={"/" + relatedGallery.slug}>{relatedGallery.data.title}</Link>.</span>}
         </div>
     )
 }

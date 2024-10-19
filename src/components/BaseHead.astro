@@ -6,23 +6,26 @@ import "../styles/global.css";
 import { ViewTransitions } from "astro:transitions";
 
 interface Props {
-	title?: string;
-	description?: string;
-	photoName?: PhotoName;
-	imgSrc?: string;
+    title?: string;
+    description?: string;
+    photoName?: PhotoName;
+    imgSrc?: string;
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const defaultPhotoName = "high-castle-london-2024-05-13";
 const {
-	title = SITE_TITLE,
-	description = SITE_DESCRIPTION,
-	imgSrc,
-	photoName = defaultPhotoName,
+    title = SITE_TITLE,
+    description = SITE_DESCRIPTION,
+    imgSrc,
+    photoName = defaultPhotoName,
 } = Astro.props;
 
 // if a src is supplied, use that, otherwise get from photo name
-const imgPath = imgSrc ?? getPhotoByName(photoName)?.paths.large ?? getPhotoByName(defaultPhotoName)?.paths.large;
+const imgPath =
+    imgSrc ??
+    getPhotoByName(photoName)?.paths.large ??
+    getPhotoByName(defaultPhotoName)?.paths.large;
 
 const faviconPath = ["/favicons/flaxengrass-", ".png"];
 ---
@@ -32,10 +35,11 @@ const faviconPath = ["/favicons/flaxengrass-", ".png"];
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <meta name="generator" content={Astro.generator} />
 <link rel="canonical" href={canonicalURL} />
-<link rel="icon" href={faviconPath.join("32")} sizes="32x32" />
-<link rel="icon" href={faviconPath.join("128")} sizes="128x128" />
-<link rel="icon" href={faviconPath.join("180")} sizes="180x180" />
-<link rel="icon" href={faviconPath.join("192")} sizes="192x192" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+<link rel="manifest" href="/site.webmanifest" />
 
 <!-- Primary Meta Tags -->
 <title>{title}</title>
