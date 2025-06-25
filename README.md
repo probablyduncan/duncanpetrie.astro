@@ -2,4 +2,4 @@ This is an old repository for [duncanpetrie.com](https://duncanpetrie.com). It w
 
 See the latest version at [https://github.com/probablyduncan/duncanpetrie.astro.v2](https://github.com/probablyduncan/duncanpetrie.astro.v2).
 
-Previous versions are available at [https://github.com/probablyduncan/duncanpetrie.nextjs](https://github.com/probablyduncan/duncanpetrie.nextjs) and [https://github.com/probablyduncan/probablyduncan.github.io](https://github.com/probablyduncan/probablyduncan.github.io).
+Previous versions are available at https://v1.duncanpetrie.com, etc.
